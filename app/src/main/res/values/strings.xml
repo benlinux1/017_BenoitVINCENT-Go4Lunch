@@ -3,4 +3,21 @@
     <string name="navigation_map_view">Map View</string>
     <string name="navigation_list_view">List View</string>
     <string name="navigation_workmates">Workmates</string>
+
+    <string name="bottom_navigation_map_view">Map View</string>
+    <string name="bottom_navigation_list_view">List View</string>
+    <string name="bottom_navigation_workmates">Workmates</string>
+
+    <string name="map_activity_label">I\'m Hungry !</string>
+    <string name="list_activity_label">I\'m Hungry !</string>
+    <string name="workmates_activity_label">Available workmates</string>
+
+    // Authentication
+    <string name="login">Connexion</string>
+    <string name="error_not_connected">User must be logged !</string>
+    <string name="error_authentication_canceled">Authentification canceled&#8230;</string>
+    <string name="error_no_internet">No internet connexion !</string>
+    <string name="error_unknown_error">An unknown error occurred&#8230;</string>
+    <string name="connection_succeed">Authentication completed !</string>
+
 </resources>
