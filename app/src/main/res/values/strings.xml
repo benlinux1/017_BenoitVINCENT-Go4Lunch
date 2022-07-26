@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Go4Lunch</string>
     <string name="navigation_map_view">Map View</string>
@@ -19,5 +20,9 @@
     <string name="error_no_internet">No internet connexion !</string>
     <string name="error_unknown_error">An unknown error occurred&#8230;</string>
     <string name="connection_succeed">Authentication completed !</string>
+
+    // FACEBOOK AUTHENTICATION
+    <string name="facebook_application_id" translatable="false">3250053565264066</string>
+    <string name="fb_login_protocol_scheme" translatable="false">fb3250053565264066</string>
 
 </resources>

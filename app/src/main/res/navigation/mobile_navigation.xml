@@ -3,23 +3,23 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_map_view">
+    app:startDestination="@+id/navigation_map_view" >
 
     <fragment
         android:id="@+id/navigation_map_view"
-        android:name="com.openclassrooms.go4lunch.ui.map.MapFragment"
+        android:name="com.benlinux.go4lunch.ui.map.MapFragment"
         android:label="@string/map_activity_label"
         tools:layout="@layout/fragment_map_view" />
 
     <fragment
         android:id="@+id/navigation_list_view"
-        android:name="com.openclassrooms.go4lunch.ui.list.ListFragment"
+        android:name="com.benlinux.go4lunch.ui.list.ListFragment"
         android:label="@string/list_activity_label"
         tools:layout="@layout/fragment_list_view" />
 
     <fragment
         android:id="@+id/navigation_workmates"
-        android:name="com.openclassrooms.go4lunch.ui.workmates.WorkmatesFragment"
+        android:name="com.benlinux.go4lunch.ui.workmates.WorkmatesFragment"
         android:label="@string/bottom_navigation_workmates"
         tools:layout="@layout/fragment_workmates" />
 </navigation>
