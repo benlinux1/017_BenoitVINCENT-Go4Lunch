@@ -25,4 +25,15 @@
     <string name="facebook_application_id" translatable="false">3250053565264066</string>
     <string name="fb_login_protocol_scheme" translatable="false">fb3250053565264066</string>
 
+    // NAVIGATION DRAWER
+    <string name="user_name">John SMITH</string>
+    <string name="user_email">jsmith.1337@gmail.com</string>
+    <string name="drawer_title_1">YOUR LUNCH</string>
+    <string name="drawer_title_2">SETTINGS</string>
+    <string name="drawer_title_3">LOGOUT</string>
+
+    // Used in NavigationDrawer
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
 </resources>
