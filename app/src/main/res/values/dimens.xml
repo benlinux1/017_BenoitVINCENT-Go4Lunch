@@ -3,6 +3,7 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
 
+    <dimen name="zero_margin">0dp</dimen>
 
     <dimen name="default_medium_margin">20dp</dimen>
     <dimen name="default_large_margin">40dp</dimen>

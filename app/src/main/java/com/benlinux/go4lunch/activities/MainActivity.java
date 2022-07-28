@@ -2,7 +2,6 @@ package com.benlinux.go4lunch.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Layout;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -24,10 +23,8 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import com.google.android.material.button.MaterialButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
-import com.benlinux.go4lunch.databinding.ActivityMainBinding;
 
 import java.util.Arrays;
 import java.util.List;
@@ -49,14 +46,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         this.configureToolBar();
         this.configureDrawerLayout();
         this.configureNavigationView();
-
-       this.setupListeners();
-       this.setBottomNavigation();
+        this.setupListeners();
+        this.setBottomNavigation();
     }
 
     @Override
     public void onBackPressed() {
-        // 5 - Handle back click to close menu
+        // Handle back click to close menu
         if (this.drawerLayout.isDrawerOpen(GravityCompat.START)) {
             this.drawerLayout.closeDrawer(GravityCompat.START);
         } else {
@@ -67,7 +63,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
 
-        // 4 - Handle Navigation Item Click
+        // Handle Navigation Item Click
         int id = item.getItemId();
 
         switch (id){
@@ -85,25 +81,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
-    // ---------------------
-    // CONFIGURATION
-    // ---------------------
-
-    // 1 - Configure Toolbar
+    // Set custom Toolbar
     private void configureToolBar(){
-        this.toolbar = (Toolbar) findViewById(R.id.activity_main_toolbar);
+        this.toolbar = (Toolbar) findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
     }
 
-    // 2 - Configure Drawer Layout
+    // Configure Drawer Layout with toggler
     private void configureDrawerLayout(){
         this.drawerLayout = (DrawerLayout) findViewById(R.id.activity_main_drawer_layout);
+        toolbar = (Toolbar) findViewById(R.id.main_toolbar);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
+
     }
 
-    // 3 - Configure NavigationView
+    // Configure NavigationView
     private void configureNavigationView(){
         this.navigationView = (NavigationView) findViewById(R.id.activity_main_nav_view);
         navigationView.setNavigationItemSelectedListener(this);

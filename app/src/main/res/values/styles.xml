@@ -30,6 +30,7 @@
         <item name="colorPrimary">@color/red</item>
         <item name="android:textColorPrimary">@android:color/white</item>
         <item name="colorControlNormal">@android:color/white</item>
+        <item name="windowActionBar">true</item>
     </style>
 
 </resources>
