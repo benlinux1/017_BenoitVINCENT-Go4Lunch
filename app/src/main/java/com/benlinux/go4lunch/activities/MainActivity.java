@@ -1,7 +1,10 @@
 package com.benlinux.go4lunch.activities;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -28,6 +31,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -36,7 +40,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     //FOR DESIGN
     private Toolbar toolbar;
     private DrawerLayout drawerLayout;
-    private NavigationView navigationView;
+    private NavigationView drawerNavView;
+    private BottomNavigationView bottomNavView;
+    private NavController navController;
+    private AppBarConfiguration appBarConfiguration;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,10 +52,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         this.configureToolBar();
         this.configureDrawerLayout();
-        this.configureNavigationView();
         this.setupListeners();
-        this.setBottomNavigation();
+        this.configureNavigation();
     }
+
+
 
     @Override
     public void onBackPressed() {
@@ -60,9 +68,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        // Replace navigation up button with nav drawer button when on start destination
+        return NavigationUI.navigateUp(navController, appBarConfiguration) || super.onSupportNavigateUp();
+    }
+
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-
         // Handle Navigation Item Click
         int id = item.getItemId();
 
@@ -87,21 +101,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setSupportActionBar(toolbar);
     }
 
-    // Configure Drawer Layout with toggler
+    // Configure Drawer Layout with toggle
     private void configureDrawerLayout(){
         this.drawerLayout = (DrawerLayout) findViewById(R.id.activity_main_drawer_layout);
-        toolbar = (Toolbar) findViewById(R.id.main_toolbar);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
     }
 
-    // Configure NavigationView
-    private void configureNavigationView(){
-        this.navigationView = (NavigationView) findViewById(R.id.activity_main_nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-    }
 
     // Listener on Connexion button
     private void setupListeners(){
@@ -133,9 +141,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 RC_SIGN_IN);
     }
 
-    // Connexion result according to request status
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        // Connexion result according to request status
         super.onActivityResult(requestCode, resultCode, data);
         this.handleResponseAfterSignIn(requestCode, resultCode, data);
     }
@@ -170,16 +178,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    // Bottom Navigation bar
-    private void setBottomNavigation() {
-        BottomNavigationView navView = findViewById(R.id.nav_view);
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_map_view, R.id.navigation_list_view, R.id.navigation_workmates)
-                .build();
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
+    // Configure Drawer & Bottom Navigation
+    private void configureNavigation() {
+
+        // Set navigation views
+        bottomNavView = findViewById(R.id.bottom_nav_view);
+        drawerNavView = findViewById(R.id.activity_main_nav_view);
+
+        // Set navigation controller
+        navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
+
+        // Build and configure App bar
+        appBarConfiguration =
+                new AppBarConfiguration.Builder(navController.getGraph()) //Pass the ids of fragments from nav_graph which you dont want to show back button in toolbar
+                        .setOpenableLayout(drawerLayout)
+                        .build();
+
+        //Setup toolbar with back button and drawer icon according to appBarConfiguration
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
-        NavigationUI.setupWithNavController(navView, navController);
+
+        // Setup Navigation for drawer & bottom bar
+        NavigationUI.setupWithNavController(drawerNavView, navController);
+        NavigationUI.setupWithNavController(bottomNavView, navController);
+
+        // Listener for selected item
+        drawerNavView.setNavigationItemSelectedListener(this);
     }
 }

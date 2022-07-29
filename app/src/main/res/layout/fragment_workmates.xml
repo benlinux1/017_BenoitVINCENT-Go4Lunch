@@ -6,12 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".ui.workmates.WorkmatesFragment">
 
-    <!-- Toolbar -->
-    <include
-        layout="@layout/toolbar_main"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
     <TextView
         android:id="@+id/text_workmates"
         android:layout_width="match_parent"
