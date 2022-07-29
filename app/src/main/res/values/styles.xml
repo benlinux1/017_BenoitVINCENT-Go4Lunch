@@ -7,30 +7,44 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="colorButtonNormal">@color/colorAccent</item>
-        <item name="colorControlNormal">@android:color/darker_gray</item>
         <item name="colorControlActivated">@android:color/darker_gray</item>
         <item name="colorControlHighlight">@android:color/darker_gray</item>
         <item name="android:textColor">@android:color/white</item>
         <item name="android:textColorPrimary">@android:color/darker_gray</item>
         <item name="android:textColorSecondary">@android:color/darker_gray</item>
         <item name="android:windowBackground">@drawable/login_background</item>
-        <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:textColorHint">@android:color/darker_gray</item>
+        <item name="colorControlNormal">@color/white</item>
+        <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
     </style>
 
     <!-- STYLE NAV DRAWER HEADER -->
     <style name="DrawerTheme" parent="Theme.MyApplication">
         <item name="colorPrimary">@color/red</item>
         <item name="android:textColor">@android:color/white</item>
+        <item name="android:navigationIcon">@drawable/ic_baseline_menu_24</item>
+        <item name="android:actionBarTabBarStyle">@drawable/ic_baseline_menu_24</item>
     </style>
 
     <!-- Toolbar theme -->
     <style name="ToolBarStyle" parent="Theme.MyApplication">
         <item name="colorPrimary">@color/red</item>
         <item name="android:textColorPrimary">@android:color/white</item>
-        <item name="colorControlNormal">@android:color/white</item>
-        <item name="windowActionBar">true</item>
+        <item name="colorControlNormal">@color/white</item>
+        <item name="spinBars">true</item>
+        <item name="color">@android:color/white</item>
+        <item name="android:navigationIcon">@drawable/ic_baseline_menu_24</item>
+        <item name="android:color">@android:color/white</item>
+    </style>
+
+    <style name="DrawerArrowStyle" parent="@style/Widget.AppCompat.DrawerArrowToggle">
+        <item name="spinBars">true</item>
+        <item name="color">@android:color/white</item>
+        <item name="colorControlNormal">@color/white</item>
+        <item name="android:textColorPrimary">@android:color/white</item>
+        <item name="android:navigationIcon">@drawable/ic_baseline_menu_24</item>
+        <item name="android:color">@android:color/white</item>
     </style>
 
 </resources>

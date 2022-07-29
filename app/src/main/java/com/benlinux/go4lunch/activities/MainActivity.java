@@ -1,10 +1,7 @@
 package com.benlinux.go4lunch.activities;
 
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -31,7 +28,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
+
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -51,11 +48,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
 
         this.configureToolBar();
+        this.configureNavigation();
         this.configureDrawerLayout();
         this.setupListeners();
-        this.configureNavigation();
     }
-
 
 
     @Override
@@ -69,11 +65,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
-    @Override
     public boolean onSupportNavigateUp() {
         // Replace navigation up button with nav drawer button when on start destination
         return NavigationUI.navigateUp(navController, appBarConfiguration) || super.onSupportNavigateUp();
     }
+
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -95,11 +91,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
+
     // Set custom Toolbar
     private void configureToolBar(){
         this.toolbar = (Toolbar) findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
     }
+
 
     // Configure Drawer Layout with toggle
     private void configureDrawerLayout(){
@@ -107,7 +105,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
-
     }
 
 
@@ -154,6 +151,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Snackbar.make(container, message, Snackbar.LENGTH_SHORT).show();
     }
 
+
     // Method that handles response after SignIn Activity close
     private void handleResponseAfterSignIn(int requestCode, int resultCode, Intent data){
 
@@ -178,15 +176,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+
     // Configure Drawer & Bottom Navigation
     private void configureNavigation() {
 
         // Set navigation views
         bottomNavView = findViewById(R.id.bottom_nav_view);
         drawerNavView = findViewById(R.id.activity_main_nav_view);
+        drawerLayout = findViewById(R.id.activity_main_drawer_layout);
 
         // Set navigation controller
         navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
+
 
         // Build and configure App bar
         appBarConfiguration =
@@ -198,8 +199,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
 
         // Setup Navigation for drawer & bottom bar
-        NavigationUI.setupWithNavController(drawerNavView, navController);
         NavigationUI.setupWithNavController(bottomNavView, navController);
+        NavigationUI.setupWithNavController(drawerNavView, navController);
 
         // Listener for selected item
         drawerNavView.setNavigationItemSelectedListener(this);
