@@ -1,12 +1,19 @@
 package com.benlinux.go4lunch.activities;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.benlinux.go4lunch.R;
+import com.benlinux.go4lunch.ui.userManager.UserManager;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.ErrorCodes;
 import com.firebase.ui.auth.IdpResponse;
@@ -25,6 +32,7 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Arrays;
 import java.util.List;
@@ -42,6 +50,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private NavController navController;
     private AppBarConfiguration appBarConfiguration;
 
+
+    // FOR DATA
+    private final UserManager userManager = UserManager.getInstance();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,6 +63,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         this.configureNavigation();
         this.configureDrawerLayout();
         this.setupListeners();
+        updateUIWithUserData();
     }
 
 
@@ -82,6 +95,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.activity_main_drawer_settings:
                 break;
             case R.id.activity_main_drawer_logout:
+                    userManager.signOut(this).addOnSuccessListener(aVoid -> {
+                        updateLoginButton();
+                    });
                 break;
             default:
                 break;
@@ -105,6 +121,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        updateLoginButton();
     }
 
 
@@ -204,5 +226,49 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         // Listener for selected item
         drawerNavView.setNavigationItemSelectedListener(this);
+    }
+
+
+    private void updateUIWithUserData(){
+        if(userManager.isCurrentUserLogged()){
+            FirebaseUser user = userManager.getCurrentUser();
+
+            if(user.getPhotoUrl() != null){
+                setProfilePicture(user.getPhotoUrl());
+            }
+            setTextUserData(user);
+        }
+    }
+
+    private void setProfilePicture(Uri profilePictureUrl){
+        drawerNavView = findViewById(R.id.activity_main_nav_view);
+        View headerContainer = drawerNavView.getHeaderView(0);
+        ImageView userAvatar = headerContainer.findViewById(R.id.user_avatar);
+        Glide.with(this)
+                .load(profilePictureUrl)
+                .apply(RequestOptions.circleCropTransform())
+                .into(userAvatar);
+    }
+
+    private void setTextUserData(FirebaseUser user){
+
+        drawerNavView = findViewById(R.id.activity_main_nav_view);
+        View headerContainer = drawerNavView.getHeaderView(0);
+        TextView userNameTextView = headerContainer.findViewById(R.id.user_name);
+        TextView userEmailTextView = headerContainer.findViewById(R.id.user_email);
+
+        //Get email & username from User
+        String email = TextUtils.isEmpty(user.getEmail()) ? getString(R.string.info_no_email_found) : user.getEmail();
+        String username = TextUtils.isEmpty(user.getDisplayName()) ? getString(R.string.info_no_username_found) : user.getDisplayName();
+
+        //Update views with data
+        userNameTextView.setText(username);
+        userEmailTextView.setText(email);
+    }
+
+    // Update Login Button when activity is resuming
+    private void updateLoginButton(){
+        Button loginButton = findViewById(R.id.loginButton);
+        loginButton.setText(userManager.isCurrentUserLogged() ? getString(R.string.button_login_text_logged) : getString(R.string.button_login_text_not_logged));
     }
 }

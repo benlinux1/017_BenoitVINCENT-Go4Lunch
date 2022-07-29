@@ -31,9 +31,14 @@
     <string name="drawer_title_1">YOUR LUNCH</string>
     <string name="drawer_title_2">SETTINGS</string>
     <string name="drawer_title_3">LOGOUT</string>
+    <string name="info_no_email_found">Email not found</string>
+    <string name="info_no_username_found">Username not found</string>
 
     // Used in NavigationDrawer
     <string name="navigation_drawer_open">Start</string>
     <string name="navigation_drawer_close">Close</string>
+
+    <string name="button_login_text_logged">Go for lunch !</string>
+    <string name="button_login_text_not_logged">Connexion</string>
 
 </resources>
