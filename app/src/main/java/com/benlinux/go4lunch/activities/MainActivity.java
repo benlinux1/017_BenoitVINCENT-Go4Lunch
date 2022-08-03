@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -14,15 +13,12 @@ import com.benlinux.go4lunch.R;
 import com.benlinux.go4lunch.ui.userManager.UserManager;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.firebase.ui.auth.AuthUI;
-import com.firebase.ui.auth.ErrorCodes;
-import com.firebase.ui.auth.IdpResponse;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
@@ -31,16 +27,10 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseUser;
-
-import java.util.Arrays;
-import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-
-    private static final int RC_SIGN_IN = 123;
 
     //FOR DESIGN
     private Toolbar toolbar;
@@ -62,8 +52,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         this.configureToolBar();
         this.configureNavigation();
         this.configureDrawerLayout();
-        this.setupListeners();
-        updateUIWithUserData();
+        this.updateUIWithUserData();
     }
 
 
@@ -95,9 +84,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.activity_main_drawer_settings:
                 break;
             case R.id.activity_main_drawer_logout:
-                    userManager.signOut(this).addOnSuccessListener(aVoid -> {
-                        updateLoginButton();
-                    });
+                    logout();
                 break;
             default:
                 break;
@@ -126,76 +113,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onResume() {
         super.onResume();
-        updateLoginButton();
-    }
-
-
-    // Listener on Connexion button
-    private void setupListeners(){
-        // Login Button
-        Button loginButton = findViewById(R.id.loginButton);
-        loginButton.setOnClickListener(view -> {
-            startSignInActivity();
-        });
-    }
-
-
-    // Firebase SignIn
-    private void startSignInActivity(){
-        // Choose authentication providers
-        List<AuthUI.IdpConfig> providers = Arrays.asList(
-                new AuthUI.IdpConfig.GoogleBuilder().build(),
-                new AuthUI.IdpConfig.FacebookBuilder().build(),
-                new AuthUI.IdpConfig.EmailBuilder().build());
-
-        // Launch the activity
-        startActivityForResult(
-                AuthUI.getInstance()
-                        .createSignInIntentBuilder()
-                        .setTheme(R.style.LoginTheme)
-                        .setAvailableProviders(providers)
-                        .setLogo(R.drawable.logo_login)
-                        .setIsSmartLockEnabled(false, true)
-                        .build(),
-                RC_SIGN_IN);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        // Connexion result according to request status
-        super.onActivityResult(requestCode, resultCode, data);
-        this.handleResponseAfterSignIn(requestCode, resultCode, data);
-    }
-
-    // Show Snack Bar with a message
-    private void showSnackBar( String message){
-        View container = findViewById(R.id.main_container);
-        Snackbar.make(container, message, Snackbar.LENGTH_SHORT).show();
-    }
-
-
-    // Method that handles response after SignIn Activity close
-    private void handleResponseAfterSignIn(int requestCode, int resultCode, Intent data){
-
-        IdpResponse response = IdpResponse.fromResultIntent(data);
-
-        if (requestCode == RC_SIGN_IN) {
-            // SUCCESS
-            if (resultCode == RESULT_OK) {
-                showSnackBar(getString(R.string.connection_succeed));
-            } else {
-                // ERRORS
-                if (response == null) {
-                    showSnackBar(getString(R.string.error_authentication_canceled));
-                } else if (response.getError()!= null) {
-                    if(response.getError().getErrorCode() == ErrorCodes.NO_NETWORK){
-                        showSnackBar(getString(R.string.error_no_internet));
-                    } else if (response.getError().getErrorCode() == ErrorCodes.UNKNOWN_ERROR) {
-                        showSnackBar(getString(R.string.error_unknown_error));
-                    }
-                }
-            }
-        }
     }
 
 
@@ -230,10 +147,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
     private void updateUIWithUserData(){
-        if(userManager.isCurrentUserLogged()){
+        if(userManager.isCurrentUserLogged()) {
             FirebaseUser user = userManager.getCurrentUser();
 
-            if(user.getPhotoUrl() != null){
+            if (user.getPhotoUrl() != null) {
                 setProfilePicture(user.getPhotoUrl());
             }
             setTextUserData(user);
@@ -266,9 +183,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         userEmailTextView.setText(email);
     }
 
-    // Update Login Button when activity is resuming
-    private void updateLoginButton(){
-        Button loginButton = findViewById(R.id.loginButton);
-        loginButton.setText(userManager.isCurrentUserLogged() ? getString(R.string.button_login_text_logged) : getString(R.string.button_login_text_not_logged));
+    // logout from firebase
+    private void logout() {
+        userManager.signOut(this).addOnSuccessListener(aVoid -> {
+                Intent loginActivityIntent = new Intent(this, LoginActivity.class);
+                ActivityCompat.startActivity(this, loginActivityIntent, null);
+                finish();
+        });
     }
 }
