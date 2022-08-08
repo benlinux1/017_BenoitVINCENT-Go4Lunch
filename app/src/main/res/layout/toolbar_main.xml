@@ -1,13 +1,11 @@
 <androidx.appcompat.widget.Toolbar
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/main_toolbar"
-    android:layout_width="match_parent"
-    android:layout_height="?attr/actionBarSize"
-    android:background="?attr/colorPrimary"
-    app:navigationIcon="@drawable/ic_baseline_menu_24"
-    app:titleTextColor="@color/white"
-    android:theme="@style/ToolBarStyle"
-    app:popupTheme="@style/ToolBarStyle">
-
-</androidx.appcompat.widget.Toolbar>
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/main_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        app:navigationIcon="@drawable/ic_baseline_menu_24"
+        app:titleTextColor="@color/white"
+        android:theme="@style/ToolBarStyle"
+        app:popupTheme="@style/ToolBarStyle" />

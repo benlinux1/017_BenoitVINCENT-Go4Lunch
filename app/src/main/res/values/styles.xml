@@ -35,6 +35,12 @@
         <item name="color">@android:color/white</item>
         <item name="android:navigationIcon">@drawable/ic_baseline_menu_24</item>
         <item name="android:color">@android:color/white</item>
+        <item name="android:elevation">@dimen/default_elevation_size</item>
+    </style>
+
+    <style name="RatingBar" parent="Theme.MyApplication">
+        <item name="colorControlNormal">@android:color/transparent</item>
+        <item name="colorControlActivated">@color/gold</item>
     </style>
 
 </resources>

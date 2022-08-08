@@ -12,6 +12,8 @@ import com.benlinux.go4lunch.R;
 import com.benlinux.go4lunch.databinding.ActivityLoginBinding;
 import com.benlinux.go4lunch.ui.userManager.UserManager;
 
+import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.ErrorCodes;
 import com.firebase.ui.auth.IdpResponse;
@@ -33,6 +35,8 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         ActivityLoginBinding binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        AppEventsLogger.activateApp(getApplication());
 
         checkIfUserIsConnected();
     }
@@ -83,9 +87,10 @@ public class LoginActivity extends AppCompatActivity {
         IdpResponse response = IdpResponse.fromResultIntent(data);
 
         if (requestCode == RC_SIGN_IN) {
-            // SUCCESS
+            // SUCCESS : launch MainActivity & close LoginActivity
             if (resultCode == RESULT_OK) {
                 startMainActivity();
+                finish();
             } else {
                 // ERRORS
                 if (response == null) {
@@ -111,6 +116,7 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    // Launch Main Activity
     private void startMainActivity() {
         Intent mainActivityIntent = new Intent(this, MainActivity.class);
         ActivityCompat.startActivity(this, mainActivityIntent, null);

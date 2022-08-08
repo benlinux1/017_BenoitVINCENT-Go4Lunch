@@ -9,6 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.benlinux.go4lunch.databinding.FragmentListViewBinding;
 
@@ -25,6 +26,8 @@ public class ListFragment extends Fragment {
         View root = binding.getRoot();
 
         final TextView textView = binding.textListView;
+        final RecyclerView restaurantList = binding.listRestaurants;
+
         listViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
         return root;
     }

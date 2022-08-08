@@ -1,5 +1,6 @@
 plugins {
     id 'com.android.application'
+    id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
 }
 
 // Google Services for Firebase
@@ -66,5 +67,10 @@ dependencies {
     implementation ("com.github.bumptech.glide:glide:4.11.0") {
         exclude group: "com.android.support"
     }
+
+    // GOOGLE MAP SDK
+    implementation 'com.google.android.gms:play-services-maps:18.1.0'
+
+    implementation 'com.google.android.libraries.places:places:2.6.0'
 
 }

@@ -99,6 +99,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void configureToolBar(){
         this.toolbar = (Toolbar) findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setElevation(R.dimen.default_elevation_size);
     }
 
 
@@ -146,6 +147,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
+    // Replace
     private void updateUIWithUserData(){
         if(userManager.isCurrentUserLogged()) {
             FirebaseUser user = userManager.getCurrentUser();

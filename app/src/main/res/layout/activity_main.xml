@@ -8,46 +8,20 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     tools:openDrawer="start"
-    tools:context="com.benlinux.go4lunch.activities.MainActivity" >
+    tools:context="com.benlinux.go4lunch.activities.MainActivity"
+    android:elevation="@dimen/default_elevation_size">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/main_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/bottom_nav_view">
+        android:layout_height="wrap_content">
 
         <!-- Toolbar -->
         <include
             layout="@layout/toolbar_main"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content" />
 
-        <!-- BUTTONS CONTAINER -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="bottom"
-            android:orientation="vertical"
-            app:layout_constraintTop_toBottomOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/bottom_nav_view"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            android:layout_margin="@dimen/default_large_margin" >
-
-            <!-- BUTTON LOGIN -->
-            <Button
-                android:id="@+id/loginButton"
-                style="?android:attr/borderlessButtonStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/default_large_margin"
-                android:background="@drawable/button_radius_primary_color"
-                android:padding="@dimen/default_large_padding"
-                android:text="@string/login"
-                android:textColor="@color/white"
-                android:textSize="@dimen/default_text_size" />
-
-        </LinearLayout>
 
         <fragment
             android:id="@+id/nav_host_fragment_activity_main"
@@ -55,11 +29,13 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:defaultNavHost="true"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="@dimen/very_large_margin"
+            app:layout_constraintTop_toBottomOf="@layout/toolbar_main"
+            app:layout_constraintBottom_toTopOf="@id/bottom_nav_view"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:navGraph="@navigation/mobile_navigation" />
+
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottom_nav_view"
@@ -86,8 +62,8 @@
         app:headerLayout="@layout/activity_main_nav_header"
         app:layout_constraintTop_toBottomOf="@id/main_toolbar"
         app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_marginTop="@dimen/drawer_margin"
         app:menu="@menu/activity_main_menu_drawer"
+        app:itemIconPadding="@dimen/default_medium_margin"
         android:background="@color/colorPrimary"
         app:itemTextColor="@color/white"
         app:itemIconTint="@color/white">

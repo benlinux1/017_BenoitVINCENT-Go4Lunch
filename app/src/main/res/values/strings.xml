@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Go4Lunch</string>
+    <string name="app_name">Go4lunch</string>
     <string name="navigation_map_view">Map View</string>
     <string name="navigation_list_view">List View</string>
     <string name="navigation_workmates">Workmates</string>
@@ -25,6 +25,8 @@
     // FACEBOOK AUTHENTICATION
     <string name="facebook_application_id" translatable="false">3250053565264066</string>
     <string name="fb_login_protocol_scheme" translatable="false">fb3250053565264066</string>
+    <string name="facebook_client_token">ce0e51edd844e91e718fb59948cab6c5</string>
+
 
     // NAVIGATION DRAWER
     <string name="user_name">John SMITH</string>
@@ -41,5 +43,17 @@
 
     <string name="button_login_text_logged">Go for lunch !</string>
     <string name="button_login_text_not_logged">Connexion</string>
+
+    // RESTAURANT LIST ITEM
+    <string name="restaurant_name">Le Zinc</string>
+    <string name="restaurant_style_and_address">French - 12 rue du Faubourg Poissonnière</string>
+    <string name="opening_hours">Open until 7pm</string>
+    <string name="distance">120m</string>
+    <string name="restaurant_users">(2)</string>
+    <string name="guest_picture">picture_of_a_guest</string>
+    <string name="restaurant_picture">picture_of_the_restaurant</string>
+    <string name="pick_place">Find a place</string>
+
+
 
 </resources>
