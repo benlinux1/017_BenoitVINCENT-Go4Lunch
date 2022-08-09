@@ -6,22 +6,19 @@
     android:layout_height="match_parent"
     tools:context=".ui.map.MapFragment" >
 
-    // MAP with marker fragment
+    <!-- MAP with marker fragment -->
     <fragment
-        xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:map="http://schemas.android.com/apk/res-auto"
         android:id="@+id/map"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:name="com.google.android.gms.maps.SupportMapFragment"
-        map:cameraZoom="10"
+        map:cameraZoom="15"
         map:uiZoomControls="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         />
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

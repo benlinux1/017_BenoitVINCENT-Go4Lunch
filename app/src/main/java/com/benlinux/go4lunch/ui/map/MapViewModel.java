@@ -15,16 +15,20 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 public class MapViewModel extends ViewModel {
 
-    private final MutableLiveData<LatLng> mLocation;
+    private MutableLiveData<LatLng> mLocation;
 
 
     public MapViewModel() {
-        mLocation = new MutableLiveData<LatLng>();
-        mLocation.setValue(new LatLng(-33.852, 151.211));
+        mLocation = new MutableLiveData<>();
+        mLocation.setValue(new LatLng(49.17824211438383, -0.36613963544368744));
     }
 
     public LiveData<LatLng> getPosition() {
         return mLocation;
+    }
+
+    public void setUserPosition(MutableLiveData<LatLng> position) {
+        this.mLocation = position;
     }
 
 

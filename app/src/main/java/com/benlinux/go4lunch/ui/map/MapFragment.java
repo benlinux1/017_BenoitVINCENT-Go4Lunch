@@ -16,6 +16,8 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewbinding.BuildConfig;
 
@@ -38,7 +40,6 @@ import com.google.android.libraries.places.api.net.PlacesClient;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Observer;
 import java.util.concurrent.Executor;
 
 
@@ -46,8 +47,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     private FragmentMapViewBinding binding;
 
-    private static final String TAG = MapFragment.class.getSimpleName();
     private GoogleMap map;
+
+    private static final String TAG = MapFragment.class.getSimpleName();
     private CameraPosition cameraPosition;
 
     // The entry point to the Fused Location Provider.
@@ -68,18 +70,21 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private static final String KEY_CAMERA_POSITION = "camera_position";
     private static final String KEY_LOCATION = "location";
 
+    private MutableLiveData<LatLng> mLocation;
+    private MapViewModel mapViewModel;
 
 
 
     @Override
-    public void onMapReady(GoogleMap googleMap) {
+    public void onMapReady(GoogleMap map) {
         // When map is loaded
-        googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-        LatLng sydney = new LatLng(-34.0, 151.0);
-        googleMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        LatLng officeLocation = new LatLng(49.17824211438383, -0.36613963544368744);
+        map.addMarker(new MarkerOptions().position(officeLocation).title("Office location"));
+        map.moveCamera(CameraUpdateFactory.newLatLng(officeLocation));
         // Prompt the user for permission.
         getLocationPermission();
+        checkAndRequestPermissions();
 
         // Turn on the My Location layer and the related control on the map.
         updateLocationUI();
@@ -88,22 +93,23 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         getDeviceLocation();
 
 
-        googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+        map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+
             @Override
             public void onMapClick(LatLng latLng) {
                 // When clicked on map
                 // Initialize marker options
-                MarkerOptions markerOptions=new MarkerOptions();
+                MarkerOptions markerOptions = new MarkerOptions();
                 // Set position of marker
                 markerOptions.position(latLng);
                 // Set title of marker
                 markerOptions.title(latLng.latitude+" : "+latLng.longitude);
                 // Remove all marker
-                googleMap.clear();
+                map.clear();
                 // Animating to zoom the marker
-                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,10));
+                map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,15));
                 // Add marker on map
-                googleMap.addMarker(markerOptions);
+                map.addMarker(markerOptions);
             }
         });
     }
@@ -114,14 +120,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        MapViewModel mapViewModel =
+        mapViewModel =
                 new ViewModelProvider(this).get(MapViewModel.class);
 
         binding = FragmentMapViewBinding.inflate(inflater, container, false);
 
         View root = binding.getRoot();
-
-        // TODO : mapViewModel.getPosition().observe(getViewLifecycleOwner(), this.);
 
         return root;
     }
@@ -210,7 +214,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         } else {
             super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
-        updateLocationUI();
     }
 
     private void updateLocationUI() {
@@ -249,6 +252,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                         if (task.isSuccessful()) {
                             // Set the map's camera position to the current location of the device.
                             lastKnownLocation = task.getResult();
+
                             if (lastKnownLocation != null) {
                                 map.moveCamera(CameraUpdateFactory.newLatLngZoom(
                                         new LatLng(lastKnownLocation.getLatitude(),
