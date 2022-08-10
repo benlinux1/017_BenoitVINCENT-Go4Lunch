@@ -36,6 +36,7 @@
     <string name="drawer_title_3">LOGOUT</string>
     <string name="info_no_email_found">Email not found</string>
     <string name="info_no_username_found">Username not found</string>
+    <string name="logo">Go4Lunch logo</string>
 
     // Used in NavigationDrawer
     <string name="navigation_drawer_open">Start</string>
@@ -53,6 +54,7 @@
     <string name="guest_picture">picture_of_a_guest</string>
     <string name="restaurant_picture">picture_of_the_restaurant</string>
     <string name="pick_place">Find a place</string>
+    <string name="option_get_place">Get place</string>
 
 
 
