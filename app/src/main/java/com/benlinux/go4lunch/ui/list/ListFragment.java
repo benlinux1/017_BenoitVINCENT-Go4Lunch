@@ -9,27 +9,70 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.benlinux.go4lunch.databinding.FragmentListViewBinding;
+import com.benlinux.go4lunch.ui.models.Restaurant;
+
+import java.util.List;
 
 public class ListFragment extends Fragment {
 
     private FragmentListViewBinding binding;
+    private ListAdapter adapter;
+
+    // TODO : private NearByApiService mNearByService;
+    private List<Restaurant> mRestaurants;
+    private RecyclerView mRecyclerView;
+
+    /**
+     * Create and return a new instance
+     * @return @{@link ListFragment}
+     */
+    public static ListFragment newInstance() {
+        ListFragment fragment = new ListFragment();
+        return fragment;
+    }
+
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        ListViewModel listViewModel =
-                new ViewModelProvider(this).get(ListViewModel.class);
 
         binding = FragmentListViewBinding.inflate(inflater, container, false);
-        View root = binding.getRoot();
+        View view = binding.getRoot();
 
-        final TextView textView = binding.textListView;
-        final RecyclerView restaurantList = binding.listRestaurants;
 
-        listViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
-        return root;
+
+        return view;
+    }
+
+
+    /**
+     * Init the recyclerView
+     */
+    private void configRecyclerView() {
+        mRecyclerView = binding.listRestaurants;
+        adapter = new ListAdapter(this.mRestaurants);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
+        mRecyclerView.setAdapter(adapter);
+    }
+
+
+    /**
+     * Init the List of restaurants
+     */
+    private void initList() {
+        // TODO : mRestaurants = mNearByService.getRestaurants();
+        // mRecyclerView.setAdapter(new ListAdapter(mRestaurants));
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        initList();
     }
 
     @Override

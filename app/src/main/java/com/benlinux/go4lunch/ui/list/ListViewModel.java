@@ -11,6 +11,7 @@ public class ListViewModel extends ViewModel {
     public ListViewModel() {
         mText = new MutableLiveData<>();
         mText.setValue("This is List View fragment");
+
     }
 
     public LiveData<String> getText() {
