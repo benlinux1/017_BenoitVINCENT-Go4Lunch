@@ -61,6 +61,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
 
 
 
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -106,9 +108,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
                             if (fineLocationGranted != null && fineLocationGranted) {
                                 locationPermissionGranted = true;
                                 getCurrentLocation();
+                                updateLocationUI();
                             } else if (coarseLocationGranted != null && coarseLocationGranted) {
                                 locationPermissionGranted = true;
                                 getCurrentLocation();
+                                updateLocationUI();
                             } else {
                                 // When location service is not enabled, open location settings and put app in background
                                 startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
@@ -150,7 +154,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
                 // When location is granted, mark current location with blue point
                 mGoogleMap.setMyLocationEnabled(true);
                 mGoogleMap.getUiSettings().setMyLocationButtonEnabled(true);
-
             } else {
                 // When location is not granted, don't mark map with blue point
                 mGoogleMap.setMyLocationEnabled(false);
