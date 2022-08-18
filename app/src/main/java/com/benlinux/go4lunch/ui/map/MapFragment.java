@@ -23,9 +23,11 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
+import com.benlinux.go4lunch.BuildConfig;
 import com.benlinux.go4lunch.R;
 import com.benlinux.go4lunch.databinding.FragmentMapViewBinding;
 
+import com.benlinux.go4lunch.ui.models.FetchData;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -58,6 +60,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
     private static final int DEFAULT_ZOOM = 15;
 
     private boolean locationPermissionGranted;
+
+    private LatLng actualLocation;
+
+    private Double actualLatitude;
+    private Double actualLongitude;
+
+
 
 
 
@@ -108,21 +117,23 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
                             if (fineLocationGranted != null && fineLocationGranted) {
                                 locationPermissionGranted = true;
                                 getCurrentLocation();
-                                updateLocationUI();
+                                findRestaurants();
                             } else if (coarseLocationGranted != null && coarseLocationGranted) {
                                 locationPermissionGranted = true;
                                 getCurrentLocation();
-                                updateLocationUI();
+                                findRestaurants();
                             } else {
                                 // When location service is not enabled, open location settings and put app in background
+                                Toast.makeText(getContext(), "Please enable position & restart app to use map features", Toast.LENGTH_SHORT).show();
                                 startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
                                         .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                             }
                         }
                 );
-
-        // Before permission request, check whether the app has already the permissions
-        // and whether the app needs to show a permission rationale dialog
+        /*
+        * Before permission request, check whether the app has already the permissions
+        * and whether the app needs to show a permission rationale dialog
+        */
         locationPermissionRequest.launch(new String[]{
                 Manifest.permission.ACCESS_FINE_LOCATION,
                 Manifest.permission.ACCESS_COARSE_LOCATION
@@ -133,17 +144,19 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
     @Override
     // Google map For OnMapReady callback implementation
     public void onMapReady(GoogleMap googleMap) {
-
         // When map is loaded
         mGoogleMap = googleMap;
         googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        // update UI with or without blue point location and map centering button
         updateLocationUI();
     }
 
 
-
+    /*
+     * Add or remove user location with blue point marker on Google Map
+     * and map centering button according to permissions
+     */
     @SuppressLint("MissingPermission")
-    // Add user location with blue point marker on Google Map
     private void updateLocationUI() {
         if (mGoogleMap == null) {
             Toast.makeText(getContext(), "No Map", Toast.LENGTH_SHORT).show();
@@ -187,13 +200,18 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
                                     // When map is loaded
                                     mGoogleMap = googleMap;
 
-                                    // Add marker & move camera to user location
-                                    mGoogleMap.addMarker(new MarkerOptions().position(new LatLng(location.getLatitude(),
-                                            location.getLongitude())).title("Actual location"));
-                                    mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
-                                            new LatLng(location.getLatitude(),
-                                                    location.getLongitude()), DEFAULT_ZOOM));
+                                    // save actual location
+                                    actualLocation = new LatLng(location.getLatitude(), location.getLongitude());
+                                    actualLatitude = actualLocation.latitude;
+                                    actualLongitude = actualLocation.longitude;
 
+                                    /**
+                                    // Add marker & move camera to user location
+                                    mGoogleMap.addMarker(new MarkerOptions().position(actualLocation).title("Actual location"));
+                                    mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(actualLocation, DEFAULT_ZOOM));
+                                     */
+
+                                    /**
                                     // Set listener for clicks on Map
                                     googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
                                         @Override
@@ -212,8 +230,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
                                             // Add marker on map
                                             googleMap.addMarker(markerOptions);
                                         }
+
                                     });
+                                     */
                                 }
+
                             });
                         } else {
                             // When location result is null, initialize location request
@@ -229,12 +250,18 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
                                 public void onLocationResult(LocationResult locationResult) {
                                     // Initialize last location
                                     Location lastLocation = locationResult.getLastLocation();
+
+                                    // Save actual location
+                                    actualLocation = new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude());
+                                    actualLatitude = actualLocation.latitude;
+                                    actualLongitude = actualLocation.longitude;
+
+                                    /**
                                     // Add marker & move camera to user last known location
-                                    mGoogleMap.addMarker(new MarkerOptions().position(new LatLng(lastLocation.getLatitude(),
-                                            lastLocation.getLongitude())).title("Last known location"));
+                                    mGoogleMap.addMarker(new MarkerOptions().position(actualLocation).title("Last known location"));
                                     mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
-                                            new LatLng(lastLocation.getLatitude(),
-                                                    lastLocation.getLongitude()), DEFAULT_ZOOM));
+                                            actualLocation, DEFAULT_ZOOM));
+                                     */
                                 }
                             };
                             // Request location updates
@@ -246,12 +273,102 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
                 Log.e("Exception: %s", ex.getMessage());
             }
         } else {
-            // When location service is not enabled, open location settings in foreground
-            // so app is put in background
+            /**
+             * When location service is not enabled, open location settings in foreground
+             * so that app is put in background
+             */
             startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
                     .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
         }
     }
+
+
+    public void findRestaurants() {
+        // Build Place request with URL
+        String apiKey = BuildConfig.MAPS_API_KEY;
+        StringBuilder stringBuilder = new StringBuilder
+                ("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
+                stringBuilder.append("location=").append(actualLatitude).append(",").append(actualLongitude);
+                stringBuilder.append("&radius=2500");
+                stringBuilder.append("&type=restaurant");
+                stringBuilder.append("&key=" + apiKey);
+
+                String url = stringBuilder.toString();
+                Object[] dataFetch = new Object[2];
+                dataFetch[0] = mGoogleMap;
+                dataFetch[1] = url;
+
+        FetchData fetchData = new FetchData();
+        fetchData.execute(dataFetch);
+    }
+
+/**
+    public class PlaceTask extends AsyncTask<String, Integer, String> {
+        @Override
+        protected String doInBackground(String... strings) {
+            String data = null;
+            try {
+                // Initialize data
+                data = PlaceDownloadUrl.downloadUrl(strings[0]);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return data;
+        }
+*/
+
+
+
+
+/**
+        private class ParserTask extends AsyncTask<String, Integer, List<HashMap<String, String>>> {
+            @Override
+            protected List<HashMap<String, String>> doInBackground(String... strings) {
+                // Create JSON parser class
+                JsonParser jsonParser = new JsonParser();
+                // Initialize hash map list
+                List<HashMap<String, String>> mapList = null;
+                JSONObject object = null;
+                try {
+                    // Initialize Json object
+                    object = new JSONObject(strings[0]);
+                    // Parse Json object
+                    mapList = jsonParser.parseResult(object);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                // Return map list
+                return mapList;
+            }
+            @Override
+            protected void onPostExecute(List<HashMap<String, String>> hashMaps) {
+                // clear map
+                mGoogleMap.clear();
+                // Use for loop
+                for (int i=0; i<hashMaps.size(); i++) {
+                    // Initialize has map
+                    HashMap<String, String> hashMapList = hashMaps.get(i);
+                    // Get latitude
+                    double lat = Double.parseDouble(Objects.requireNonNull(hashMapList.get("lat")));
+                    // Get longitude
+                    double lng = Double.parseDouble(Objects.requireNonNull(hashMapList.get("lng")));
+                    // Get name
+                    String name = hashMapList.get("name");
+                    // Concat latitude & longitude
+                    LatLng latLng = new LatLng(lat, lng);
+                    // Initialize marker options
+                    MarkerOptions options = new MarkerOptions();
+                    // Set position
+                    options.position(latLng);
+                    // Set title
+                    options.title(name);
+                    // add marker on map
+                    mGoogleMap.addMarker(options);
+                }
+            }
+        }
+    }
+ */
 
     @Override
     public void onDestroyView() {
