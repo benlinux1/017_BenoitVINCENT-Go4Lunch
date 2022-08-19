@@ -1,10 +1,19 @@
 package com.benlinux.go4lunch.ui.models;
 
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.AsyncTask;
 
+import com.benlinux.go4lunch.R;
 import com.benlinux.go4lunch.ui.map.MapFragment;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -38,11 +47,12 @@ public class FetchData extends AsyncTask<Object, String, String> {
                 String name = getName.getString("name");
 
                 LatLng latLng = new LatLng(Double.parseDouble(lat), Double.parseDouble(lng));
-                MarkerOptions markerOptions = new MarkerOptions();
-                markerOptions.title(name);
-                markerOptions.position(latLng);
+                MarkerOptions markerOptions = new MarkerOptions()
+                    .title(name)
+                    .position(latLng)
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN));
                 googleMap.addMarker(markerOptions);
-                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
+                // googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
             }
         } catch (JSONException e) {
             e.printStackTrace();
