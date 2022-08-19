@@ -15,16 +15,18 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 public class MapViewModel extends ViewModel {
 
-    private final MutableLiveData<LatLng> mLocation;
-    private final MutableLiveData<Boolean> hasPermissions = new MutableLiveData<>();
+    private MutableLiveData<LatLng> mLocation = new MutableLiveData<>();
 
 
     public MapViewModel() {
-        mLocation = new MutableLiveData<>();
-        mLocation.setValue(new LatLng(49.17824211438383, -0.36613963544368744));
+        mLocation = this.getUserLocation();
+        if (mLocation == null) {
+            mLocation.setValue(new LatLng(49.17824211438383, -0.36613963544368744));
+        }
+
     }
 
-    public LiveData<LatLng> getUserLocation() {
+    public MutableLiveData<LatLng> getUserLocation() {
         return mLocation;
     }
 
@@ -32,9 +34,7 @@ public class MapViewModel extends ViewModel {
         this.mLocation.setValue(position);
     }
 
-    public LiveData<Boolean> observePermissionState() {
-        return hasPermissions;
-    }
+
 
 
 
