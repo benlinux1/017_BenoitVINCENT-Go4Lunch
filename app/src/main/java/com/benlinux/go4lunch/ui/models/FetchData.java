@@ -35,6 +35,8 @@ public class FetchData extends AsyncTask<Object, String, String> {
             JSONObject jsonObject = new JSONObject(s);
             JSONArray jsonArray =  jsonObject.getJSONArray("results");
 
+            int restaurantMarker;
+
             for (int i=0; i<jsonArray.length(); i++) {
                 JSONObject jsonObject1 = jsonArray.getJSONObject(i);
                 JSONObject getLocation = jsonObject1.getJSONObject("geometry")
@@ -43,14 +45,16 @@ public class FetchData extends AsyncTask<Object, String, String> {
                 String lat = getLocation.getString("lat");
                 String lng = getLocation.getString("lng");
 
-                JSONObject getName = jsonArray.getJSONObject(i);
-                String name = getName.getString("name");
+                JSONObject getInfo = jsonArray.getJSONObject(i);
+                String name = getInfo.getString("name");
+
+                restaurantMarker = R.drawable.ic_marker_48;
 
                 LatLng latLng = new LatLng(Double.parseDouble(lat), Double.parseDouble(lng));
                 MarkerOptions markerOptions = new MarkerOptions()
                     .title(name)
                     .position(latLng)
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN));
+                    .icon(BitmapDescriptorFactory.fromResource(restaurantMarker));
                 googleMap.addMarker(markerOptions);
                 // googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
             }
