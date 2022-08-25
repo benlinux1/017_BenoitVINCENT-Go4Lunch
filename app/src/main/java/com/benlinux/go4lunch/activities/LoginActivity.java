@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -16,16 +18,16 @@ import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.ErrorCodes;
+import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract;
 import com.firebase.ui.auth.IdpResponse;
 
+import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Arrays;
 import java.util.List;
 
 public class LoginActivity extends AppCompatActivity {
-
-    private static final int RC_SIGN_IN = 123;
 
     // FOR DATA
     private final UserManager userManager = UserManager.getInstance();
@@ -35,8 +37,6 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         ActivityLoginBinding binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        FacebookSdk.sdkInitialize(getApplicationContext());
-        AppEventsLogger.activateApp(getApplication());
 
         checkIfUserIsConnected();
     }
@@ -47,6 +47,18 @@ public class LoginActivity extends AppCompatActivity {
         super.onResume();
     }
 
+
+    // Create callback for Firebase authentication result
+    private final ActivityResultLauncher<Intent> signInLauncher = registerForActivityResult(
+            new FirebaseAuthUIActivityResultContract(),
+            new ActivityResultCallback<FirebaseAuthUIAuthenticationResult>() {
+                @Override
+                public void onActivityResult(FirebaseAuthUIAuthenticationResult result) {
+                    onSignInResult(result);
+                }
+            }
+    );
+
     // Firebase SignIn
     private void startSignInActivity(){
         // Choose authentication providers
@@ -55,55 +67,43 @@ public class LoginActivity extends AppCompatActivity {
                 new AuthUI.IdpConfig.FacebookBuilder().build(),
                 new AuthUI.IdpConfig.EmailBuilder().build());
 
-        // Launch the activity
-        startActivityForResult(
-                AuthUI.getInstance()
-                        .createSignInIntentBuilder()
-                        .setTheme(R.style.LoginTheme)
-                        .setLogo(R.drawable.logo_login)
-                        .setAvailableProviders(providers)
-                        .setIsSmartLockEnabled(false, true)
-                        .build(),
-                RC_SIGN_IN);
+        // Create and launch sign-in intent
+        Intent signInIntent = AuthUI.getInstance()
+                .createSignInIntentBuilder()
+                .setAvailableProviders(providers)
+                .setTheme(R.style.LoginTheme)
+                .setLogo(R.drawable.logo_login)
+                .build();
+        signInLauncher.launch(signInIntent);
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        // Connexion result according to request status
-        super.onActivityResult(requestCode, resultCode, data);
-        this.handleResponseAfterSignIn(requestCode, resultCode, data);
+
+    // Handler for response after SignIn Activity close
+    private void onSignInResult(FirebaseAuthUIAuthenticationResult result) {
+        IdpResponse response = result.getIdpResponse();
+        if (result.getResultCode() == RESULT_OK) {
+            // Successfully signed in
+            startMainActivity();
+            finish();
+            // ...
+        } else {
+            // ERRORS
+            if (response == null) {
+                showSnackBar(getString(R.string.error_authentication_canceled));
+            } else if (response.getError()!= null) {
+                if(response.getError().getErrorCode() == ErrorCodes.NO_NETWORK){
+                    showSnackBar(getString(R.string.error_no_internet));
+                } else if (response.getError().getErrorCode() == ErrorCodes.UNKNOWN_ERROR) {
+                    showSnackBar(getString(R.string.error_unknown_error));
+                }
+            }
+        }
     }
 
     // Show Snack Bar with a message
     private void showSnackBar( String message){
         View container = findViewById(R.id.main_container);
         Snackbar.make(container, message, Snackbar.LENGTH_SHORT).show();
-    }
-
-
-    // Method that handles response after SignIn Activity close
-    private void handleResponseAfterSignIn(int requestCode, int resultCode, Intent data){
-
-        IdpResponse response = IdpResponse.fromResultIntent(data);
-
-        if (requestCode == RC_SIGN_IN) {
-            // SUCCESS : launch MainActivity & close LoginActivity
-            if (resultCode == RESULT_OK) {
-                startMainActivity();
-                finish();
-            } else {
-                // ERRORS
-                if (response == null) {
-                    showSnackBar(getString(R.string.error_authentication_canceled));
-                } else if (response.getError()!= null) {
-                    if(response.getError().getErrorCode() == ErrorCodes.NO_NETWORK){
-                        showSnackBar(getString(R.string.error_no_internet));
-                    } else if (response.getError().getErrorCode() == ErrorCodes.UNKNOWN_ERROR) {
-                        showSnackBar(getString(R.string.error_unknown_error));
-                    }
-                }
-            }
-        }
     }
 
 

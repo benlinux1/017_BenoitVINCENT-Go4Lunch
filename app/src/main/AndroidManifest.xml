@@ -6,7 +6,7 @@
     <queries> <provider android:authorities="com.facebook.katana.provider.PlatformProvider" /> </queries>
 
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
@@ -31,10 +31,22 @@
             </intent-filter>
         </activity>
 
-        <meta-data android:name="facebook_app_id" android:value="@string/facebook_application_id"/>
-        <meta-data android:name="facebook_application_id" android:value="@string/facebook_application_id"/>
-        <meta-data android:name="com.facebook.sdk.ClientToken" android:value="@string/facebook_client_token"/>
-        <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_application_id"/>
+        <meta-data
+            android:name="facebook_app_id"
+            android:value="@string/facebook_application_id"/>
+
+        <meta-data
+            android:name="facebook_application_id"
+            android:value="@string/facebook_application_id" />
+
+        <meta-data
+            android:name="facebook_protocol_id"
+            android:value="${FACEBOOK_PROTOCOL_SCHEME}"/>
+
+        <meta-data
+            android:name="com.facebook.sdk.ClientToken"
+            android:value="${FACEBOOK_CLIENT_TOKEN}"/>
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="${MAPS_API_KEY}" />

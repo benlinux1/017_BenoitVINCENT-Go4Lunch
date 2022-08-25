@@ -23,7 +23,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 
-public class FetchData extends AsyncTask<Object, String, String> {
+public class FetchPlacesData extends AsyncTask<Object, String, String> {
 
     String googleNearByPlacesData;
     GoogleMap googleMap;

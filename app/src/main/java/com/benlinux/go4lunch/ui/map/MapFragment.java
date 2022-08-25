@@ -25,16 +25,14 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
-import androidx.core.content.ContextCompat;
+
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.benlinux.go4lunch.BuildConfig;
 import com.benlinux.go4lunch.R;
 import com.benlinux.go4lunch.databinding.FragmentMapViewBinding;
 
-import com.benlinux.go4lunch.ui.models.FetchData;
-import com.benlinux.go4lunch.ui.workmates.WorkmatesViewModel;
+import com.benlinux.go4lunch.ui.models.FetchPlacesData;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -46,14 +44,10 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 
-import com.google.android.gms.maps.model.BitmapDescriptor;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-
-import java.util.Objects;
 
 
 @RequiresApi(api = Build.VERSION_CODES.N) // Required for getOrDefault method in location permissions
@@ -85,14 +79,16 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         super.onCreate(savedInstanceState);
         // Initialize user location
         client = LocationServices.getFusedLocationProviderClient(requireActivity());
-        // Request user location permission
-        getLocationPermission();
+
     }
 
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        // Request user location permission
+        getLocationPermission();
 
         binding = FragmentMapViewBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
@@ -365,12 +361,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 stringBuilder.append("&key=" + apiKey);
 
                 String url = stringBuilder.toString();
-                Object[] dataFetch = new Object[2];
-                dataFetch[0] = mGoogleMap;
-                dataFetch[1] = url;
+                Object[] restaurantData = new Object[2];
+                restaurantData[0] = mGoogleMap;
+                restaurantData[1] = url;
 
-        FetchData fetchData = new FetchData();
-        fetchData.execute(dataFetch);
+        FetchPlacesData fetchPlacesData = new FetchPlacesData();
+        fetchPlacesData.execute(restaurantData);
     }
 
 /**
