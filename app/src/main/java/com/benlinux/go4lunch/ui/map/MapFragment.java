@@ -365,7 +365,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 restaurantData[0] = mGoogleMap;
                 restaurantData[1] = url;
 
-        FetchPlacesData fetchPlacesData = new FetchPlacesData();
+        FetchPlacesData fetchPlacesData = new FetchPlacesData(getContext());
         fetchPlacesData.execute(restaurantData);
     }
 

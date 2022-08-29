@@ -85,7 +85,6 @@ public class LoginActivity extends AppCompatActivity {
             // Successfully signed in
             startMainActivity();
             finish();
-            // ...
         } else {
             // ERRORS
             if (response == null) {
