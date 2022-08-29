@@ -102,7 +102,7 @@ public class FetchPlacesData extends AsyncTask<Object, String, String> {
             String mStreet = returnedAddress.getThoroughfare();
             String mPostalCode = returnedAddress.getPostalCode();
             String mCity = returnedAddress.getLocality();
-            strReturnedAddress.append(mStreetNumber).append(" ").append(mStreet).append(" - ").append(mPostalCode).append(mCity);
+            strReturnedAddress.append(mStreetNumber).append(" ").append(mStreet).append(" - ").append(mPostalCode).append(" ").append(mCity);
             strAdd = strReturnedAddress.toString();
 
         } catch (Exception e) {
