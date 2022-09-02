@@ -6,6 +6,7 @@
         <entry key="..\:/Users/ops14/Desktop/FORMATION OCR/2 -ANDROID/DA_ANDROID_GO4LUNCH/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.1" />
         <entry key="..\:/Users/ops14/Desktop/FORMATION OCR/2 -ANDROID/DA_ANDROID_GO4LUNCH/app/src/main/res/drawable/button_radius_primary_color.xml" value="0.1" />
         <entry key="..\:/Users/ops14/Desktop/FORMATION OCR/2 -ANDROID/DA_ANDROID_GO4LUNCH/app/src/main/res/drawable/ic_baseline_menu_24.xml" value="0.176" />
+        <entry key="..\:/Users/ops14/Desktop/FORMATION OCR/2 -ANDROID/DA_ANDROID_GO4LUNCH/app/src/main/res/drawable/ic_check_circle.xml" value="0.2645" />
         <entry key="..\:/Users/ops14/Desktop/FORMATION OCR/2 -ANDROID/DA_ANDROID_GO4LUNCH/app/src/main/res/drawable/ic_circle.xml" value="0.235" />
         <entry key="..\:/Users/ops14/Desktop/FORMATION OCR/2 -ANDROID/DA_ANDROID_GO4LUNCH/app/src/main/res/drawable/ic_dashboard_black_24dp.xml" value="0.1" />
         <entry key="..\:/Users/ops14/Desktop/FORMATION OCR/2 -ANDROID/DA_ANDROID_GO4LUNCH/app/src/main/res/drawable/ic_launcher_background.xml" value="0.1" />
@@ -14,11 +15,15 @@
         <entry key="..\:/Users/ops14/Desktop/FORMATION OCR/2 -ANDROID/DA_ANDROID_GO4LUNCH/app/src/main/res/drawable/ic_lunch.xml" value="0.2865" />
         <entry key="..\:/Users/ops14/Desktop/FORMATION OCR/2 -ANDROID/DA_ANDROID_GO4LUNCH/app/src/main/res/drawable/ic_map_24dp.xml" value="0.1" />
         <entry key="..\:/Users/ops14/Desktop/FORMATION OCR/2 -ANDROID/DA_ANDROID_GO4LUNCH/app/src/main/res/drawable/ic_marker.xml" value="0.2865" />
+        <entry key="..\:/Users/ops14/Desktop/FORMATION OCR/2 -ANDROID/DA_ANDROID_GO4LUNCH/app/src/main/res/drawable/ic_phone.xml" value="0.2645" />
+        <entry key="..\:/Users/ops14/Desktop/FORMATION OCR/2 -ANDROID/DA_ANDROID_GO4LUNCH/app/src/main/res/drawable/ic_star.xml" value="0.2645" />
+        <entry key="..\:/Users/ops14/Desktop/FORMATION OCR/2 -ANDROID/DA_ANDROID_GO4LUNCH/app/src/main/res/drawable/ic_website.xml" value="0.2645" />
         <entry key="..\:/Users/ops14/Desktop/FORMATION OCR/2 -ANDROID/DA_ANDROID_GO4LUNCH/app/src/main/res/drawable/marker_ic.xml" value="0.2865" />
         <entry key="..\:/Users/ops14/Desktop/FORMATION OCR/2 -ANDROID/DA_ANDROID_GO4LUNCH/app/src/main/res/layout-v28/activity_main_nav_header.xml" value="0.1301715438950555" />
         <entry key="..\:/Users/ops14/Desktop/FORMATION OCR/2 -ANDROID/DA_ANDROID_GO4LUNCH/app/src/main/res/layout/activity_login.xml" value="0.11145833333333334" />
         <entry key="..\:/Users/ops14/Desktop/FORMATION OCR/2 -ANDROID/DA_ANDROID_GO4LUNCH/app/src/main/res/layout/activity_main.xml" value="0.15432098765432098" />
         <entry key="..\:/Users/ops14/Desktop/FORMATION OCR/2 -ANDROID/DA_ANDROID_GO4LUNCH/app/src/main/res/layout/activity_main_nav_header.xml" value="0.16666666666666666" />
+        <entry key="..\:/Users/ops14/Desktop/FORMATION OCR/2 -ANDROID/DA_ANDROID_GO4LUNCH/app/src/main/res/layout/activity_restaurant_details.xml" value="0.3333333333333333" />
         <entry key="..\:/Users/ops14/Desktop/FORMATION OCR/2 -ANDROID/DA_ANDROID_GO4LUNCH/app/src/main/res/layout/custom_info_contents.xml" value="0.3220108695652174" />
         <entry key="..\:/Users/ops14/Desktop/FORMATION OCR/2 -ANDROID/DA_ANDROID_GO4LUNCH/app/src/main/res/layout/fragment_list_view.xml" value="0.22" />
         <entry key="..\:/Users/ops14/Desktop/FORMATION OCR/2 -ANDROID/DA_ANDROID_GO4LUNCH/app/src/main/res/layout/fragment_map_view.xml" value="0.1" />
