@@ -30,6 +30,7 @@ import androidx.fragment.app.Fragment;
 
 import com.benlinux.go4lunch.BuildConfig;
 import com.benlinux.go4lunch.R;
+import com.benlinux.go4lunch.activities.RestaurantDetailsActivity;
 import com.benlinux.go4lunch.databinding.FragmentMapViewBinding;
 
 import com.benlinux.go4lunch.ui.models.FetchPlacesData;
@@ -45,6 +46,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -165,6 +167,21 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             findRestaurants();
         }
 
+        // Set listener on restaurant's info window to launch restaurant's details page
+        mGoogleMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+            @Override
+            public void onInfoWindowClick(@NonNull Marker marker) {
+
+                Intent restaurantDetailsIntent = new Intent(getContext(), RestaurantDetailsActivity.class);
+                // Retrieve place_id in tag
+                String placeId= String.valueOf(marker.getTag());
+                // Send place_id in the intent, in order to get it in details activity
+                restaurantDetailsIntent.putExtra("PLACE_ID", placeId);
+                if (!placeId.equals("null")) {
+                    startActivity(restaurantDetailsIntent);
+                }
+            }
+        });
     }
 
 

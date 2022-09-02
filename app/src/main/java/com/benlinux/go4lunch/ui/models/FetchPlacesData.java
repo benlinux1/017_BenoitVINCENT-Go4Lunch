@@ -28,6 +28,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 public class FetchPlacesData extends AsyncTask<Object, String, String> {
 
@@ -50,31 +51,41 @@ public class FetchPlacesData extends AsyncTask<Object, String, String> {
 
             int restaurantMarker;
 
-
-
+            // Loop to get restaurants details from each result of the Place request
             for (int i=0; i<jsonArray.length(); i++) {
-                JSONObject jsonObject1 = jsonArray.getJSONObject(i);
-                JSONObject getLocation = jsonObject1.getJSONObject("geometry")
+                JSONObject restaurantInfo = jsonArray.getJSONObject(i);
+                JSONObject getLocation = restaurantInfo.getJSONObject("geometry")
                         .getJSONObject("location");
 
+                // Get restaurant's latitude & longitude
                 String lat = getLocation.getString("lat");
                 String lng = getLocation.getString("lng");
 
+                // Get restaurant's name
                 JSONObject getInfo = jsonArray.getJSONObject(i);
                 String name = getInfo.getString("name");
 
+                // Define restaurant marker icon
                 restaurantMarker = R.drawable.ic_marker_48;
 
+                // Define restaurant LatLng for marker
                 LatLng latLng = new LatLng(Double.parseDouble(lat), Double.parseDouble(lng));
 
+                // Get restaurant's address from LatLng
                 String address = getAddressFromLatLng(latLng);
 
+                // Get place id (used to retrieve place info in details activity)
+                String placeId = getInfo.getString("place_id");
+
+                // Define marker options (restaurant's name, address, position, icon)
                 MarkerOptions markerOptions = new MarkerOptions()
                     .title(name)
                     .snippet(address)
                     .position(latLng)
                     .icon(BitmapDescriptorFactory.fromResource(restaurantMarker));
-                googleMap.addMarker(markerOptions);
+
+                // Set place id in tag (used to retrieve place info in details activity)
+                Objects.requireNonNull(googleMap.addMarker(markerOptions)).setTag(placeId);
                 // googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
             }
         } catch (JSONException e) {
