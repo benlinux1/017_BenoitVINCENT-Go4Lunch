@@ -60,6 +60,11 @@
     <string name="call">CALL</string>
     <string name="like">LIKE</string>
     <string name="website">WEBSITE</string>
+    <string name="no_website_notification">This restaurant doesn\'t have website…</string>
+    <string name="no_phoneNumber_notification">This restaurant doesn\'t phone number…</string>
+    <string name="distance_in_meters_end" translatable="false">%d m</string>
+    <string name="restaurant_location" translatable="false">Restaurant location</string>
+
 
 
 

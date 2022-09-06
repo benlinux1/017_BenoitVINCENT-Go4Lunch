@@ -94,7 +94,7 @@ public class FetchPlacesData extends AsyncTask<Object, String, String> {
     }
 
     // Return address according to Latitude & longitude params
-    private String getAddressFromLatLng(LatLng latLng) {
+    public String getAddressFromLatLng(LatLng latLng) {
         Geocoder geocoder;
         List<Address> addresses;
         geocoder = new Geocoder(this.localContext, Locale.getDefault());

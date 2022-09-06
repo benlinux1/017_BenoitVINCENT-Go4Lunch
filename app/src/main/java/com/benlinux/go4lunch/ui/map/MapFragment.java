@@ -175,8 +175,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 Intent restaurantDetailsIntent = new Intent(getContext(), RestaurantDetailsActivity.class);
                 // Retrieve place_id in tag
                 String placeId= String.valueOf(marker.getTag());
+                // Retrieve place_
+                LatLng userLocation = actualLocation;
                 // Send place_id in the intent, in order to get it in details activity
                 restaurantDetailsIntent.putExtra("PLACE_ID", placeId);
+
+                restaurantDetailsIntent.putExtra("USER_LOCATION", userLocation);
                 if (!placeId.equals("null")) {
                     startActivity(restaurantDetailsIntent);
                 }

@@ -68,10 +68,9 @@
                 android:layout_marginEnd="@dimen/small_margin"
                 android:textColor="@color/white"
                 android:textSize="@dimen/default_title_size"
-                app:layout_constraintBottom_toTopOf="@+id/restaurantDetailsAddress"
-                app:layout_constraintEnd_toStartOf="@+id/restaurantDetailsRating"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/restaurantDetailsAddress"
                 app:layout_constraintVertical_chainStyle="packed"
                 tools:text="@string/restaurant_name" />
 
@@ -80,24 +79,25 @@
                 style="@style/Widget.AppCompat.RatingBar.Small"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/small_margin"
+                android:layout_marginStart="@dimen/default_margin"
                 android:theme="@style/RatingBar"
-                app:layout_constraintBottom_toBottomOf="@+id/restaurantDetailsName"
-                app:layout_constraintEnd_toStartOf="@+id/guideline5"
+                app:layout_constraintTop_toTopOf="@+id/restaurantDetailsName"
                 app:layout_constraintStart_toEndOf="@+id/restaurantDetailsName"
-                app:layout_constraintTop_toTopOf="@+id/restaurantDetailsName" />
+                app:layout_constraintBottom_toBottomOf="@+id/restaurantDetailsName"
+                app:layout_constraintEnd_toStartOf="@+id/guideline5" />
 
             <TextView
                 android:id="@+id/restaurantDetailsAddress"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/small_margin"
+                android:layout_marginStart="@dimen/default_margin"
                 android:layout_marginEnd="@dimen/default_margin"
                 android:layout_marginBottom="@dimen/small_margin"
                 android:textColor="@color/white"
                 app:layout_constraintBottom_toTopOf="@+id/restaurantDetailsOpening"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/restaurantDetailsName"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/restaurantDetailsName"
                 tools:text="@string/restaurant_style_and_address" />
 
@@ -105,19 +105,20 @@
                 android:id="@+id/restaurantDetailsOpening"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/default_margin"
                 android:textColor="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/restaurantDetailsDistance"
                 app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="@+id/restaurantDetailsAddress"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/restaurantDetailsAddress"
+                app:layout_constraintEnd_toStartOf="@id/guideline5"
                 tools:text="@string/opening_hours" />
 
             <TextView
                 android:id="@+id/restaurantDetailsDistance"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/default_large_margin"
+                android:layout_marginStart="@dimen/small_margin"
                 android:textColor="@color/white"
                 app:layout_constraintBottom_toBottomOf="@+id/restaurantDetailsOpening"
                 app:layout_constraintStart_toEndOf="@+id/restaurantDetailsOpening"
