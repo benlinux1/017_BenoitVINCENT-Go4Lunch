@@ -65,8 +65,6 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
     private ImageButton likeButton;
     private ImageButton webSiteButton;
 
-    private LatLng userPosition;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,15 +82,13 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
     // Retrieve Place Id from previous activity
     private String getRestaurantIdFromIntent() {
         Intent intent = getIntent();
-        String restaurantID = intent.getStringExtra("PLACE_ID");
-        return restaurantID;
+        return intent.getStringExtra("PLACE_ID");
     }
 
     // Retrieve User location from previous activity
     private LatLng getUserLocationFromIntent() {
         Intent intent = getIntent();
-        userPosition = intent.getParcelableExtra("USER_LOCATION");
-        return userPosition;
+        return intent.getParcelableExtra("USER_LOCATION");
     }
 
     // Define views
@@ -163,8 +159,6 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
             if (exception instanceof ApiException) {
                 final ApiException apiException = (ApiException) exception;
                 Log.e(TAG, "Place not found: " + exception.getMessage());
-                final int statusCode = apiException.getStatusCode();
-                // TODO: Handle error with given status code.
             }
         });
     }
@@ -197,9 +191,9 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
 
             // Format opening hours of the day according to user language
             StringBuilder openingHours = new StringBuilder();
-            if (Locale.getDefault() == Locale.FRANCE) {
+            if (Locale.getDefault().getLanguage().equals("fr")) {
                 openingHours.append("Ouvert aujourd'hui de ").append(openHour).append("h").append(formatMinutes(openMinutes))
-                        .append(" jusqu'à ").append(closeHour+12).append("h").append(formatMinutes(closeMinutes)).append("  -");
+                        .append(" jusqu'à ").append(closeHour).append("h").append(formatMinutes(closeMinutes)).append("  -");
             } else {
                 openingHours.append("Open today from ").append(openHour).append(":").append(formatMinutes(openMinutes)).append(" am")
                         .append(" to ").append(closeHour).append(":").append(formatMinutes(closeMinutes)).append(" pm").append("  -");
@@ -244,8 +238,7 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
     // Calculate distance between two points, and format to string in meters
     private String calculateAndFormatDistance(LatLng startPoint, LatLng endPoint) {
         double distance = SphericalUtil.computeDistanceBetween(startPoint, endPoint);
-        String distanceString = String.format(getString(R.string.distance_in_meters_end), Math.round(distance));
-        return distanceString;
+        return String.format(getString(R.string.distance_in_meters_end), Math.round(distance));
     }
 
     // Set place picture with placeClient to imageView

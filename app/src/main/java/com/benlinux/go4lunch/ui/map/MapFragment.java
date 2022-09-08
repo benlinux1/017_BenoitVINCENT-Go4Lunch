@@ -4,9 +4,6 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Build;
@@ -51,6 +48,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
+import java.util.Locale;
+
 
 @RequiresApi(api = Build.VERSION_CODES.N) // Required for getOrDefault method in location permissions
 public class MapFragment extends Fragment implements OnMapReadyCallback {
@@ -74,8 +73,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private Double actualLongitude;
 
 
-
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,9 +90,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         getLocationPermission();
 
         binding = FragmentMapViewBinding.inflate(inflater, container, false);
-        View view = binding.getRoot();
 
-        return view;
+        return binding.getRoot();
     }
 
     @Override
@@ -144,6 +140,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
 
 
+    @SuppressLint("PotentialBehaviorOverride")
     @Override
     // Google map For OnMapReady callback implementation
     public void onMapReady(GoogleMap googleMap) {
@@ -167,6 +164,48 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             findRestaurants();
         }
 
+        mGoogleMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+
+            // Use default InfoWindow frame
+            @Override
+            public View getInfoWindow(Marker marker) {
+                return null;
+            }
+
+            // Defines the contents of the InfoWindow
+            @Override
+            public View getInfoContents(Marker marker) {
+
+                // Getting view from the layout file info_window_layout
+                View view = getLayoutInflater().inflate(R.layout.info_window_map, null);
+
+                // Getting the position from the marker
+                LatLng latLng = marker.getPosition();
+
+                // Getting reference to the TextView to set restaurant's name
+                TextView restaurantName = (TextView) view.findViewById(R.id.title);
+                // Getting reference to the TextView to set restaurant's full address
+                TextView restaurantAddress = (TextView) view.findViewById(R.id.snippet);
+                // Getting reference to the TextView to set place-id
+                TextView restaurantId = (TextView) view.findViewById(R.id.place_id);
+                // Getting reference to the TextView to set street & street number
+                TextView restaurantStreet = (TextView) view.findViewById(R.id.street);
+                // Getting reference to the TextView to set postal code & city
+                TextView restaurantCity = (TextView) view.findViewById(R.id.postalCodeAndCity);
+
+                // Setting the restaurant's name
+                restaurantName.setText(marker.getTitle().toUpperCase(Locale.ROOT));
+                // Setting the restaurant's full address
+                restaurantAddress.setText(marker.getSnippet());
+                // Setting the restaurant's id
+                restaurantId.setText(marker.getTag().toString());
+
+                // Returning the view containing InfoWindow contents
+                return view;
+
+            }
+        });
+
         // Set listener on restaurant's info window to launch restaurant's details page
         mGoogleMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
@@ -187,9 +226,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             }
         });
     }
-
-
-
 
     /*
      * Add or remove user location with blue point marker on Google Map
@@ -361,10 +397,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             }
 
         } else {
-            /**
-             * When location service is not enabled, open location settings in foreground
-             * so that app is put in background
-             */
+            // Open location settings in foreground, so that app is put in background
             startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
                     .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
         }
@@ -374,14 +407,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     public void findRestaurants() {
         // Build Place request with URL
         String apiKey = BuildConfig.PLACE_API_KEY;
-        StringBuilder stringBuilder = new StringBuilder
-                ("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
-                stringBuilder.append("location=" + getUserLatitude() + "," + getUserLongitude());
-                stringBuilder.append("&radius=2000");
-                stringBuilder.append("&type=restaurant");
-                stringBuilder.append("&key=" + apiKey);
 
-                String url = stringBuilder.toString();
+        String url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?" + "location=" + getUserLatitude() + "," + getUserLongitude() +
+                "&radius=2000" +
+                "&type=restaurant" +
+                "&key=" + apiKey;
                 Object[] restaurantData = new Object[2];
                 restaurantData[0] = mGoogleMap;
                 restaurantData[1] = url;
@@ -389,74 +419,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         FetchPlacesData fetchPlacesData = new FetchPlacesData(getContext());
         fetchPlacesData.execute(restaurantData);
     }
-
-/**
-    public class PlaceTask extends AsyncTask<String, Integer, String> {
-        @Override
-        protected String doInBackground(String... strings) {
-            String data = null;
-            try {
-                // Initialize data
-                data = PlaceDownloadUrl.downloadUrl(strings[0]);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return data;
-        }
-*/
-
-
-
-
-/**
-        private class ParserTask extends AsyncTask<String, Integer, List<HashMap<String, String>>> {
-            @Override
-            protected List<HashMap<String, String>> doInBackground(String... strings) {
-                // Create JSON parser class
-                JsonParser jsonParser = new JsonParser();
-                // Initialize hash map list
-                List<HashMap<String, String>> mapList = null;
-                JSONObject object = null;
-                try {
-                    // Initialize Json object
-                    object = new JSONObject(strings[0]);
-                    // Parse Json object
-                    mapList = jsonParser.parseResult(object);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                // Return map list
-                return mapList;
-            }
-            @Override
-            protected void onPostExecute(List<HashMap<String, String>> hashMaps) {
-                // clear map
-                mGoogleMap.clear();
-                // Use for loop
-                for (int i=0; i<hashMaps.size(); i++) {
-                    // Initialize has map
-                    HashMap<String, String> hashMapList = hashMaps.get(i);
-                    // Get latitude
-                    double lat = Double.parseDouble(Objects.requireNonNull(hashMapList.get("lat")));
-                    // Get longitude
-                    double lng = Double.parseDouble(Objects.requireNonNull(hashMapList.get("lng")));
-                    // Get name
-                    String name = hashMapList.get("name");
-                    // Concat latitude & longitude
-                    LatLng latLng = new LatLng(lat, lng);
-                    // Initialize marker options
-                    MarkerOptions options = new MarkerOptions();
-                    // Set position
-                    options.position(latLng);
-                    // Set title
-                    options.title(name);
-                    // add marker on map
-                    mGoogleMap.addMarker(options);
-                }
-            }
-        }
-    }
- */
 
     @Override
     public void onDestroyView() {

@@ -30,4 +30,25 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="#ff7f7f7f" />
+
+    <TextView
+        android:id="@+id/street"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#ff7f7f7f"
+        android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/postalCodeAndCity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#ff7f7f7f"
+        android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/place_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#ff7f7f7f"
+        android:visibility="gone"/>
 </LinearLayout>

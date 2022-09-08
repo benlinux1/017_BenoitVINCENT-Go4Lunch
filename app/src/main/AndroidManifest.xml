@@ -26,11 +26,18 @@
         android:name=".activities.RestaurantDetailsActivity"
         android:exported="true" />
         <activity
+            android:configChanges=
+                "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:label="@string/app_name"
             android:name=".activities.LoginActivity"
             android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
 
@@ -44,11 +51,7 @@
 
         <meta-data
             android:name="facebook_protocol_id"
-            android:value="${FACEBOOK_PROTOCOL_SCHEME}"/>
-
-        <meta-data
-            android:name="com.facebook.sdk.ClientToken"
-            android:value="${FACEBOOK_CLIENT_TOKEN}"/>
+            android:value="@string/facebook_login_protocol_scheme"/>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
