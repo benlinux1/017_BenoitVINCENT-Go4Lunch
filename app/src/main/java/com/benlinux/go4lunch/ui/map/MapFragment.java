@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -67,7 +68,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     private boolean locationPermissionGranted;
 
-    private LatLng actualLocation;
+    public LatLng actualLocation;
 
     private Double actualLatitude;
     private Double actualLongitude;
@@ -164,47 +165,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             findRestaurants();
         }
 
-        mGoogleMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
-
-            // Use default InfoWindow frame
-            @Override
-            public View getInfoWindow(Marker marker) {
-                return null;
-            }
-
-            // Defines the contents of the InfoWindow
-            @Override
-            public View getInfoContents(Marker marker) {
-
-                // Getting view from the layout file info_window_layout
-                View view = getLayoutInflater().inflate(R.layout.info_window_map, null);
-
-                // Getting the position from the marker
-                LatLng latLng = marker.getPosition();
-
-                // Getting reference to the TextView to set restaurant's name
-                TextView restaurantName = (TextView) view.findViewById(R.id.title);
-                // Getting reference to the TextView to set restaurant's full address
-                TextView restaurantAddress = (TextView) view.findViewById(R.id.snippet);
-                // Getting reference to the TextView to set place-id
-                TextView restaurantId = (TextView) view.findViewById(R.id.place_id);
-                // Getting reference to the TextView to set street & street number
-                TextView restaurantStreet = (TextView) view.findViewById(R.id.street);
-                // Getting reference to the TextView to set postal code & city
-                TextView restaurantCity = (TextView) view.findViewById(R.id.postalCodeAndCity);
-
-                // Setting the restaurant's name
-                restaurantName.setText(marker.getTitle().toUpperCase(Locale.ROOT));
-                // Setting the restaurant's full address
-                restaurantAddress.setText(marker.getSnippet());
-                // Setting the restaurant's id
-                restaurantId.setText(marker.getTag().toString());
-
-                // Returning the view containing InfoWindow contents
-                return view;
-
-            }
-        });
+        // Set custom info window layout
+        mGoogleMap.setInfoWindowAdapter(new InfoWindowForMap(getContext()));
 
         // Set listener on restaurant's info window to launch restaurant's details page
         mGoogleMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
@@ -214,12 +176,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 Intent restaurantDetailsIntent = new Intent(getContext(), RestaurantDetailsActivity.class);
                 // Retrieve place_id in tag
                 String placeId= String.valueOf(marker.getTag());
-                // Retrieve place_
+                // Retrieve user location
                 LatLng userLocation = actualLocation;
                 // Send place_id in the intent, in order to get it in details activity
                 restaurantDetailsIntent.putExtra("PLACE_ID", placeId);
 
                 restaurantDetailsIntent.putExtra("USER_LOCATION", userLocation);
+
                 if (!placeId.equals("null")) {
                     startActivity(restaurantDetailsIntent);
                 }

@@ -71,16 +71,12 @@ public class FetchPlacesData extends AsyncTask<Object, String, String> {
                 // Define restaurant LatLng for marker
                 LatLng latLng = new LatLng(Double.parseDouble(lat), Double.parseDouble(lng));
 
-                // Get restaurant's address from LatLng
-                String address = getAddressFromLatLng(latLng);
-
                 // Get place id (used to retrieve place info in details activity)
                 String placeId = getInfo.getString("place_id");
 
                 // Define marker options (restaurant's name, address, position, icon)
                 MarkerOptions markerOptions = new MarkerOptions()
                     .title(name)
-                    .snippet(address)
                     .position(latLng)
                     .icon(BitmapDescriptorFactory.fromResource(restaurantMarker));
 
@@ -93,35 +89,7 @@ public class FetchPlacesData extends AsyncTask<Object, String, String> {
         }
     }
 
-    // Return address according to Latitude & longitude params
-    public String getAddressFromLatLng(LatLng latLng) {
-        Geocoder geocoder;
-        List<Address> addresses;
-        geocoder = new Geocoder(this.localContext, Locale.getDefault());
-        String strAdd = "";
-        try {
-            addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
-            Address returnedAddress = addresses.get(0);
-            StringBuilder strReturnedAddress = new StringBuilder("");
 
-
-            for (int i = 0; i < returnedAddress.getMaxAddressLineIndex(); i++) {
-                strReturnedAddress.append(returnedAddress.getAddressLine(i)).append("\n");
-            }
-            // String mFullAddress = returnedAddress.getAddressLine(0);
-            String mStreetNumber = returnedAddress.getSubThoroughfare();
-            String mStreet = returnedAddress.getThoroughfare();
-            String mPostalCode = returnedAddress.getPostalCode();
-            String mCity = returnedAddress.getLocality();
-            strReturnedAddress.append(mStreetNumber).append(" ").append(mStreet).append(" - ").append(mPostalCode).append(" ").append(mCity);
-            strAdd = strReturnedAddress.toString();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "";
-        }
-        return strAdd;
-    }
 
     @Override
     protected String doInBackground (Object... objects) {

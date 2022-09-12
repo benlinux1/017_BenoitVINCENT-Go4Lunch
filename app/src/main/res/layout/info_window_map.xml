@@ -16,34 +16,46 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layoutDirection="locale"
+    android:paddingHorizontal="@dimen/small_margin"
+    android:paddingVertical="@dimen/small_margin"
+    android:background="@color/white"
     android:orientation="vertical">
-    <TextView
-        android:id="@+id/title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:textColor="#ff000000"
-        android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/snippet"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="#ff7f7f7f" />
+        android:gravity="center_horizontal"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:textColor="#ff000000"
+            android:textStyle="bold" />
+
+        <RatingBar
+            android:id="@+id/rating"
+            style="@style/Widget.AppCompat.RatingBar.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/default_margin"
+            android:theme="@style/RatingBar" />
+
+    </LinearLayout>
 
     <TextView
         android:id="@+id/street"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="#ff7f7f7f"
-        android:visibility="gone"/>
+        android:textColor="#ff7f7f7f" />
 
     <TextView
         android:id="@+id/postalCodeAndCity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="#ff7f7f7f"
-        android:visibility="gone"/>
+        android:textColor="#ff7f7f7f" />
 
     <TextView
         android:id="@+id/place_id"
@@ -51,4 +63,15 @@
         android:layout_height="wrap_content"
         android:textColor="#ff7f7f7f"
         android:visibility="gone"/>
+
+    <Button
+        android:id="@+id/seeDetailsButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/colorPrimary"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/very_small_margin"
+        android:textColor="@color/white"
+        android:text="@string/details_button" />
+
 </LinearLayout>

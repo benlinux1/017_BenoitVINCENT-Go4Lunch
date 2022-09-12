@@ -43,6 +43,9 @@
     <string name="button_login_text_logged">Go for lunch !</string>
     <string name="button_login_text_not_logged">Connexion</string>
 
+    // RESTAURANT MAP ITEM
+    <string name="details_button">See details</string>
+
     // RESTAURANT LIST ITEM
     <string name="restaurant_name">Le Zinc</string>
     <string name="restaurant_style_and_address">French - 12 rue du Faubourg Poissonnière</string>
