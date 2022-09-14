@@ -46,42 +46,46 @@ public class InfoWindowForMap implements GoogleMap.InfoWindowAdapter {
 
     @Override
     public View getInfoContents(Marker marker) {
-        return null;
+    return null;
+
     }
 
     @Override
     public View getInfoWindow(Marker marker) {
-        inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.info_window_map, null);
 
-        // Getting the position from the marker
-        LatLng latLng = marker.getPosition();
-
-        // Getting reference to the TextView to set restaurant's name
-        TextView restaurantName = (TextView) view.findViewById(R.id.title);
-        // Getting reference to the TextView to set place-id
+        // Get reference to the TextView to set place-id
         TextView restaurantId = (TextView) view.findViewById(R.id.place_id);
-        // Getting reference to the TextView to set street & street number
+        // Getting the restaurant's position from marker
+        LatLng latLng = marker.getPosition();
+        // Get reference to the TextView to set restaurant's name
+        TextView restaurantName = (TextView) view.findViewById(R.id.title);
+        // Get reference to the TextView to set street & street number
         TextView restaurantStreet = (TextView) view.findViewById(R.id.street);
-        // Getting reference to the TextView to set postal code & city
+        // Get reference to the TextView to set postal code & city
         TextView restaurantCity = (TextView) view.findViewById(R.id.postalCodeAndCity);
-        // Getting reference to the Rating bar to set rating value
+        // Get reference to the Rating bar to set rating value
         RatingBar ratingBar = (RatingBar) view.findViewById(R.id.rating);
+        // Get reference to the info window button
+        Button seeDetailsButton = (Button) view.findViewById(R.id.seeDetailsButton);
 
-
-        // Setting the restaurant's name
-        restaurantName.setText(marker.getTitle().toUpperCase(Locale.ROOT));
-        // Setting the restaurant's full address
-        setAddressFromLatLng(marker.getPosition(), restaurantStreet, restaurantCity);
-        // Getting restaurant's data to set rating
-        getRestaurantInfo(marker.getTag().toString());
-        if (ratingFloat != null) {
-            ratingBar.setRating(ratingFloat);
+        // Getting restaurant's data to set rating & place_id in invisible textView
+        if (marker.getTag() != null) {
+            getRestaurantInfo(marker.getTag().toString());
+            restaurantId.setText(marker.getTag().toString());
         } else {
+            seeDetailsButton.setVisibility(View.GONE);
             ratingBar.setVisibility(View.GONE);
         }
 
-        restaurantId.setText(marker.getTag().toString());
+        // Set restaurant's name
+        restaurantName.setText(Objects.requireNonNull(marker.getTitle()).toUpperCase(Locale.ROOT));
+        // Set restaurant's formatted address
+        setAddressFromLatLng(latLng, restaurantStreet, restaurantCity);
+        // Set restaurant's rating
+        setRestaurantRating(ratingBar);
 
         // Returning the view containing InfoWindow contents
         return view;
@@ -123,11 +127,13 @@ public class InfoWindowForMap implements GoogleMap.InfoWindowAdapter {
         });
     }
 
-    // Set restaurant's details in text views, according to place result
-    private void setRestaurantRating(Place place) {
-
-        // Set Rating
-
+    // Set restaurant's rating in text view, according to rating result
+    private void setRestaurantRating(RatingBar ratingBar) {
+        if (this.ratingFloat != null) {
+            ratingBar.setRating(ratingFloat);
+        } else {
+            ratingBar.setVisibility(View.GONE);
+        }
     }
 
     // Return address according to Latitude & longitude params
@@ -148,7 +154,11 @@ public class InfoWindowForMap implements GoogleMap.InfoWindowAdapter {
             String mStreetNumber = returnedAddress.getSubThoroughfare();
             String mStreet = returnedAddress.getThoroughfare();
             // Set street number & street info into dedicated textView
-            restaurantStreet.setText(mStreetNumber + " " + mStreet);
+            if (mStreetNumber != null) {
+                restaurantStreet.setText(mStreetNumber + " " + mStreet);
+            } else {
+                restaurantStreet.setText(mStreet);
+            }
 
             // Get postal code & city from Geocoder
             String mPostalCode = returnedAddress.getPostalCode();

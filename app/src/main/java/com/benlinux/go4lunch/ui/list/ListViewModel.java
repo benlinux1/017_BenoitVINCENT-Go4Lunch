@@ -4,17 +4,24 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import org.json.JSONArray;
+
 public class ListViewModel extends ViewModel {
 
-    private final MutableLiveData<String> mText;
+    private JSONArray mRestaurants;
 
     public ListViewModel() {
-        mText = new MutableLiveData<>();
-        mText.setValue("This is List View fragment");
-
+        mRestaurants = getRestaurants();
+        if (mRestaurants == null) {
+            mRestaurants = new JSONArray();
+        }
     }
 
-    public LiveData<String> getText() {
-        return mText;
+    public JSONArray getRestaurants() {
+        return mRestaurants;
+    }
+
+    public void setRestaurants(JSONArray restaurants) {
+        mRestaurants = restaurants;
     }
 }

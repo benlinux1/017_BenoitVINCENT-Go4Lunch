@@ -11,8 +11,13 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.os.AsyncTask;
 
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModel;
+
 import com.benlinux.go4lunch.R;
 import com.benlinux.go4lunch.activities.MainActivity;
+import com.benlinux.go4lunch.ui.list.ListFragment;
+import com.benlinux.go4lunch.ui.list.ListViewModel;
 import com.benlinux.go4lunch.ui.map.MapFragment;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -26,6 +31,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -36,6 +42,9 @@ public class FetchPlacesData extends AsyncTask<Object, String, String> {
     GoogleMap googleMap;
     String url;
     Context localContext;
+
+    JSONArray restaurantsResults;
+
 
     public FetchPlacesData(Context context) {
         super();
@@ -48,6 +57,10 @@ public class FetchPlacesData extends AsyncTask<Object, String, String> {
         try {
             JSONObject jsonObject = new JSONObject(s);
             JSONArray jsonArray =  jsonObject.getJSONArray("results");
+
+            restaurantsResults = new JSONArray();
+            restaurantsResults.put(jsonArray);
+            new ListViewModel().setRestaurants(restaurantsResults);
 
             int restaurantMarker;
 

@@ -18,12 +18,17 @@ import com.benlinux.go4lunch.ui.models.Restaurant;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 import java.util.List;
 
 
 public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
 
-    private List<Restaurant> mRestaurants;
+    private JSONArray mRestaurants;
 
 
     /**
@@ -31,7 +36,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
      *
      * @param restaurants the list of restaurants the adapter deals with to set
      */
-    public ListAdapter(List<Restaurant> restaurants) {
+    public ListAdapter(JSONArray restaurants) {
         mRestaurants = restaurants;
     }
 
@@ -41,7 +46,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
      *
      * @param restaurants the list of tasks the adapter deals with to set
      */
-    void updateRestaurants(@NonNull final List<Restaurant> restaurants) {
+    void updateRestaurants(@NonNull final JSONArray restaurants) {
         this.mRestaurants = restaurants;
         notifyDataSetChanged();
     }
@@ -57,20 +62,26 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(final ListAdapter.ViewHolder holder, int position) {
-        Restaurant restaurant = mRestaurants.get(position);
+        for (int i=0; i<mRestaurants.length(); i++) {
+            try {
+                JSONObject restaurant = mRestaurants.getJSONObject(i);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
 
         // Launch Restaurant Details according to the Restaurant Id
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View restaurantItem) {
                Intent restaurantDetailsActivityIntent = new Intent(restaurantItem.getContext(), RestaurantDetailsActivity.class);
-               restaurantDetailsActivityIntent.putExtra("RESTAURANT_ID", restaurant.getId());
+               restaurantDetailsActivityIntent.putExtra("PLACE_ID", restaurantItem.getId());
                restaurantItem.getContext().startActivity(restaurantDetailsActivityIntent);
             }
         });
     }
 
-    public void initList(List<Restaurant> mRestaurants) {
+    public void initList(JSONArray mRestaurants) {
         this.mRestaurants = mRestaurants;
         notifyDataSetChanged();
     }
@@ -78,7 +89,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
 
     @Override
     public int getItemCount() {
-        return mRestaurants.size();
+        return mRestaurants.length();
     }
 
     /**
@@ -148,7 +159,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
          *
          * @param restaurant the restaurant to bind in the item view
          */
-        void bind(Restaurant restaurant) {
+        void bind(JSONObject restaurant) {
             // String styleAndAddressString = restaurant.getStyle() + R.string.restaurant_style_and_address_separator + restaurant.getAddress();
             name.setText(name.getText());
             styleAndAddress.setText(styleAndAddress.getText());

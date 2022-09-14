@@ -14,8 +14,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -49,39 +47,27 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
-import java.util.Locale;
-
 
 @RequiresApi(api = Build.VERSION_CODES.N) // Required for getOrDefault method in location permissions
 public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     private FragmentMapViewBinding binding;
-
     private GoogleMap mGoogleMap;
-
-    SupportMapFragment mapFragment;
-
+    private SupportMapFragment mapFragment;
     // The entry point to the Fused Location Provider.
     private FusedLocationProviderClient client;
-
     private static final int DEFAULT_ZOOM = 15;
-
     private boolean locationPermissionGranted;
-
     public LatLng actualLocation;
-
     private Double actualLatitude;
     private Double actualLongitude;
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // Initialize user location
         client = LocationServices.getFusedLocationProviderClient(requireActivity());
-
     }
-
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -99,13 +85,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mapFragment =
-                (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
-
+        mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         if (mapFragment != null) {
             mapFragment.getMapAsync(this);
         }
-
     }
 
     // Prompt user for location permission (Coarse & fine)
@@ -140,7 +123,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     }
 
 
-
     @SuppressLint("PotentialBehaviorOverride")
     @Override
     // Google map For OnMapReady callback implementation
@@ -167,6 +149,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
         // Set custom info window layout
         mGoogleMap.setInfoWindowAdapter(new InfoWindowForMap(getContext()));
+
 
         // Set listener on restaurant's info window to launch restaurant's details page
         mGoogleMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
@@ -276,6 +259,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                                             setUserPosition(new LatLng(latLng.latitude, latLng.longitude));
                                             // Initialize marker options
                                             MarkerOptions markerOptions = new MarkerOptions();
+                                            // Set title of marker
+                                            markerOptions.title("Search location");
                                             // Set position of marker
                                             markerOptions.position(latLng);
                                             // Remove all marker
@@ -332,6 +317,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                                                     setUserPosition(new LatLng(latLng.latitude, latLng.longitude));
                                                     // Initialize marker options
                                                     MarkerOptions markerOptions = new MarkerOptions();
+                                                    // Set title of marker
+                                                    markerOptions.title("Search location");
                                                     // Set position of marker
                                                     markerOptions.position(latLng);
                                                     // Remove all marker
