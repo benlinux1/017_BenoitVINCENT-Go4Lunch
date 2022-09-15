@@ -14,14 +14,19 @@ public class Restaurant {
     private String name;
     private String address;
     private String style;
-    private Float rating;
+    private Double rating;
     private Boolean open;
-    private Float distance;
+    private String distance;
     private LatLng latLng;
     private String pictureUrl;
+    private String hours;
 
-    public Restaurant(String id) {
+    public Restaurant(String id, String name, String address, Double rating, String hours, String distance) {
         this.id = id;
+        this.name = name;
+        this.address = address;
+        this.rating = rating;
+        this.hours = hours;
     }
 
     public Restaurant() {}
@@ -58,11 +63,11 @@ public class Restaurant {
         this.style = style;
     }
 
-    public Float getRating() {
+    public Double getRating() {
         return rating;
     }
 
-    public void setRating(Float rating) {
+    public void setRating(Double rating) {
         this.rating = rating;
     }
 
@@ -74,11 +79,11 @@ public class Restaurant {
         this.open = open;
     }
 
-    public Float getDistance() {
+    public String getDistance() {
         return distance;
     }
 
-    public void setDistance(Float distance) {
+    public void setDistance(String distance) {
         this.distance = distance;
     }
 

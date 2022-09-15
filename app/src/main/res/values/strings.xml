@@ -47,6 +47,7 @@
     <string name="details_button">See details</string>
 
     // RESTAURANT LIST ITEM
+    <string name="restaurant_id">ID SDK PLACES</string>
     <string name="restaurant_name">Le Zinc</string>
     <string name="restaurant_style_and_address">French - 12 rue du Faubourg Poissonnière</string>
     <string name="restaurant_style_and_address_separator"> - </string>

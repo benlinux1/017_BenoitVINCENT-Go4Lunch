@@ -38,11 +38,24 @@
                 app:layout_constraintGuide_percent="0.80" />
 
             <TextView
+                android:id="@+id/item_restaurant_id"
+                android:layout_width="@dimen/zero"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/small_margin"
+                android:layout_marginEnd="@dimen/small_margin"
+                android:textColor="@color/black"
+                app:layout_constraintBottom_toTopOf="@+id/item_restaurant_name"
+                app:layout_constraintEnd_toStartOf="@+id/guideline1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="@string/restaurant_id"
+                android:visibility="gone"/>
+
+            <TextView
                 android:id="@+id/item_restaurant_name"
                 android:layout_width="@dimen/zero"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/small_margin"
-                android:layout_marginTop="@dimen/small_margin"
                 android:layout_marginEnd="@dimen/small_margin"
                 android:textColor="@color/black"
                 app:layout_constraintBottom_toTopOf="@+id/item_restaurant_style_and_address"
@@ -68,7 +81,7 @@
                 android:id="@+id/item_restaurant_hours"
                 android:layout_width="@dimen/zero"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/small_margin"
+                android:layout_marginBottom="@dimen/very_small_margin"
                 android:textSize="@dimen/smaller_text_size"
                 app:layout_constraintTop_toBottomOf="@+id/item_restaurant_style_and_address"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -119,11 +132,11 @@
                 style="@style/Widget.AppCompat.RatingBar.Small"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/default_margin"
                 android:theme="@style/RatingBar"
-                app:layout_constraintTop_toTopOf="@id/item_restaurant_hours"
                 app:layout_constraintBottom_toBottomOf="@id/item_restaurant_hours"
                 app:layout_constraintEnd_toStartOf="@+id/guideline2"
-                app:layout_constraintStart_toStartOf="@+id/guideline1"
+                app:layout_constraintTop_toTopOf="@id/item_restaurant_hours"
                 app:layout_constraintVertical_bias="0.0" />
 
             <ImageView

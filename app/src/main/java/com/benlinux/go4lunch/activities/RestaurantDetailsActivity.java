@@ -21,6 +21,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.benlinux.go4lunch.BuildConfig;
 import com.benlinux.go4lunch.R;
 import com.benlinux.go4lunch.databinding.ActivityRestaurantDetailsBinding;
+import com.benlinux.go4lunch.modules.FormatAddressModule;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.Result;
@@ -166,7 +167,8 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
     // Set restaurant's details in text views, according to place result
     private void setRestaurantsInfo(Place place) {
         // Format restaurant Address
-        String address = getFormattedAddressFromLatLng(place.getLatLng());
+        FormatAddressModule addressFormatter = new FormatAddressModule(getApplication());
+        String address = FormatAddressModule.getFormattedAddressFromLatLng(place.getLatLng());
         // Set Name
         if (place.getName() != null) {
             restaurantName.setText(place.getName());
@@ -291,33 +293,5 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
     private void showSnackBar(View view, String message) {
         Snackbar.make(view, message, Snackbar.LENGTH_SHORT)
                 .setAction("Action", null).show();
-    }
-
-    // Return address according to Latitude & longitude params
-    public String getFormattedAddressFromLatLng(LatLng latLng) {
-        Geocoder geocoder;
-        List<Address> addresses;
-        geocoder = new Geocoder(this.getApplicationContext(), Locale.getDefault());
-        String strAdd = "";
-        try {
-            addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
-            Address returnedAddress = addresses.get(0);
-            StringBuilder strReturnedAddress = new StringBuilder("");
-
-            for (int i = 0; i < returnedAddress.getMaxAddressLineIndex(); i++) {
-                strReturnedAddress.append(returnedAddress.getAddressLine(i)).append("\n");
-            }
-            String mStreetNumber = returnedAddress.getSubThoroughfare();
-            String mStreet = returnedAddress.getThoroughfare();
-            String mPostalCode = returnedAddress.getPostalCode();
-            String mCity = returnedAddress.getLocality();
-            strReturnedAddress.append(mStreetNumber).append(" ").append(mStreet).append(" - ").append(mPostalCode).append(" ").append(mCity);
-            strAdd = strReturnedAddress.toString();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "";
-        }
-        return strAdd;
     }
 }
