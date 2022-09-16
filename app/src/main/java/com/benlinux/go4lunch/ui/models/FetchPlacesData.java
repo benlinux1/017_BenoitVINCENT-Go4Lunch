@@ -1,5 +1,6 @@
 package com.benlinux.go4lunch.ui.models;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
@@ -18,6 +19,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.benlinux.go4lunch.R;
 import com.benlinux.go4lunch.activities.MainActivity;
@@ -55,6 +57,7 @@ public class FetchPlacesData extends AsyncTask<Object, String, String> {
     private JSONArray mRestaurants;
 
     private ListAdapter adapter;
+    private RecyclerView mRecyclerView;
 
     private LatLng userLocation;
 
@@ -65,13 +68,16 @@ public class FetchPlacesData extends AsyncTask<Object, String, String> {
         dataType = data;
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     @Override
     protected void onPostExecute(String s) {
 
         try {
+            // Get results from NearBy API
             JSONObject jsonObject = new JSONObject(s);
             JSONArray jsonArray = jsonObject.getJSONArray("results");
 
+            // If request come from map fragment, set elements on google map
             if (dataType.equals("map") ) {
 
                 int restaurantMarker;
@@ -109,24 +115,26 @@ public class FetchPlacesData extends AsyncTask<Object, String, String> {
                     Objects.requireNonNull(googleMap.addMarker(markerOptions)).setTag(placeId);
                     // googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
                 }
+            // else, request come from list fragment, so set elements into recyclerview adapter
             } else {
 
+
+                // Get restaurants list data
                 mRestaurants = jsonArray;
+                // Pass user location data to calculate distance from restaurant
                 adapter.setUserLocation(userLocation);
+                // Set restaurants list to adapter
                 adapter.initList(mRestaurants);
-                adapter.notifyDataSetChanged();
-
-
             }
-        } catch (JSONException e) {
+        } catch (JSONException e ) {
             e.printStackTrace();
         }
-
     }
 
 
     @Override
     protected String doInBackground (Object... objects) {
+        // if request come from mapFragment
         if (dataType.equals("map") ) {
             try {
                 googleMap = (GoogleMap) objects[0];
@@ -137,20 +145,20 @@ public class FetchPlacesData extends AsyncTask<Object, String, String> {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        // else request come from listFragment
         } else {
             try {
                 mRestaurants = (JSONArray) objects[0];
                 url = (String) objects[1];
                 adapter = (ListAdapter) objects[2];
+                // get user location from request parameters to calculate distance
                 userLocation = (LatLng) objects[3];
-
                 PlaceDownloadUrl downloadUrl = new PlaceDownloadUrl();
                 googleNearByPlacesData = downloadUrl.downloadUrl(url);
 
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
         }
         return googleNearByPlacesData;
     }

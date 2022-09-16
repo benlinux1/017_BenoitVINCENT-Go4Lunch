@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -51,13 +52,12 @@ public class ListFragment extends Fragment {
 
     private FragmentListViewBinding binding;
     private ListAdapter adapter;
-
     private JSONArray mRestaurants;
-
     private FusedLocationProviderClient client;
     public  LatLng actualLocation;
     private Double actualLatitude;
     private Double actualLongitude;
+    private RecyclerView mRecyclerView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -66,7 +66,6 @@ public class ListFragment extends Fragment {
         client = LocationServices.getFusedLocationProviderClient(requireActivity());
     }
 
-
     @RequiresApi(api = Build.VERSION_CODES.N)
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -74,8 +73,7 @@ public class ListFragment extends Fragment {
         binding = FragmentListViewBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
         mRestaurants = new JSONArray();
-
-        getCurrentLocation();
+        mRecyclerView = binding.listRestaurants;
         configRecyclerView();
 
         return view;
@@ -84,19 +82,19 @@ public class ListFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        getCurrentLocation();
     }
-
 
     /**
      * Init the recyclerView
      */
     private void configRecyclerView() {
-        RecyclerView mRecyclerView = binding.listRestaurants;
+
         adapter = new ListAdapter(mRestaurants, getContext());
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.addItemDecoration(new DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL));
         mRecyclerView.setAdapter(adapter);
+        adapter.notifyItemRangeInserted(- 1, mRestaurants.length());
     }
 
     public void findRestaurants() {
@@ -139,7 +137,6 @@ public class ListFragment extends Fragment {
 
                         // When user location is found, find restaurants
                         findRestaurants();
-
 
                     } else {
                         // When location result is null, initialize location request
@@ -187,7 +184,6 @@ public class ListFragment extends Fragment {
     private Double getUserLongitude() {
         return this.actualLongitude;
     }
-
 
     @Override
     public void onResume() {

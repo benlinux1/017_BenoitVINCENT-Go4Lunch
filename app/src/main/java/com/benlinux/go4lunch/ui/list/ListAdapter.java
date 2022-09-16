@@ -3,7 +3,6 @@ package com.benlinux.go4lunch.ui.list;
 import static android.content.ContentValues.TAG;
 
 import android.annotation.SuppressLint;
-import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -27,11 +26,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.benlinux.go4lunch.BuildConfig;
 import com.benlinux.go4lunch.R;
 import com.benlinux.go4lunch.activities.RestaurantDetailsActivity;
-import com.benlinux.go4lunch.modules.FormatAddressModule;
-import com.benlinux.go4lunch.ui.map.MapFragment;
-import com.benlinux.go4lunch.ui.models.Restaurant;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.libraries.places.api.Places;
@@ -47,7 +42,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
@@ -59,32 +53,25 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
 
     private JSONArray mRestaurants;
     public LatLng actualLocation;
-    private Application app;
     private Context localContext;
-
 
     /**
      * Instantiates a new ListAdapter.
-     *
      * @param restaurants the list of restaurants the adapter deals with to set
      */
     public ListAdapter(JSONArray restaurants, Context context) {
         mRestaurants = restaurants;
         localContext = context;
-
     }
-
 
     /**
      * Updates the list of restaurants the adapter deals with.
-     *
      * @param restaurants the list of tasks the adapter deals with to set
      */
     void updateRestaurants(@NonNull final JSONArray restaurants) {
         this.mRestaurants = restaurants;
-        notifyDataSetChanged();
+        notifyItemRangeChanged(- 1, mRestaurants.length());
     }
-
 
     @NonNull
     @Override
@@ -115,9 +102,10 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         });
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     public void initList(JSONArray mRestaurants) {
         this.mRestaurants = mRestaurants;
-        notifyDataSetChanged();
+        notifyItemRangeChanged(- 1, mRestaurants.length());
     }
 
     public void setUserLocation(LatLng location) {
@@ -128,7 +116,6 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         return this.actualLocation;
     }
 
-
     @Override
     public int getItemCount() {
         return mRestaurants.length();
@@ -136,7 +123,6 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
 
     /**
      * <p>ViewHolder for restaurants items in the restaurants list</p>
-     *
      * @author BenLinux1
      */
     protected class ViewHolder extends RecyclerView.ViewHolder {
@@ -181,14 +167,13 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         private final TextView numberOfBookings;
 
         /**
-         * The TextView displaying the number of workmates who booked a lunch in the restaurant
+         * The Rating bar displaying the rating average of the restaurant
          */
         private final RatingBar ratingBar;
 
 
         /**
          * Instantiates a new Restaurant ViewHolder.
-         *
          * @param itemView the view of the restaurant item
          */
         private ViewHolder(@NonNull View itemView) {
@@ -208,54 +193,48 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
 
         /**
          * Binds data to the item view.
-         *
          * @param restaurant the restaurant to bind in the item view
          */
         void bind(JSONObject restaurant) {
-            // String styleAndAddressString = restaurant.getStyle() + R.string.restaurant_style_and_address_separator + restaurant.getAddress();
-            //name.setText(name.getText());
+
             try {
+                // Set name
                 name.setText(restaurant.getString("name"));
+                // Set place_id (from Places API)
                 id.setText(restaurant.getString("place_id"));
-                id.setVisibility(View.GONE);
+
+                // Get and set formatted rating
                 Double rating = restaurant.getDouble("rating");
                 ratingBar.setRating(formatRating(rating).floatValue());
 
+                // Get location from Places API
                 JSONObject getLocation = restaurant.getJSONObject("geometry")
                         .getJSONObject("location");
 
-                // Get restaurant's latitude & longitude
+                // Define restaurant's latitude & longitude from location
                 String lat = getLocation.getString("lat");
                 String lng = getLocation.getString("lng");
 
-                // Define restaurant LatLng for marker
+                // Define restaurant's LatLng
                 LatLng restaurantLocation = new LatLng(Double.parseDouble(lat), Double.parseDouble(lng));
 
-                // Format and set address to text view
+                // Format and set address to text view, according to LatLng
                 String formattedAddress = getFormattedAddressFromLatLng(restaurantLocation);
                 styleAndAddress.setText(formattedAddress);
 
                 // Calculate and set distance into text view
                 distance.setText(calculateAndFormatDistance(actualLocation, restaurantLocation));
 
-                getRestaurantInfo(restaurant.getString("place_id"), hours);
+                // Get and set formatted opening hours and picture into respective views
+                getAndSetOpeningHoursAndPicture(restaurant.getString("place_id"), hours, picture);
+
+                // TODO : Get and set number of users who booked in the restaurant
 
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            // styleAndAddress.getEditableText();
-            // distance.setText(distance.getText());
-            /**
-            Glide.with(itemView.getContext())
-                    .load(restaurant.getPictureUrl())
-                    .into(picture);
-             */
-            // hours.getText();
-            // numberOfBookings.getText();
         }
-
     }
-
 
     // Format 0 minutes to 00 for best user XP
     private String formatMinutes(String string) {
@@ -274,6 +253,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         return String.format("%d m", Math.round(distance));
     }
 
+    // Format number of rating stars (between 0.5 and 3) as asked from client
     private Double formatRating(Double rating) {
         Double formattedRating = null;
         if (rating > 0 && rating <= 0.8) {
@@ -292,7 +272,8 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         return formattedRating;
     }
 
-    public String getFormattedAddressFromLatLng(LatLng latLng) {
+    // Format LatLng data to readable address
+    private String getFormattedAddressFromLatLng(LatLng latLng) {
         Geocoder geocoder;
         List<Address> addresses;
         geocoder = new Geocoder(localContext, Locale.getDefault());
@@ -317,18 +298,19 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         return formattedAddress;
     }
 
+    // Format opening hours for best user experience
     private void setOpeningHours(Place place, TextView hours) {
 
         StringBuilder openingHours = new StringBuilder();
-        // Set Opening hours
+        // Get Opening hours
         if (place.getOpeningHours() != null) {
             final Calendar currentDate = Calendar.getInstance(Locale.getDefault());
-            int today = currentDate.get(Calendar.DAY_OF_WEEK);
+            int today = currentDate.get(Calendar.DAY_OF_WEEK+1);
             List<Period> periodList = place.getOpeningHours().getPeriods();
-            int openHour = Objects.requireNonNull(periodList.get(today - 1).getOpen()).getTime().getHours();
-            int closeHour = Objects.requireNonNull(periodList.get(today - 1).getClose()).getTime().getHours();
-            String openMinutes = String.valueOf(Objects.requireNonNull(periodList.get(today - 1).getOpen()).getTime().getMinutes());
-            String closeMinutes = String.valueOf(Objects.requireNonNull(periodList.get(today - 1).getClose()).getTime().getMinutes());
+            int openHour = Objects.requireNonNull(periodList.get(today).getOpen()).getTime().getHours();
+            int closeHour = Objects.requireNonNull(periodList.get(today).getClose()).getTime().getHours();
+            String openMinutes = String.valueOf(Objects.requireNonNull(periodList.get(today).getOpen()).getTime().getMinutes());
+            String closeMinutes = String.valueOf(Objects.requireNonNull(periodList.get(today).getClose()).getTime().getMinutes());
 
             // Format opening hours of the day according to user language
             if (Locale.getDefault().getLanguage().equals("fr")) {
@@ -345,18 +327,18 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
                 openingHours.append("Opening hours not registered yet");
             }
         }
+        // Set formatted opening hours into destination TextView
         hours.setText(openingHours.toString());
     }
 
-    // Retrieve place details
-    private void getRestaurantInfo(String placeId, TextView textView) {
-
-        TextView destination = textView;
+    // Retrieve place details to set opening hours and picture
+    private void getAndSetOpeningHoursAndPicture(String placeId, TextView hoursDestination, ImageView pictureDestination) {
 
         // Specify the fields to return from request
         final List<Place.Field> placeFields = Arrays.asList(
                 Place.Field.ID,
-                Place.Field.OPENING_HOURS
+                Place.Field.OPENING_HOURS,
+                Place.Field.PHOTO_METADATAS
         );
 
         // Construct a request object, passing the place ID and fields array.
@@ -372,9 +354,17 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         placesClient.fetchPlace(request).addOnSuccessListener((response) -> {
             Place place = response.getPlace();
 
-            // if result is successful, set restaurants details in textview
-            setOpeningHours(place, destination);
-
+            // if result is successful, set restaurant's opening hours into textview
+            setOpeningHours(place, hoursDestination);
+            // if result is successful, set restaurant's picture into imageView
+            if (place.getPhotoMetadatas() != null) {
+            setPicture(place, placesClient, pictureDestination);
+            } else {
+                Glide.with(pictureDestination.getContext())
+                        .load(R.mipmap.no_photo)
+                        .centerCrop()
+                        .into(pictureDestination);
+            }
         }).addOnFailureListener((exception) -> {
             if (exception instanceof ApiException) {
                 final ApiException apiException = (ApiException) exception;
@@ -383,4 +373,28 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         });
     }
 
+    // Set place picture with placeClient to imageView
+    public void setPicture(Place place, PlacesClient placesClient, ImageView imageView) {
+        final List<PhotoMetadata> metadata = place.getPhotoMetadatas();
+        if (metadata == null || metadata.isEmpty()) {
+            Log.w(TAG, "No photo metadata.");
+        }
+        final PhotoMetadata photoMetadata = metadata.get(0);
+
+        // Create a FetchPhotoRequest.
+        final FetchPhotoRequest photoRequest = FetchPhotoRequest.builder(photoMetadata)
+                .build();
+        // On success, set picture into imageView
+        placesClient.fetchPhoto(photoRequest).addOnSuccessListener((fetchPhotoResponse) -> {
+            Bitmap bitmap = fetchPhotoResponse.getBitmap();
+            imageView.setImageBitmap(bitmap);
+        }).addOnFailureListener((exception) -> {
+            if (exception instanceof ApiException) {
+                final ApiException apiException = (ApiException) exception;
+                Log.e(TAG, "Place not found: " + exception.getMessage());
+                final int statusCode = apiException.getStatusCode();
+                Log.e(TAG, "Status code : " + statusCode);
+            }
+        });
+    }
 }

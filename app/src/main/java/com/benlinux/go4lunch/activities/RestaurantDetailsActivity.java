@@ -248,6 +248,10 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
         final List<PhotoMetadata> metadata = place.getPhotoMetadatas();
         if (metadata == null || metadata.isEmpty()) {
             Log.w(TAG, "No photo metadata.");
+            Glide.with(restaurantPicture.getContext())
+                    .load(R.mipmap.no_photo)
+                    .centerCrop()
+                    .into(imageView);
         }
         final PhotoMetadata photoMetadata = metadata.get(0);
 

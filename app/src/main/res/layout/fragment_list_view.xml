@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     tools:context=".ui.list.ListFragment">
 
     <TextView
@@ -20,15 +20,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/list_restaurants"
+    <ScrollView
+        android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clipToPadding="false"
-        android:layout_marginTop="@dimen/small_margin"
-        android:paddingBottom="@dimen/default_large_padding"
-        tools:itemCount="5"
-        tools:listitem="@layout/item_restaurant_list" />
+        android:overScrollMode="never">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/list_restaurants"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:listitem="@layout/item_restaurant_list"
+            app:layoutManager="LinearLayoutManager"/>
+
+    </ScrollView>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
