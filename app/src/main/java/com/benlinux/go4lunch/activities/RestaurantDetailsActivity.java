@@ -105,7 +105,11 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
         webSiteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openWebSite(restaurantWebSite.toString());
+                if (restaurantWebSite != null) {
+                    openWebSite(restaurantWebSite.toString());
+                } else {
+                    showSnackBar(binding.getRoot().getRootView(), getString(R.string.no_website_notification));
+                }
             }
         });
     }
