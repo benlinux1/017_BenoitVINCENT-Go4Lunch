@@ -67,14 +67,16 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         super.onCreate(savedInstanceState);
         // Initialize user location
         client = LocationServices.getFusedLocationProviderClient(requireActivity());
+
+        // Request user location permission
+        getLocationPermission();
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        // Request user location permission
-        getLocationPermission();
+
 
         binding = FragmentMapViewBinding.inflate(inflater, container, false);
 
@@ -211,7 +213,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private Double getUserLongitude() {
         return actualLongitude;
     }
-
 
 
     @SuppressLint("MissingPermission")

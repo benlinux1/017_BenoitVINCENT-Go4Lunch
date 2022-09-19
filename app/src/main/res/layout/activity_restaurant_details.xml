@@ -58,7 +58,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="@dimen/default_margin"
-            android:layout_marginBottom="@dimen/default_margin">
+            android:layout_marginBottom="@dimen/default_margin"
+            android:layout_gravity="center">
 
             <TextView
                 android:id="@+id/restaurantDetailsName"
@@ -71,6 +72,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toTopOf="@+id/restaurantDetailsAddress"
+                app:layout_constraintEnd_toStartOf="@id/restaurantDetailsRating"
                 app:layout_constraintVertical_chainStyle="packed"
                 tools:text="@string/restaurant_name" />
 
@@ -79,8 +81,10 @@
                 style="@style/Widget.AppCompat.RatingBar.Small"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:foregroundGravity="center_vertical"
                 android:layout_marginStart="@dimen/default_margin"
                 android:theme="@style/RatingBar"
+                android:paddingTop="@dimen/very_small_margin"
                 app:layout_constraintTop_toTopOf="@+id/restaurantDetailsName"
                 app:layout_constraintStart_toEndOf="@+id/restaurantDetailsName"
                 app:layout_constraintBottom_toBottomOf="@+id/restaurantDetailsName"

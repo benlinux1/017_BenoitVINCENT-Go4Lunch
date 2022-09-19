@@ -1,64 +1,38 @@
 package com.benlinux.go4lunch.ui.models;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
-import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.AsyncTask;
-import android.view.LayoutInflater;
-import android.view.View;
-
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.ViewModel;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.benlinux.go4lunch.R;
-import com.benlinux.go4lunch.activities.MainActivity;
 import com.benlinux.go4lunch.ui.list.ListAdapter;
-import com.benlinux.go4lunch.ui.list.ListFragment;
-import com.benlinux.go4lunch.ui.list.ListViewModel;
-import com.benlinux.go4lunch.ui.map.MapFragment;
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.maps.android.SphericalUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Objects;
 
 public class FetchPlacesData extends AsyncTask<Object, String, String> {
 
-    String googleNearByPlacesData;
-    GoogleMap googleMap;
-    String url;
-    Context localContext;
-    String dataType;
+    private String googleNearByPlacesData;
+    private GoogleMap googleMap;
+    @SuppressLint("StaticFieldLeak")
+    private final Context localContext;
+    private final String dataType;
 
-    private JSONArray mRestaurants;
-
+    private List<Restaurant> restaurantsList;
     private ListAdapter adapter;
-    private RecyclerView mRecyclerView;
-
     private LatLng userLocation;
 
 
@@ -115,16 +89,50 @@ public class FetchPlacesData extends AsyncTask<Object, String, String> {
                     Objects.requireNonNull(googleMap.addMarker(markerOptions)).setTag(placeId);
                     // googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
                 }
+
             // else, request come from list fragment, so set elements into recyclerview adapter
             } else {
 
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    try {
+                        JSONObject restaurantInfo = jsonArray.getJSONObject(i);
 
-                // Get restaurants list data
-                mRestaurants = jsonArray;
-                // Pass user location data to calculate distance from restaurant
-                adapter.setUserLocation(userLocation);
-                // Set restaurants list to adapter
-                adapter.initList(mRestaurants);
+                        String placeId = restaurantInfo.getString("place_id");
+                        String name = restaurantInfo.getString("name");
+                        Double rating = restaurantInfo.getDouble("rating");
+
+                        // Get restaurant's full Location
+                        JSONObject getLocation = restaurantInfo.getJSONObject("geometry")
+                                .getJSONObject("location");
+
+                        // Get restaurant's latitude & longitude
+                        String lat = getLocation.getString("lat");
+                        String lng = getLocation.getString("lng");
+
+                        // Define restaurant's LatLng
+                        LatLng restaurantLocation = new LatLng(Double.parseDouble(lat), Double.parseDouble(lng));
+
+                        // Formatted Address
+                        String formattedAddress = getFormattedAddressFromLatLng(restaurantLocation);
+
+                        // Formatted distance
+                        String distance = calculateAndFormatDistance(userLocation, restaurantLocation);
+
+                        // Create new restaurant for each result of Nearby Places API
+                        Restaurant restaurant = new Restaurant(placeId, name, formattedAddress, rating, null, distance, restaurantLocation);
+
+                        // Add each restaurant in the list
+                        restaurantsList.add(restaurant);
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    // Pass user's location data to calculate distance from restaurant
+                    adapter.setUserLocation(userLocation);
+                    // Set restaurants list to adapter
+                    adapter.initList(restaurantsList);
+                }
             }
         } catch (JSONException e ) {
             e.printStackTrace();
@@ -135,6 +143,7 @@ public class FetchPlacesData extends AsyncTask<Object, String, String> {
     @Override
     protected String doInBackground (Object... objects) {
         // if request come from mapFragment
+        String url;
         if (dataType.equals("map") ) {
             try {
                 googleMap = (GoogleMap) objects[0];
@@ -145,10 +154,10 @@ public class FetchPlacesData extends AsyncTask<Object, String, String> {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        // else request come from listFragment
+        // else, if request come from listFragment
         } else {
             try {
-                mRestaurants = (JSONArray) objects[0];
+                restaurantsList = (List<Restaurant>) objects[0];
                 url = (String) objects[1];
                 adapter = (ListAdapter) objects[2];
                 // get user location from request parameters to calculate distance
@@ -161,6 +170,39 @@ public class FetchPlacesData extends AsyncTask<Object, String, String> {
             }
         }
         return googleNearByPlacesData;
+    }
+
+    // Format LatLng data to readable address
+    private String getFormattedAddressFromLatLng(LatLng latLng) {
+        Geocoder geocoder;
+        List<Address> addresses;
+        geocoder = new Geocoder(localContext, Locale.getDefault());
+        String formattedAddress;
+        try {
+            addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
+            Address returnedAddress = addresses.get(0);
+            StringBuilder strReturnedAddress = new StringBuilder();
+
+            for (int i = 0; i < returnedAddress.getMaxAddressLineIndex(); i++) {
+                strReturnedAddress.append(returnedAddress.getAddressLine(i)).append("\n");
+            }
+            String mStreetNumber = returnedAddress.getSubThoroughfare();
+            String mStreet = returnedAddress.getThoroughfare();
+            strReturnedAddress.append(mStreetNumber).append(" ").append(mStreet);
+            formattedAddress = strReturnedAddress.toString();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "";
+        }
+        return formattedAddress;
+    }
+
+    // Calculate distance between two points, and format to string in meters
+    @SuppressLint("DefaultLocale")
+    private String calculateAndFormatDistance(LatLng startPoint, LatLng endPoint) {
+        double distance = SphericalUtil.computeDistanceBetween(startPoint, endPoint);
+        return String.format("%d m", Math.round(distance));
     }
 
 }

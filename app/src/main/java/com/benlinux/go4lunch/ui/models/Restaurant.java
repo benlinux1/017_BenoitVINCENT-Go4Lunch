@@ -21,15 +21,15 @@ public class Restaurant {
     private String pictureUrl;
     private String hours;
 
-    public Restaurant(String id, String name, String address, Double rating, String hours, String distance) {
+    public Restaurant(String id, String name, String address, Double rating, String hours, String distance, LatLng latLng) {
         this.id = id;
         this.name = name;
         this.address = address;
         this.rating = rating;
         this.hours = hours;
+        this.distance = distance;
+        this.latLng = latLng;
     }
-
-    public Restaurant() {}
 
     public String getId() {
         return id;

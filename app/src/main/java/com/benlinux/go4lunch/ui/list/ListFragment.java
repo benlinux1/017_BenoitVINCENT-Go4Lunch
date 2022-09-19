@@ -2,18 +2,15 @@ package com.benlinux.go4lunch.ui.list;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
-import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -24,9 +21,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.benlinux.go4lunch.BuildConfig;
-import com.benlinux.go4lunch.R;
 import com.benlinux.go4lunch.databinding.FragmentListViewBinding;
-import com.benlinux.go4lunch.ui.map.MapFragment;
 import com.benlinux.go4lunch.ui.models.FetchPlacesData;
 import com.benlinux.go4lunch.ui.models.Restaurant;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -34,25 +29,16 @@ import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-
-import org.json.JSONArray;
 
 import java.util.ArrayList;
-import java.util.Objects;
+import java.util.List;
 
 public class ListFragment extends Fragment {
 
     private FragmentListViewBinding binding;
     private ListAdapter adapter;
-    private JSONArray mRestaurants;
+    private List<Restaurant> mRestaurants;
     private FusedLocationProviderClient client;
     public  LatLng actualLocation;
     private Double actualLatitude;
@@ -72,8 +58,8 @@ public class ListFragment extends Fragment {
 
         binding = FragmentListViewBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
-        mRestaurants = new JSONArray();
         mRecyclerView = binding.listRestaurants;
+        mRestaurants = new ArrayList<>();
         configRecyclerView();
 
         return view;
@@ -86,15 +72,14 @@ public class ListFragment extends Fragment {
     }
 
     /**
-     * Init the recyclerView
+     * Init the recyclerView that contains nearby restaurants
      */
     private void configRecyclerView() {
-
         adapter = new ListAdapter(mRestaurants, getContext());
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.addItemDecoration(new DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL));
         mRecyclerView.setAdapter(adapter);
-        adapter.notifyItemRangeInserted(- 1, mRestaurants.length());
+        adapter.notifyItemRangeInserted(- 1, mRestaurants.size());
     }
 
     public void findRestaurants() {
@@ -129,7 +114,7 @@ public class ListFragment extends Fragment {
                 client.getLastLocation().addOnCompleteListener(task -> {
                     // Initialize location
                     Location location = task.getResult();
-                    // Check condition
+                    // Check result
                     if (location != null) {
 
                         // save actual location to actualLocation variable

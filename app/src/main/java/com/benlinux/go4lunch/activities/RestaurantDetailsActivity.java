@@ -4,9 +4,6 @@ import static android.content.ContentValues.TAG;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.location.Address;
-import android.location.Geocoder;
-import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -24,28 +21,20 @@ import com.benlinux.go4lunch.databinding.ActivityRestaurantDetailsBinding;
 import com.benlinux.go4lunch.modules.FormatAddressModule;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.common.api.Result;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Period;
 import com.google.android.libraries.places.api.model.PhotoMetadata;
 import com.google.android.libraries.places.api.model.Place;
-import com.google.android.libraries.places.api.model.TimeOfWeek;
 import com.google.android.libraries.places.api.net.FetchPhotoRequest;
 import com.google.android.libraries.places.api.net.FetchPlaceRequest;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.maps.android.SphericalUtil;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
-import java.sql.Time;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -63,7 +52,7 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
     private ImageView restaurantPicture;
 
     private ImageButton phoneButton;
-    private ImageButton likeButton;
+    // TODO : private ImageButton likeButton;
     private ImageButton webSiteButton;
 
     @Override
@@ -101,7 +90,7 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
         restaurantHours = binding.restaurantDetailsOpening;
         restaurantPicture = binding.restaurantDetailsPhoto;
         phoneButton = binding.restaurantDetailsCallButton;
-        likeButton = binding.restaurantDetailsLikeButton;
+        // TODO : likeButton = binding.restaurantDetailsLikeButton;
         webSiteButton = binding.restaurantDetailsWebsiteButton;
     }
 
@@ -158,7 +147,6 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
 
         }).addOnFailureListener((exception) -> {
             if (exception instanceof ApiException) {
-                final ApiException apiException = (ApiException) exception;
                 Log.e(TAG, "Place not found: " + exception.getMessage());
             }
         });
@@ -246,29 +234,34 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
     // Set place picture with placeClient to imageView
     public void setPicture(Place place, PlacesClient placesClient, ImageView imageView) {
         final List<PhotoMetadata> metadata = place.getPhotoMetadatas();
+        // If no photo, set No photo picture
         if (metadata == null || metadata.isEmpty()) {
             Log.w(TAG, "No photo metadata.");
             Glide.with(restaurantPicture.getContext())
                     .load(R.mipmap.no_photo)
                     .centerCrop()
                     .into(imageView);
-        }
-        final PhotoMetadata photoMetadata = metadata.get(0);
+        } else {
+            // Get photo
+            final PhotoMetadata photoMetadata = metadata.get(0);
 
-        // Create a FetchPhotoRequest.
-        final FetchPhotoRequest photoRequest = FetchPhotoRequest.builder(photoMetadata)
-                .build();
-        placesClient.fetchPhoto(photoRequest).addOnSuccessListener((fetchPhotoResponse) -> {
-            Bitmap bitmap = fetchPhotoResponse.getBitmap();
-            imageView.setImageBitmap(bitmap);
-        }).addOnFailureListener((exception) -> {
-            if (exception instanceof ApiException) {
-                final ApiException apiException = (ApiException) exception;
-                Log.e(TAG, "Place not found: " + exception.getMessage());
-                final int statusCode = apiException.getStatusCode();
-                Log.e(TAG, "Place not found: " + statusCode);
-            }
-        });
+            // Create a FetchPhotoRequest.
+            final FetchPhotoRequest photoRequest = FetchPhotoRequest.builder(photoMetadata)
+                    .build();
+            placesClient.fetchPhoto(photoRequest).addOnSuccessListener((fetchPhotoResponse) -> {
+                // On success, set photo in ImageView
+                Bitmap bitmap = fetchPhotoResponse.getBitmap();
+                imageView.setImageBitmap(bitmap);
+            }).addOnFailureListener((exception) -> {
+                // On fail, log error
+                if (exception instanceof ApiException) {
+                    final ApiException apiException = (ApiException) exception;
+                    Log.e(TAG, "Place not found: " + exception.getMessage());
+                    final int statusCode = apiException.getStatusCode();
+                    Log.e(TAG, "Place not found: " + statusCode);
+                }
+            });
+        }
 
     }
 
