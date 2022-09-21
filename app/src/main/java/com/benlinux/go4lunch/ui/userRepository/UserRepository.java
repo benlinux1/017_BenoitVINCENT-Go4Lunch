@@ -38,4 +38,10 @@ public final class UserRepository {
         return AuthUI.getInstance().signOut(context);
     }
 
+    public Task<Void> deleteUser(Context context){
+        return AuthUI.getInstance().delete(context);
+    }
+
+
+
 }

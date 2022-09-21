@@ -41,4 +41,8 @@ public class UserManager {
         return userRepository.signOut(context);
     }
 
+    public Task<Void> deleteUser(Context context){
+        return userRepository.deleteUser(context);
+    }
+
 }

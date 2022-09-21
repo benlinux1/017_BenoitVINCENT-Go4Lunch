@@ -21,10 +21,14 @@
     <string name="error_unknown_error">An unknown error occurred&#8230;</string>
     <string name="connection_succeed">Authentication completed !</string>
     <string name="disconnection_succeed">Logout completed !</string>
+    <string name="disconnection_failed">Error during logout… Try again</string>
+
 
     // FACEBOOK AUTHENTICATION
-    <string name="facebook_application_id" translatable="false">3250053565264066</string>
-    <string name="fb_login_protocol_scheme" translatable="false">fb3250053565264066</string>
+    <string name="facebook_application_id" translatable="false">1194505511151823</string>
+    <string name="fb_login_protocol_scheme" translatable="false">fb1194505511151823</string>
+    <string name="fb_token" translatable="false">4cf699c9d44a43136bb2f87649e5ce1a</string>
+
 
     // NAVIGATION DRAWER
     <string name="user_name">John SMITH</string>
@@ -65,10 +69,17 @@
     <string name="like">LIKE</string>
     <string name="website">WEBSITE</string>
     <string name="no_website_notification">This restaurant doesn\'t have website…</string>
+    <string name="no_secured_website">This website\'s link is not safe…</string>
     <string name="no_phoneNumber_notification">This restaurant doesn\'t phone number…</string>
     <string name="distance_in_meters_end" translatable="false">%d m</string>
     <string name="restaurant_location" translatable="false">Restaurant location</string>
 
+    // Settings Activity
+    <string name="popup_message_choice_yes">YES</string>
+    <string name="popup_message_choice_no">NO</string>
+    <string name="popup_message_confirmation_delete_account">Do you really want to delete your account ?</string>
+    <string name="delete_account_succeed">Account deleted with success !</string>
+    <string name="delete_account_failed">Error during deletion… Try again</string>
 
 
 

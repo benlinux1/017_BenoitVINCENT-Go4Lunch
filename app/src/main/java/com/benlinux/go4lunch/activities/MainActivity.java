@@ -1,5 +1,7 @@
 package com.benlinux.go4lunch.activities;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -8,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.benlinux.go4lunch.R;
 import com.benlinux.go4lunch.ui.userManager.UserManager;
@@ -32,13 +35,13 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    //FOR DESIGN
-    private Toolbar toolbar;
     private DrawerLayout drawerLayout;
     private NavigationView drawerNavView;
-    private BottomNavigationView bottomNavView;
     private NavController navController;
     private AppBarConfiguration appBarConfiguration;
+    private TextView userName;
+    private TextView userEmail;
+    private ImageView userAvatar;
 
 
     // FOR DATA
@@ -52,7 +55,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         this.configureToolBar();
         this.configureNavigation();
         this.configureDrawerLayout();
+        this.setDrawerViews();
         this.updateUIWithUserData();
+    }
+
+    private void setDrawerViews() {
+        drawerNavView = findViewById(R.id.activity_main_nav_view);
+        View headerContainer = drawerNavView.getHeaderView(0);
+        userName = headerContainer.findViewById(R.id.user_name);
+        userEmail = headerContainer.findViewById(R.id.user_email);
+        userAvatar = headerContainer.findViewById(R.id.user_avatar);
     }
 
 
@@ -73,6 +85,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
+    @SuppressLint("NonConstantResourceId")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle Navigation Item Click
@@ -82,6 +95,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.activity_main_drawer_lunch:
                 break;
             case R.id.activity_main_drawer_settings:
+                Intent settingsActivityIntent = new Intent(this, SettingsActivity.class);
+                startActivity(settingsActivityIntent);
                 break;
             case R.id.activity_main_drawer_logout:
                     logout();
@@ -97,7 +112,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     // Set custom Toolbar
     private void configureToolBar(){
-        this.toolbar = (Toolbar) findViewById(R.id.main_toolbar);
+        //FOR DESIGN
+        Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setElevation(R.dimen.default_elevation_size);
     }
@@ -121,7 +137,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void configureNavigation() {
 
         // Set navigation views
-        bottomNavView = findViewById(R.id.bottom_nav_view);
+        BottomNavigationView bottomNavView = findViewById(R.id.bottom_nav_view);
         drawerNavView = findViewById(R.id.activity_main_nav_view);
         drawerLayout = findViewById(R.id.activity_main_drawer_layout);
 
@@ -154,13 +170,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             if (user.getPhotoUrl() != null) {
                 setProfilePicture(user.getPhotoUrl());
+            } else {
+                setNoPhoto(userAvatar);
             }
             setTextUserData(user);
         }
     }
 
     private void setProfilePicture(Uri profilePictureUrl){
-        drawerNavView = findViewById(R.id.activity_main_nav_view);
         View headerContainer = drawerNavView.getHeaderView(0);
         ImageView userAvatar = headerContainer.findViewById(R.id.user_avatar);
         Glide.with(this)
@@ -169,28 +186,44 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 .into(userAvatar);
     }
 
+    private void setNoPhoto(ImageView destination) {
+        Glide.with(this)
+            .load(R.mipmap.no_photo)
+            .apply(RequestOptions.circleCropTransform())
+            .into(destination);
+    }
+
     private void setTextUserData(FirebaseUser user){
-
-        drawerNavView = findViewById(R.id.activity_main_nav_view);
-        View headerContainer = drawerNavView.getHeaderView(0);
-        TextView userNameTextView = headerContainer.findViewById(R.id.user_name);
-        TextView userEmailTextView = headerContainer.findViewById(R.id.user_email);
-
         //Get email & username from User
         String email = TextUtils.isEmpty(user.getEmail()) ? getString(R.string.info_no_email_found) : user.getEmail();
         String username = TextUtils.isEmpty(user.getDisplayName()) ? getString(R.string.info_no_username_found) : user.getDisplayName();
 
         //Update views with data
-        userNameTextView.setText(username);
-        userEmailTextView.setText(email);
+        userName.setText(username);
+        userEmail.setText(email);
     }
 
     // logout from firebase
     private void logout() {
+        // On success, close activity & go to login
         userManager.signOut(this).addOnSuccessListener(aVoid -> {
-                Intent loginActivityIntent = new Intent(this, LoginActivity.class);
-                ActivityCompat.startActivity(this, loginActivityIntent, null);
-                finish();
-        });
+            finish();
+            Intent loginActivityIntent = new Intent(this, LoginActivity.class);
+            ActivityCompat.startActivity(this, loginActivityIntent, null);
+            Toast.makeText(getApplicationContext(), getString(R.string.disconnection_succeed), Toast.LENGTH_SHORT).show();
+        })
+        // On failure, show error toast
+        .addOnFailureListener(aVoid -> {
+            Toast.makeText(getApplicationContext(), getString(R.string.disconnection_failed), Toast.LENGTH_SHORT).show();
+        });;
+    }
+
+    /**
+     * Used to navigate to this activity
+     * @param activity
+     */
+    public static void navigate(Activity activity) {
+        Intent intent = new Intent(activity, MainActivity.class);
+        ActivityCompat.startActivity(activity, intent, null);
     }
 }

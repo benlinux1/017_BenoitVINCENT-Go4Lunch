@@ -51,6 +51,7 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
     private TextView restaurantDistance;
     private ImageView restaurantPicture;
 
+
     private ImageButton phoneButton;
     // TODO : private ImageButton likeButton;
     private ImageButton webSiteButton;
@@ -286,7 +287,7 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(webSiteUrl));
             startActivity(intent);
         } else {
-            showSnackBar(binding.getRoot().getRootView(), getString(R.string.no_website_notification));
+            showSnackBar(binding.getRoot().getRootView(), getString(R.string.no_secured_website));
         }
     }
 

@@ -1,21 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- STYLE SIGN-IN ACTIVITY -->
     <style name="LoginTheme" parent="Theme.MyApplication">
         <item name="colorPrimary">@color/red</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorPrimaryDark">@color/colorSand</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="colorButtonNormal">@color/colorAccent</item>
-        <item name="colorControlActivated">@android:color/darker_gray</item>
-        <item name="colorControlHighlight">@android:color/darker_gray</item>
+        <item name="colorControlActivated">@android:color/white</item>
+        <item name="colorControlHighlight">@android:color/white</item>
         <item name="android:textColor">@android:color/white</item>
-        <item name="android:textColorPrimary">@android:color/darker_gray</item>
-        <item name="android:textColorSecondary">@android:color/darker_gray</item>
+        <item name="android:textColorPrimary">@android:color/white</item>
+        <item name="android:textColorSecondary">@android:color/white</item>
         <item name="android:windowBackground">@drawable/login_background</item>
         <item name="windowNoTitle">true</item>
-        <item name="android:textColorHint">@android:color/darker_gray</item>
+        <item name="android:textColorHint">@android:color/white</item>
         <item name="colorControlNormal">@color/white</item>
+        <item name="color">@color/white</item>
+        <item name="boxBackgroundColor" tools:override="true">@color/white</item>
+        <item name="boxStrokeColor" tools:override="true">@color/white</item>
+        <item name="hintTextColor" tools:override="true">@color/white</item>
+        <item name="android:colorBackground">@color/white</item>
+
     </style>
 
     <!-- STYLE NAV DRAWER HEADER -->
