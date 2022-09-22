@@ -4,51 +4,35 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.benlinux.go4lunch.R;
-import com.benlinux.go4lunch.databinding.ActivitySettingsBinding;
 import com.benlinux.go4lunch.ui.userManager.UserManager;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.facebook.AccessToken;
-import com.firebase.ui.auth.AuthUI;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.android.material.navigation.NavigationView;
-import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.FacebookAuthProvider;
-import com.google.firebase.auth.FirebaseAuth;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.GoogleAuthProvider;
-import com.google.firebase.auth.UserInfo;
 
-import java.util.Objects;
 
 public class SettingsActivity extends AppCompatActivity {
 
     private ImageView userAvatar;
-    private TextView userName;
-    private TextView userEmail;
+    private ImageView updateAvatar;
+    private TextInputLayout userNameLayout;
+    private EditText userName;
+    private TextInputLayout userEmailLayout;
+    private EditText userEmail;
     private Button deleteButton;
+    private Button updateButton;
     private Toolbar mToolbar;
 
     // FOR DATA
@@ -88,9 +72,11 @@ public class SettingsActivity extends AppCompatActivity {
     // Define views
     private void setViews() {
         userAvatar = findViewById(R.id.settings_user_avatar);
-        userName = findViewById(R.id.settings_user_name);
-        userEmail = findViewById(R.id.settings_user_email);
-        deleteButton = findViewById(R.id.buttonDeleteAccount);
+        updateAvatar = findViewById(R.id.settings_user_avatar_update);
+        userName = findViewById(R.id.settings_user_name_field);
+        userEmail = findViewById(R.id.settings_user_email_field);
+        deleteButton = findViewById(R.id.settings_delete_button);
+        updateButton = findViewById(R.id.settings_update_button);
     }
 
     // Set User data in fields

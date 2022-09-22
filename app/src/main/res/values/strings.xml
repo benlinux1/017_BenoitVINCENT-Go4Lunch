@@ -74,12 +74,21 @@
     <string name="distance_in_meters_end" translatable="false">%d m</string>
     <string name="restaurant_location" translatable="false">Restaurant location</string>
 
-    // Settings Activity
+    // SETTINGS ACTIVITY
     <string name="popup_message_choice_yes">YES</string>
     <string name="popup_message_choice_no">NO</string>
     <string name="popup_message_confirmation_delete_account">Do you really want to delete your account ?</string>
     <string name="delete_account_succeed">Account deleted with success !</string>
     <string name="delete_account_failed">Error during deletion… Try again</string>
+    <string name="delete_button_text">Delete account</string>
+    <string name="update_button_text">Save changes</string>
+    <string name="settings_enable_notifications">Enable notifications</string>
+    <dimen name="settings_progressbar_size">80dip</dimen>
+    <string name="settings_user_name_title">Full name</string>
+    <string name="settings_user_name">John Doe</string>
+    <string name="settings_user_email_title">Email</string>
+    <string name="settings_user_email">johndoe@test.com</string>
+
 
 
 

@@ -3,7 +3,6 @@ package com.benlinux.go4lunch.ui.map;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Location;
 import android.location.LocationManager;
@@ -23,29 +22,23 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import com.benlinux.go4lunch.BuildConfig;
 import com.benlinux.go4lunch.R;
 import com.benlinux.go4lunch.activities.RestaurantDetailsActivity;
 import com.benlinux.go4lunch.databinding.FragmentMapViewBinding;
-
 import com.benlinux.go4lunch.ui.models.FetchPlacesData;
-import com.google.android.gms.common.api.ResolvableApiException;
+
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.LocationSettingsRequest;
-import com.google.android.gms.location.LocationSettingsResponse;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -95,7 +88,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         }
     }
 
-
     @SuppressLint("PotentialBehaviorOverride")
     @Override
     // Google map For OnMapReady callback implementation
@@ -111,12 +103,78 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         // update UI with or without blue point location and map centering button
         updateLocationUI();
 
+        // Set map listeners
+        setListenerOnMapClick(googleMap);
+        setListenerOnMyLocationIcon(googleMap);
+        setListenerOnMyLocationButton(googleMap);
+
         // Set custom info window layout
-        mGoogleMap.setInfoWindowAdapter(new InfoWindowForMap(getContext()));
+        googleMap.setInfoWindowAdapter(new InfoWindowForMap(getContext()));
 
         // Set click listener on Info window
-        setInfoWindowClickListener(mGoogleMap);
-    };
+        setInfoWindowClickListener(googleMap);
+
+        // Set camera & find restaurants
+        if (actualLocation != null) {
+            setCamera(googleMap);
+            findRestaurants();
+        }
+    }
+
+    private void setListenerOnMapClick(GoogleMap googleMap) {
+        // Set listener for clicks on Map
+        googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(@NonNull LatLng latLng) {
+                // When clicked on map
+                // save new location
+                setUserPosition(new LatLng(latLng.latitude, latLng.longitude));
+                // Initialize marker options
+                MarkerOptions markerOptions = new MarkerOptions();
+                // Set title of marker
+                markerOptions.title("Search location");
+                // Set position of marker
+                markerOptions.position(latLng);
+                // Remove all marker
+                googleMap.clear();
+                // Animating to zoom the marker
+                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,DEFAULT_ZOOM));
+                // Add marker on map
+                googleMap.addMarker(markerOptions);
+                // Actualize restaurants on map
+                findRestaurants();
+            }
+        });
+    }
+
+    private void setListenerOnMyLocationIcon(GoogleMap googleMap) {
+        googleMap.setOnMyLocationClickListener(new GoogleMap.OnMyLocationClickListener() {
+            @Override
+            public void onMyLocationClick(@NonNull Location location) {
+                LatLng userPosition = new LatLng(location.getLatitude(), location.getLongitude());
+                setUserPosition(userPosition);
+                googleMap.clear();
+                setMarkerForUserLocation(userPosition, "actual");
+                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(actualLatitude, actualLongitude), DEFAULT_ZOOM));
+                findRestaurants();
+            }
+        });
+    }
+
+
+    private void setListenerOnMyLocationButton(GoogleMap googleMap) {
+        googleMap.setOnMyLocationButtonClickListener(new GoogleMap.OnMyLocationButtonClickListener() {
+            @Override
+            public boolean onMyLocationButtonClick() {
+                googleMap.clear();
+                getCurrentLocation();
+                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(actualLatitude, actualLongitude), DEFAULT_ZOOM));
+                setMarkerForUserLocation(new LatLng(actualLatitude, actualLongitude), "actual");
+                return true;
+            }
+        });
+    }
+
 
     // Prompt user for location permission (Coarse & fine)
     private void getLocationPermission() {
@@ -132,8 +190,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                     } else if (coarseLocationGranted != null && coarseLocationGranted) {
                         locationPermissionGranted = true;
                     } else {
-                        // When location service is not enabled, open location settings and put app in background
-                        // When location service is not enabled, open location settings and put app in background
+                        // When location service is not enabled, open location settings
                         Toast.makeText(getContext(), "Please enable position & restart app to use map features", Toast.LENGTH_SHORT).show();
                         startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
                             .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
@@ -141,7 +198,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 }
             );
 
-        /**
+        /*
         * Before permission request, check whether the app has already the permissions
         * and whether the app needs to show a permission rationale dialog
         */
@@ -163,9 +220,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 String placeId= String.valueOf(marker.getTag());
                 // Retrieve user location
                 LatLng userLocation = actualLocation;
-                // Send place_id in the intent, in order to get it in details activity
+                // Send place_id & user location in order to get it in details activity
                 restaurantDetailsIntent.putExtra("PLACE_ID", placeId);
-
                 restaurantDetailsIntent.putExtra("USER_LOCATION", userLocation);
 
                 if (!placeId.equals("null")) {
@@ -200,21 +256,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         }
     }
 
-    public void setUserPosition(LatLng location) {
-        actualLocation = location;
-        actualLatitude = location.latitude;
-        actualLongitude = location.longitude;
-    }
-
-    private Double getUserLatitude() {
-        return actualLatitude;
-    }
-
-    private Double getUserLongitude() {
-        return actualLongitude;
-    }
-
-
     @SuppressLint("MissingPermission")
     private void getCurrentLocation() {
         // Initialize location manager
@@ -235,7 +276,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                             // save actual location to actualLocation variable
                             setUserPosition(new LatLng(location.getLatitude(), location.getLongitude()));
                             // set markers
-                            setMarkersForUserLocation("actual location");
+                            setMarkerForUserLocation(new LatLng(location.getLatitude(), location.getLongitude()),
+                                    "actual");
 
                         } else {
                             // When location result is null, initialize location request
@@ -254,12 +296,15 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                                     // save last location in actualLocation variable
                                     setUserPosition(new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude()));
                                     // set markers
-                                    setMarkersForUserLocation("last location");
+                                    setMarkerForUserLocation(new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude()),
+                                            "last");
                                 }
                             };
                             // Request location updates
                             client.requestLocationUpdates(locationRequest, locationCallback, Looper.myLooper());
                         }
+                        setCamera(mGoogleMap);
+                        findRestaurants();
                     }
                 });
             } catch (Exception ex)  {
@@ -273,7 +318,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         }
     }
 
-    private void setMarkersForUserLocation(String type) {
+    private void setMarkerForUserLocation(LatLng userLocation, String locationType) {
         // Set map callback
         mapFragment.getMapAsync(new OnMapReadyCallback() {
             @Override
@@ -282,47 +327,18 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 mGoogleMap = googleMap;
 
                 // Add marker & move camera to user location
-                if (type.equals("actual location")) {
-                    mGoogleMap.addMarker(new MarkerOptions().position(actualLocation).title("Actual location"));
-                } else if (type.equals("last location")) {
-                    mGoogleMap.addMarker(new MarkerOptions().position(actualLocation).title("Last known location"));
+                if (locationType.equals("actual")) {
+                    mGoogleMap.addMarker(new MarkerOptions().position(userLocation).title("Actual location"));
+                } else if (locationType.equals("last")) {
+                    mGoogleMap.addMarker(new MarkerOptions().position(userLocation).title("Last known location"));
                 }
-
-                mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(actualLatitude, actualLongitude), DEFAULT_ZOOM));
-
-                // find & mark restaurants
-                if (actualLocation != null)  {
-                    findRestaurants();
-                }
-
-                // Set listener for clicks on Map
-                googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-                    @Override
-                    public void onMapClick(@NonNull LatLng latLng) {
-                        // When clicked on map
-                        // save new location
-                        setUserPosition(new LatLng(latLng.latitude, latLng.longitude));
-                        // Initialize marker options
-                        MarkerOptions markerOptions = new MarkerOptions();
-                        // Set title of marker
-                        markerOptions.title("Search location");
-                        // Set position of marker
-                        markerOptions.position(latLng);
-                        // Remove all marker
-                        googleMap.clear();
-                        // Animating to zoom the marker
-                        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,16));
-                        // Add marker on map
-                        googleMap.addMarker(markerOptions);
-                        // find & mark restaurants with new location
-                        findRestaurants();
-                    }
-                });
             }
         });
     }
 
-
+    private void setCamera(GoogleMap googleMap) {
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(actualLatitude, actualLongitude), DEFAULT_ZOOM));
+    }
 
     public void findRestaurants() {
         // Build Place request with URL
@@ -338,6 +354,20 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
         FetchPlacesData fetchPlacesData = new FetchPlacesData(getContext(), "map");
         fetchPlacesData.execute(restaurantData);
+    }
+
+    public void setUserPosition(LatLng location) {
+        actualLocation = location;
+        actualLatitude = location.latitude;
+        actualLongitude = location.longitude;
+    }
+
+    private Double getUserLatitude() {
+        return actualLatitude;
+    }
+
+    private Double getUserLongitude() {
+        return actualLongitude;
     }
 
     @Override

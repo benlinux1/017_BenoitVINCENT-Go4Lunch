@@ -10,8 +10,12 @@
     <color name="white">#FFFFFFFF</color>
     <color name="gold">#DEB20B</color>
 
+    <color name="grey">#BDBDBD</color>
+
+
+
     <color name="colorPrimary">#FC3F1B</color>
-    <color name="colorPrimaryDark">#0288D1</color>
+    <color name="colorPrimaryBlue">#0288D1</color>
     <color name="colorAccent">#FFA000</color>
     <color name="colorError">#FF5252</color>
 

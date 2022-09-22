@@ -2,118 +2,141 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/linearLayout2"
+    android:id="@+id/activity_setting_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:backgroundTint="#83E53935"
-    android:backgroundTintMode="add">
+    android:layout_height="match_parent">
 
-    <!-- Toolbar -->
-    <include
-        layout="@layout/toolbar_main"
-        android:id="@+id/main_toolbar" />
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/settings_card"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="16dp"
-        android:backgroundTint="@color/colorPrimary"
-        android:padding="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline8"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/main_toolbar">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <ImageView
-                android:id="@+id/settings_user_avatar"
-                android:layout_width="150dp"
-                android:layout_height="150dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="8dp"
-                android:padding="8dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/settings_user_name"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:srcCompat="@tools:sample/avatars" />
-
-            <TextView
-                android:id="@+id/settings_user_name"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
-                android:gravity="start"
-                android:padding="8dp"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                app:layout_constraintBottom_toTopOf="@+id/settings_user_email"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/settings_user_avatar"
-                app:layout_constraintTop_toTopOf="@+id/settings_user_avatar"
-                tools:text="TextView" />
-
-            <TextView
-                android:id="@+id/settings_user_email"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:gravity="start"
-                android:padding="8dp"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                app:layout_constraintBottom_toBottomOf="@+id/settings_user_avatar"
-                app:layout_constraintEnd_toEndOf="@+id/settings_user_name"
-                app:layout_constraintStart_toStartOf="@+id/settings_user_name"
-                app:layout_constraintTop_toBottomOf="@+id/settings_user_name"
-                tools:text="TextView" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </androidx.cardview.widget.CardView>
-
-    <FrameLayout
-        android:id="@+id/settings"
-        android:layout_width="0dp"
+    <LinearLayout
+        android:id="@+id/layout_toolbar"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="8dp"
-        android:padding="8dp"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <!-- Toolbar -->
+        <include
+            layout="@layout/toolbar_main"
+            android:id="@+id/main_toolbar" />
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/settings_user_avatar"
+        android:layout_width="@dimen/user_avatar_size"
+        android:layout_height="@dimen/user_avatar_size"
+        android:layout_margin="@dimen/default_large_margin"
+        app:layout_constraintTop_toBottomOf="@id/layout_toolbar"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline8" />
+        tools:srcCompat="@tools:sample/avatars" />
+
+    <ImageView
+        android:id="@+id/settings_user_avatar_update"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:src="@drawable/ic_add_photo"
+        app:layout_constraintBottom_toBottomOf="@id/settings_user_avatar"
+        app:layout_constraintEnd_toEndOf="@id/settings_user_avatar" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/settings_user_name_input"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/small_margin"
+        android:layout_marginTop="@dimen/default_large_margin"
+        app:layout_constraintTop_toBottomOf="@id/settings_user_avatar"
+        android:hint="@string/settings_user_name_title">
+
+        <EditText
+            android:id="@+id/settings_user_name_field"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/settings_user_name"
+            android:text="@string/settings_user_name"
+            android:inputType="text"
+            android:imeOptions="actionDone"
+            android:autofillHints="" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/settings_user_email_input"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/small_margin"
+        app:layout_constraintTop_toBottomOf="@id/settings_user_name_input"
+        android:hint="@string/settings_user_email_title" >
+
+        <EditText
+            android:id="@+id/settings_user_email_field"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/settings_user_email"
+            android:hint="@string/settings_user_email"
+            android:inputType="textEmailAddress"
+            android:imeOptions="actionDone"
+            android:autofillHints="" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <LinearLayout
+        android:id="@+id/settings_notifications_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/settings_user_email_input"
+        android:orientation="horizontal"
+        android:layout_marginTop="@dimen/default_medium_margin"
+        android:layout_marginHorizontal="@dimen/small_margin">
+
+        <TextView
+            android:id="@+id/settings_notifications_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/small_margin"
+            android:text="@string/settings_enable_notifications"
+            android:textSize="@dimen/high_text_size"/>
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/settings_notification_switch"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+    </LinearLayout>
 
     <Button
-        android:id="@+id/buttonDeleteAccount"
-        style="@style/Widget.Material3.Button.Icon"
-        android:layout_width="wrap_content"
+        android:id="@+id/settings_update_button"
+        style="@style/Widget.Material3.Button.ElevatedButton.Icon"
+        android:layout_width="@dimen/profile_button_width"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"
-        android:backgroundTint="@android:color/holo_red_dark"
-        android:text="Delete account"
-        android:textSize="16sp"
-        app:icon="@drawable/ic_delete_account"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="@dimen/default_large_margin"
+        android:backgroundTint="@android:color/holo_blue_bright"
+        android:textSize="@dimen/high_text_size"
+        android:textColor="@color/white"
+        app:iconTint="@color/white"
+        app:icon="@drawable/ic_save_profile"
+        android:text="@string/update_button_text"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/settings_notifications_layout"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:layout_marginTop="@dimen/default_medium_margin"
+        android:layout_marginHorizontal="@dimen/small_margin" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline8"
-        android:layout_width="wrap_content"
+    <Button
+        android:id="@+id/settings_delete_button"
+        style="@style/Widget.Material3.Button.ElevatedButton.Icon"
+        android:layout_width="@dimen/profile_button_width"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.4" />
+        android:layout_marginBottom="@dimen/default_large_margin"
+        android:backgroundTint="@android:color/holo_red_dark"
+        android:text="@string/delete_button_text"
+        android:textSize="@dimen/high_text_size"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        app:iconTint="@color/white"
+        app:icon="@drawable/ic_delete_account"
+        android:layout_marginTop="@dimen/small_margin"
+        app:layout_constraintTop_toBottomOf="@id/settings_update_button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
-
-

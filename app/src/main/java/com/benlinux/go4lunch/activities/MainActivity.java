@@ -32,6 +32,8 @@ import androidx.navigation.ui.NavigationUI;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.Objects;
+
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -93,6 +95,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         switch (id){
             case R.id.activity_main_drawer_lunch:
+                Intent lunchActivityIntent = new Intent(this, UserLunchActivity.class);
+                startActivity(lunchActivityIntent);
                 break;
             case R.id.activity_main_drawer_settings:
                 Intent settingsActivityIntent = new Intent(this, SettingsActivity.class);
@@ -115,7 +119,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //FOR DESIGN
         Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setElevation(R.dimen.default_elevation_size);
+        Objects.requireNonNull(getSupportActionBar()).setElevation(R.dimen.default_elevation_size);
     }
 
 
@@ -213,14 +217,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Toast.makeText(getApplicationContext(), getString(R.string.disconnection_succeed), Toast.LENGTH_SHORT).show();
         })
         // On failure, show error toast
-        .addOnFailureListener(aVoid -> {
-            Toast.makeText(getApplicationContext(), getString(R.string.disconnection_failed), Toast.LENGTH_SHORT).show();
-        });;
+        .addOnFailureListener(aVoid -> Toast.makeText(getApplicationContext(), getString(R.string.disconnection_failed), Toast.LENGTH_SHORT).show());
     }
 
     /**
-     * Used to navigate to this activity
-     * @param activity
+     * Used to navigate to Main activity
+     * @param activity is original activity
      */
     public static void navigate(Activity activity) {
         Intent intent = new Intent(activity, MainActivity.class);
