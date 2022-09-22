@@ -1,4 +1,4 @@
-package com.benlinux.go4lunch.ui.map;
+package com.benlinux.go4lunch.ui.adapters;
 
 import static android.content.ContentValues.TAG;
 
@@ -35,12 +35,12 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
-public class InfoWindowForMap implements GoogleMap.InfoWindowAdapter {
+public class InfoWindowForMapAdapter implements GoogleMap.InfoWindowAdapter {
     Context context;
     LayoutInflater inflater;
     Float ratingFloat;
 
-    public InfoWindowForMap(Context context) {
+    public InfoWindowForMapAdapter(Context context) {
         this.context = context;
     }
 

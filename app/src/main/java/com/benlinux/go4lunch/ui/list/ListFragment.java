@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.benlinux.go4lunch.BuildConfig;
 import com.benlinux.go4lunch.databinding.FragmentListViewBinding;
+import com.benlinux.go4lunch.ui.adapters.ListAdapter;
 import com.benlinux.go4lunch.ui.models.FetchPlacesData;
 import com.benlinux.go4lunch.ui.models.Restaurant;
 import com.google.android.gms.location.FusedLocationProviderClient;

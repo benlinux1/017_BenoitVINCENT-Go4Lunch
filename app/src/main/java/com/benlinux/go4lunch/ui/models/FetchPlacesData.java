@@ -7,7 +7,7 @@ import android.location.Geocoder;
 import android.os.AsyncTask;
 
 import com.benlinux.go4lunch.R;
-import com.benlinux.go4lunch.ui.list.ListAdapter;
+import com.benlinux.go4lunch.ui.adapters.ListAdapter;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;

@@ -1,4 +1,4 @@
-package com.benlinux.go4lunch.ui.list;
+package com.benlinux.go4lunch.ui.adapters;
 
 import static android.content.ContentValues.TAG;
 
@@ -6,8 +6,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.location.Address;
-import android.location.Geocoder;
 import android.os.Build;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -37,11 +35,6 @@ import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.net.FetchPhotoRequest;
 import com.google.android.libraries.places.api.net.FetchPlaceRequest;
 import com.google.android.libraries.places.api.net.PlacesClient;
-import com.google.maps.android.SphericalUtil;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.Arrays;
 import java.util.Calendar;

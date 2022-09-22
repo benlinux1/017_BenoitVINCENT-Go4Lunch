@@ -28,6 +28,7 @@ import com.benlinux.go4lunch.BuildConfig;
 import com.benlinux.go4lunch.R;
 import com.benlinux.go4lunch.activities.RestaurantDetailsActivity;
 import com.benlinux.go4lunch.databinding.FragmentMapViewBinding;
+import com.benlinux.go4lunch.ui.adapters.InfoWindowForMapAdapter;
 import com.benlinux.go4lunch.ui.models.FetchPlacesData;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -109,7 +110,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         setListenerOnMyLocationButton(googleMap);
 
         // Set custom info window layout
-        googleMap.setInfoWindowAdapter(new InfoWindowForMap(getContext()));
+        googleMap.setInfoWindowAdapter(new InfoWindowForMapAdapter(getContext()));
 
         // Set click listener on Info window
         setInfoWindowClickListener(googleMap);
@@ -383,5 +384,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         super.onDestroyView();
         binding = null;
     }
+
+
+
 
 }
