@@ -26,6 +26,7 @@ import androidx.fragment.app.Fragment;
 
 import com.benlinux.go4lunch.BuildConfig;
 import com.benlinux.go4lunch.R;
+import com.benlinux.go4lunch.activities.MainActivity;
 import com.benlinux.go4lunch.activities.RestaurantDetailsActivity;
 import com.benlinux.go4lunch.databinding.FragmentMapViewBinding;
 import com.benlinux.go4lunch.ui.adapters.InfoWindowForMapAdapter;
@@ -361,6 +362,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         actualLocation = location;
         actualLatitude = location.latitude;
         actualLongitude = location.longitude;
+        MainActivity.setUserLocation(location);
     }
 
     private Double getUserLatitude() {
@@ -384,6 +386,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         super.onDestroyView();
         binding = null;
     }
+
 
 
 
