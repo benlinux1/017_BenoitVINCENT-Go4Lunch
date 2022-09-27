@@ -14,12 +14,13 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class PlaceAutoCompleteSearch {
 
-    public ArrayList<String> autoComplete(String input) {
-        ArrayList<String> arrayList = new ArrayList();
+    public List<Restaurant> autoComplete(String input) {
+        List<Restaurant> restaurantsList = new ArrayList();
         HttpURLConnection connection = null;
         StringBuilder jsonResult = new StringBuilder();
         try {
@@ -57,7 +58,13 @@ public class PlaceAutoCompleteSearch {
             JSONArray prediction=jsonObject.getJSONArray("predictions");
 
             for (int i = 0; i < prediction.length(); i++) {
-                arrayList.add(prediction.getJSONObject(i).getString("description"));
+
+                String description = prediction.getJSONObject(i).getString("description");
+                String id = prediction.getJSONObject(i).getString("place_id");
+                Restaurant restaurant = new Restaurant(id, description, null, null, null, null, null);
+
+
+                restaurantsList.add(restaurant);
             }
 
         }
@@ -65,6 +72,6 @@ public class PlaceAutoCompleteSearch {
             e.printStackTrace();
         }
 
-        return arrayList;
+        return restaurantsList;
     }
 }

@@ -6,12 +6,13 @@ import android.widget.Filter;
 import android.widget.Filterable;
 
 import com.benlinux.go4lunch.ui.models.PlaceAutoCompleteSearch;
+import com.benlinux.go4lunch.ui.models.Restaurant;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class PlaceAutoCompleteAdapter extends ArrayAdapter implements Filterable {
     
-    private ArrayList<String> results;
+    private List<Restaurant> restaurants;
     private final PlaceAutoCompleteSearch placeApi = new PlaceAutoCompleteSearch();
 
     public PlaceAutoCompleteAdapter(Context context, int resId) {
@@ -20,12 +21,24 @@ public class PlaceAutoCompleteAdapter extends ArrayAdapter implements Filterable
 
     @Override
     public int getCount(){
-        return results.size();
+        return restaurants.size();
     }
 
     @Override
     public String getItem(int pos){
-        return results.get(pos);
+        return restaurants.get(pos).getName();
+    }
+
+    public List<Restaurant> getRestaurantList() {
+        return restaurants;
+    }
+
+    public String getRestaurantId(int pos) {
+        return restaurants.get(pos).getId();
+    }
+
+    public String getRestaurantName(int pos) {
+        return restaurants.get(pos).getName();
     }
 
     @Override
@@ -35,10 +48,10 @@ public class PlaceAutoCompleteAdapter extends ArrayAdapter implements Filterable
             protected FilterResults performFiltering(CharSequence constraint) {
                 FilterResults filterResults = new FilterResults();
                 if (constraint != null){
-                    results = placeApi.autoComplete(constraint.toString());
+                    restaurants = placeApi.autoComplete(constraint.toString());
 
-                    filterResults.values = results;
-                    filterResults.count = results.size();
+                    filterResults.values = restaurants;
+                    filterResults.count = restaurants.size();
                 }
                 return filterResults;
             }

@@ -89,6 +89,11 @@
     <string name="settings_user_email_title">Email</string>
     <string name="settings_user_email">johndoe@test.com</string>
 
+    // SEARCH BAR
+    <string name="search_bar_title">Search</string>
+    <string name="search_bar_hint">Search restaurants</string>
+
+
 
 
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources xmlns:tools="http://schemas.android.com/tools" xmlns:app="http://schemas.android.com/apk/res-auto" >
 
     <!-- STYLE SIGN-IN ACTIVITY -->
     <style name="LoginTheme" parent="Theme.MyApplication">
@@ -28,22 +28,17 @@
     <style name="DrawerTheme" parent="Theme.MyApplication">
         <item name="colorPrimary">@color/red</item>
         <item name="android:textColor">@android:color/white</item>
-        <item name="android:navigationIcon">@drawable/ic_baseline_menu_24</item>
-        <item name="android:actionBarTabBarStyle">@drawable/ic_baseline_menu_24</item>
     </style>
 
-    <!-- Toolbar theme -->
-    <style name="ToolBarStyle" parent="Theme.MyApplication">
-        <item name="colorPrimary">@color/red</item>
-        <item name="android:textColorPrimary">@android:color/white</item>
-        <item name="colorControlNormal">@color/white</item>
+
+    <!-- STYLE HAMBURGER / BACK ARROW IN TOOLBAR -->
+    <style name="DrawerArrowStyle" parent="@style/Widget.AppCompat.DrawerArrowToggle">
         <item name="spinBars">true</item>
         <item name="color">@android:color/white</item>
-        <item name="android:navigationIcon">@drawable/ic_baseline_menu_24</item>
-        <item name="android:color">@android:color/white</item>
-        <item name="android:elevation">@dimen/default_elevation_size</item>
     </style>
 
+
+    <!-- STYLE RATING BAR -->
     <style name="RatingBar" parent="Theme.MyApplication">
         <item name="colorControlNormal">@android:color/transparent</item>
         <item name="colorControlActivated">@color/gold</item>

@@ -254,10 +254,12 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
             Place place = response.getPlace();
 
             // if result is successful, set restaurant's opening hours into textview
-            setOpeningHours(place, hoursDestination);
+            if (place.getOpeningHours() != null) {
+                setOpeningHours(place, hoursDestination);
+            }
             // if result is successful, set restaurant's picture into imageView
             if (place.getPhotoMetadatas() != null) {
-            setPicture(place, placesClient, pictureDestination);
+                setPicture(place, placesClient, pictureDestination);
             } else {
                 Glide.with(pictureDestination.getContext())
                         .load(R.mipmap.no_photo)
@@ -279,8 +281,10 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         // Get Opening hours
         if (place.getOpeningHours() != null) {
             final Calendar currentDate = Calendar.getInstance(Locale.getDefault());
-            int today = currentDate.get(Calendar.DAY_OF_WEEK+1);
+            int today = currentDate.get(Calendar.DAY_OF_WEEK)-1;
+            Log.d("today", String.valueOf(today));
             List<Period> periodList = place.getOpeningHours().getPeriods();
+            Log.d("today for opening hours", String.valueOf(periodList.get(today)));
             int openHour = Objects.requireNonNull(periodList.get(today).getOpen()).getTime().getHours();
             int closeHour = Objects.requireNonNull(periodList.get(today).getClose()).getTime().getHours();
             String openMinutes = String.valueOf(Objects.requireNonNull(periodList.get(today).getOpen()).getTime().getMinutes());

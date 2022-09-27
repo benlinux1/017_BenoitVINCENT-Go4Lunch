@@ -1,50 +1,34 @@
 package com.benlinux.go4lunch.activities;
 
-import static android.content.ContentValues.TAG;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
-import android.location.Address;
-import android.location.Geocoder;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.benlinux.go4lunch.BuildConfig;
 import com.benlinux.go4lunch.R;
 import com.benlinux.go4lunch.ui.adapters.PlaceAutoCompleteAdapter;
-import com.benlinux.go4lunch.ui.map.MapFragment;
 import com.benlinux.go4lunch.ui.userManager.UserManager;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.common.api.Status;
+
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.libraries.places.api.Places;
-import com.google.android.libraries.places.api.model.AutocompletePrediction;
-import com.google.android.libraries.places.api.model.Period;
-import com.google.android.libraries.places.api.model.Place;
-import com.google.android.libraries.places.api.model.TypeFilter;
-import com.google.android.libraries.places.api.net.FetchPlaceRequest;
-import com.google.android.libraries.places.api.net.PlacesClient;
-import com.google.android.libraries.places.widget.Autocomplete;
-import com.google.android.libraries.places.widget.AutocompleteActivity;
-import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
-import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
-import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
@@ -52,7 +36,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.Fragment;
+
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -61,10 +45,6 @@ import androidx.navigation.ui.NavigationUI;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseUser;
 
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.List;
-import java.util.Locale;
 import java.util.Objects;
 
 
@@ -80,17 +60,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public static LatLng userLocation;
 
-
     // FOR DATA
     private final UserManager userManager = UserManager.getInstance();
 
-    private int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;// declare this globally
+    private SearchView.SearchAutoComplete autoCompleteTextView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
 
         this.configureToolBar();
         this.configureNavigation();
@@ -98,7 +77,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         this.setDrawerViews();
         this.updateUIWithUserData();
     }
-
 
     private LatLng getUserLocation() {
         return userLocation;
@@ -109,57 +87,61 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
+    // Customize Search Bar features
+    @RequiresApi(api = Build.VERSION_CODES.P)
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.search_menu,menu);
+        getMenuInflater().inflate(R.menu.search_menu, menu);
         MenuItem menuItem = menu.findItem(R.id.search_action);
 
-        // Initialize Places API
-        Places.initialize(getApplicationContext(), BuildConfig.PLACE_API_KEY);
+        // Custom search bar
+        SearchView searchView = (SearchView) menuItem.getActionView();
+        searchView.setQueryHint(getResources().getString(R.string.search_bar_hint));
 
-        // Specify the fields to return from request
-        final List<Place.Field> placeFields = Arrays.asList(
-                Place.Field.ID,
-                Place.Field.NAME,
-                Place.Field.ADDRESS,
-                Place.Field.LAT_LNG,
-                Place.Field.TYPES
-        );
+        // Custom search bar layout with no elevation
+        LinearLayout searchPlate = searchView.findViewById(androidx.appcompat.R.id.search_plate);
+        if (searchPlate != null) {
+            searchPlate.setElevation(R.dimen.zero);
+        }
 
-        // Call autocomplete search bar when user clicks on search icon
-        menuItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+        // Autocomplete text view
+        autoCompleteTextView = searchView.findViewById(androidx.appcompat.R.id.search_src_text);
+
+        // Get the SearchView and set the searchable configuration
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        // Assumes current activity is the searchable activity
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        searchView.setIconifiedByDefault(true); // Do not iconify the widget; expand it by default
+        searchView.setIconified(true);
+
+
+        // Handle voice search & set query in autoComplete textview
+        Intent intent = getIntent();
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            String query = intent.getStringExtra(SearchManager.QUERY);
+            autoCompleteTextView.setText(query);
+        }
+
+        // Set adapter for Suggestions
+        PlaceAutoCompleteAdapter adapter = new PlaceAutoCompleteAdapter(MainActivity.this, android.R.layout.simple_list_item_1);
+        autoCompleteTextView.setAdapter(adapter);
+
+        // Custom search text with corner radius & search icon
+        autoCompleteTextView.setBackgroundResource(R.drawable.background_search_bar);
+       // autoCompleteTextView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_search_black,0,0,0);
+
+        // When user clicks on restaurant in list, go to details page
+        autoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY,
-                        placeFields).setTypeFilter(TypeFilter.ESTABLISHMENT).build(MainActivity.this);
-                startActivityForResult(intent, 100);
-                return true;
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String placeId = adapter.getRestaurantId(position);
+                Intent restaurantDetailsActivityIntent = new Intent(MainActivity.this, RestaurantDetailsActivity.class);
+                restaurantDetailsActivityIntent.putExtra("PLACE_ID", placeId);
+                restaurantDetailsActivityIntent.putExtra("USER_LOCATION", getUserLocation());
+                startActivity(restaurantDetailsActivityIntent);
             }
         });
+
         return super.onCreateOptionsMenu(menu);
-    }
-
-    // Start details activity if selected place is a restaurant
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 100 && resultCode == RESULT_OK) {
-
-            Place place = Autocomplete.getPlaceFromIntent(data);
-
-            if (Objects.requireNonNull(place.getTypes()).toString().contains("RESTAURANT") || place.getTypes().toString().contains("FOOD")) {
-                Intent detailsActivityIntent = new Intent(MainActivity.this, RestaurantDetailsActivity.class);
-                detailsActivityIntent.putExtra("PLACE_ID", place.getId());
-                detailsActivityIntent.putExtra("USER_LOCATION", getUserLocation());
-                startActivity(detailsActivityIntent);
-            } else {
-                Toast.makeText(getApplicationContext(), "This place is not a restaurant", Toast.LENGTH_LONG).show();
-            }
-
-        } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
-
-            Status status = Autocomplete.getStatusFromIntent(data);
-            Toast.makeText(getApplicationContext(), status.getStatusMessage(), Toast.LENGTH_SHORT).show();
-        }
     }
 
 
@@ -217,9 +199,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
     // Set custom Toolbar
+    @SuppressLint("ResourceAsColor")
     private void configureToolBar(){
         //FOR DESIGN
-        Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
+        Toolbar toolbar = findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setElevation(R.dimen.default_elevation_size);
     }
@@ -227,17 +210,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     // Configure Drawer Layout with toggle
     private void configureDrawerLayout(){
-        this.drawerLayout = (DrawerLayout) findViewById(R.id.activity_main_drawer_layout);
+        this.drawerLayout = findViewById(R.id.activity_main_drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
     }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
-
 
     // Configure Drawer & Bottom Navigation
     private void configureNavigation() {
@@ -323,49 +300,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
-    private LatLng getLatLngFromAddress(String address){
-
-        Geocoder geocoder=new Geocoder(MainActivity.this);
-        List<Address> addressList;
-
-        try {
-            addressList = geocoder.getFromLocationName(address, 1);
-            if(addressList!=null){
-                Address singleaddress=addressList.get(0);
-                LatLng latLng=new LatLng(singleaddress.getLatitude(),singleaddress.getLongitude());
-                return latLng;
-            }
-            else{
-                return null;
-            }
-        }
-        catch (Exception e){
-            e.printStackTrace();
-            return null;
-        }
-
-    }
-
-    private Address getAddressFromLatLng(LatLng latLng){
-        Geocoder geocoder=new Geocoder(MainActivity.this);
-        List<Address> addresses;
-        try {
-            addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 5);
-            if(addresses!=null){
-                Address address=addresses.get(0);
-                return address;
-            }
-            else{
-                return null;
-            }
-        }
-        catch (Exception e){
-            e.printStackTrace();
-            return null;
-        }
-
-    }
-
     /**
      * Used to navigate to Main activity
      * @param activity is original activity
@@ -373,5 +307,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public static void navigate(Activity activity) {
         Intent intent = new Intent(activity, MainActivity.class);
         ActivityCompat.startActivity(activity, intent, null);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 }
