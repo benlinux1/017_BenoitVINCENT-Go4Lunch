@@ -16,7 +16,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 
 import com.benlinux.go4lunch.R;
-import com.benlinux.go4lunch.ui.userManager.UserManager;
+import com.benlinux.go4lunch.data.userManager.UserManager;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.textfield.TextInputLayout;

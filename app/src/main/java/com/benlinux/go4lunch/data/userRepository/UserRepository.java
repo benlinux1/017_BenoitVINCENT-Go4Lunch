@@ -1,4 +1,4 @@
-package com.benlinux.go4lunch.ui.userRepository;
+package com.benlinux.go4lunch.data.userRepository;
 
 import android.content.Context;
 

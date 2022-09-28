@@ -1,8 +1,9 @@
-package com.benlinux.go4lunch.ui.models;
+package com.benlinux.go4lunch.modules;
 
 import android.util.Log;
 
 import com.benlinux.go4lunch.BuildConfig;
+import com.benlinux.go4lunch.ui.models.Restaurant;
 
 import org.json.JSONArray;
 import org.json.JSONException;

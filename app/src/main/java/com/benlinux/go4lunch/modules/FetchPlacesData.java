@@ -1,4 +1,4 @@
-package com.benlinux.go4lunch.ui.models;
+package com.benlinux.go4lunch.modules;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 
 import com.benlinux.go4lunch.R;
 import com.benlinux.go4lunch.ui.adapters.ListAdapter;
+import com.benlinux.go4lunch.ui.models.Restaurant;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
@@ -150,6 +151,8 @@ public class FetchPlacesData extends AsyncTask<Object, String, String> {
                 url = (String) objects[1];
                 PlaceDownloadUrl downloadUrl = new PlaceDownloadUrl();
                 googleNearByPlacesData = downloadUrl.downloadUrl(url);
+
+
 
             } catch (IOException e) {
                 e.printStackTrace();

@@ -1,4 +1,4 @@
-package com.benlinux.go4lunch.ui.models;
+package com.benlinux.go4lunch.modules;
 
 import android.util.Log;
 

@@ -1,4 +1,4 @@
-package com.benlinux.go4lunch.ui.map;
+package com.benlinux.go4lunch.ui.fragments;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -30,7 +30,7 @@ import com.benlinux.go4lunch.activities.MainActivity;
 import com.benlinux.go4lunch.activities.RestaurantDetailsActivity;
 import com.benlinux.go4lunch.databinding.FragmentMapViewBinding;
 import com.benlinux.go4lunch.ui.adapters.InfoWindowForMapAdapter;
-import com.benlinux.go4lunch.ui.models.FetchPlacesData;
+import com.benlinux.go4lunch.modules.FetchPlacesData;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -98,7 +98,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         mGoogleMap = googleMap;
         googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
-        if (locationPermissionGranted) {
+        if (locationPermissionGranted && actualLocation == null) {
             getCurrentLocation();
         }
 
@@ -118,6 +118,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
         // Set camera & find restaurants
         if (actualLocation != null) {
+            googleMap.clear();
             setCamera(googleMap);
             findRestaurants();
         }
@@ -154,8 +155,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             @Override
             public void onMyLocationClick(@NonNull Location location) {
                 LatLng userPosition = new LatLng(location.getLatitude(), location.getLongitude());
+                // Actualize user fictive position on click
                 setUserPosition(userPosition);
-                googleMap.clear();
+
                 setMarkerForUserLocation(userPosition, "actual");
                 googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(actualLatitude, actualLongitude), DEFAULT_ZOOM));
                 findRestaurants();
@@ -272,8 +274,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                     public void onComplete(@NonNull Task<Location> task) {
                         // Initialize location
                         Location location = task.getResult();
+
+                        mGoogleMap.clear();
                         // Check condition
                         if (location != null) {
+
 
                             // save actual location to actualLocation variable
                             setUserPosition(new LatLng(location.getLatitude(), location.getLongitude()));
@@ -281,7 +286,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                             setMarkerForUserLocation(new LatLng(location.getLatitude(), location.getLongitude()),
                                     "actual");
 
+
+                            setCamera(mGoogleMap);
+                            findRestaurants();
+
                         } else {
+
                             // When location result is null, initialize location request
                             LocationRequest locationRequest = new LocationRequest()
                                     .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
@@ -300,13 +310,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                                     // set markers
                                     setMarkerForUserLocation(new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude()),
                                             "last");
+
+                                    setCamera(mGoogleMap);
+                                    findRestaurants();
                                 }
                             };
                             // Request location updates
                             client.requestLocationUpdates(locationRequest, locationCallback, Looper.myLooper());
                         }
-                        setCamera(mGoogleMap);
-                        findRestaurants();
                     }
                 });
             } catch (Exception ex)  {
@@ -339,10 +350,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     }
 
     private void setCamera(GoogleMap googleMap) {
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(actualLatitude, actualLongitude), DEFAULT_ZOOM));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(getUserLatitude(), getUserLongitude()), DEFAULT_ZOOM));
     }
 
     public void findRestaurants() {
+        mGoogleMap.clear();
         // Build Place request with URL
         String apiKey = BuildConfig.PLACE_API_KEY;
 

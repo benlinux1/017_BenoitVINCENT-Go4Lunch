@@ -1,4 +1,4 @@
-package com.benlinux.go4lunch.ui.workmates;
+package com.benlinux.go4lunch.ui.fragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.benlinux.go4lunch.databinding.FragmentWorkmatesBinding;
+import com.benlinux.go4lunch.viewmodels.WorkmatesViewModel;
 
 public class WorkmatesFragment extends Fragment {
 

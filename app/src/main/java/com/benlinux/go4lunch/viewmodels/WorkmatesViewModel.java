@@ -1,4 +1,4 @@
-package com.benlinux.go4lunch.ui.workmates;
+package com.benlinux.go4lunch.viewmodels;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;

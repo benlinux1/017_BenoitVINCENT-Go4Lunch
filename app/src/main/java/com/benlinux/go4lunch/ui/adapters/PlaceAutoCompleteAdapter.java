@@ -5,13 +5,13 @@ import android.widget.ArrayAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
 
-import com.benlinux.go4lunch.ui.models.PlaceAutoCompleteSearch;
+import com.benlinux.go4lunch.modules.PlaceAutoCompleteSearch;
 import com.benlinux.go4lunch.ui.models.Restaurant;
 
 import java.util.List;
 
 public class PlaceAutoCompleteAdapter extends ArrayAdapter implements Filterable {
-    
+
     private List<Restaurant> restaurants;
     private final PlaceAutoCompleteSearch placeApi = new PlaceAutoCompleteSearch();
 

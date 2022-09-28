@@ -1,15 +1,15 @@
-package com.benlinux.go4lunch.ui.userManager;
+package com.benlinux.go4lunch.data.userManager;
 
 import android.content.Context;
 
-import com.benlinux.go4lunch.ui.userRepository.UserRepository;
+import com.benlinux.go4lunch.data.userRepository.UserRepository;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseUser;
 
 public class UserManager {
 
     private static volatile UserManager instance;
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     private UserManager() {
         userRepository = UserRepository.getInstance();

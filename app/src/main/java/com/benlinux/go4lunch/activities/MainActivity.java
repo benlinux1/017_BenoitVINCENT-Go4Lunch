@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,7 +21,7 @@ import android.widget.Toast;
 
 import com.benlinux.go4lunch.R;
 import com.benlinux.go4lunch.ui.adapters.PlaceAutoCompleteAdapter;
-import com.benlinux.go4lunch.ui.userManager.UserManager;
+import com.benlinux.go4lunch.data.userManager.UserManager;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -58,11 +59,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private TextView userEmail;
     private ImageView userAvatar;
 
-    public static LatLng userLocation;
-
     // FOR DATA
     private final UserManager userManager = UserManager.getInstance();
+    public static LatLng userLocation;
 
+    // For autocomplete search feature
     private SearchView.SearchAutoComplete autoCompleteTextView;
 
 
@@ -70,6 +71,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
         this.configureToolBar();
         this.configureNavigation();
@@ -86,6 +88,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         userLocation = location;
     }
 
+
+    @Override
+    // Catch intent type. Used for voice search
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        handleIntent(intent);
+    }
+
+    // Handle voice search intent  & set query in autoComplete textview
+    private void handleIntent(Intent intent) {
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            String query = intent.getStringExtra(SearchManager.QUERY);
+            autoCompleteTextView.setText(query);
+        }
+    }
 
     // Customize Search Bar features
     @RequiresApi(api = Build.VERSION_CODES.P)
@@ -106,28 +123,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Autocomplete text view
         autoCompleteTextView = searchView.findViewById(androidx.appcompat.R.id.search_src_text);
 
-        // Get the SearchView and set the searchable configuration
-        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        // Assumes current activity is the searchable activity
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-        searchView.setIconifiedByDefault(true); // Do not iconify the widget; expand it by default
-        searchView.setIconified(true);
-
-
-        // Handle voice search & set query in autoComplete textview
-        Intent intent = getIntent();
-        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-            String query = intent.getStringExtra(SearchManager.QUERY);
-            autoCompleteTextView.setText(query);
-        }
-
         // Set adapter for Suggestions
-        PlaceAutoCompleteAdapter adapter = new PlaceAutoCompleteAdapter(MainActivity.this, android.R.layout.simple_list_item_1);
+        PlaceAutoCompleteAdapter adapter = new PlaceAutoCompleteAdapter(MainActivity.this, R.layout.search_autocomplete);
         autoCompleteTextView.setAdapter(adapter);
 
         // Custom search text with corner radius & search icon
         autoCompleteTextView.setBackgroundResource(R.drawable.background_search_bar);
        // autoCompleteTextView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_search_black,0,0,0);
+
+        // Get the SearchView and set the searchable configuration
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        // Assumes current activity is the searchable activity
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
 
         // When user clicks on restaurant in list, go to details page
         autoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -141,8 +148,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
-        return super.onCreateOptionsMenu(menu);
+        return true;
     }
+
 
 
     private void setDrawerViews() {

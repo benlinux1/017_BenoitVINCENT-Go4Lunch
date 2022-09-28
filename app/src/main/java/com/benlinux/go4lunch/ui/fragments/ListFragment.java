@@ -1,4 +1,4 @@
-package com.benlinux.go4lunch.ui.list;
+package com.benlinux.go4lunch.ui.fragments;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -21,9 +21,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.benlinux.go4lunch.BuildConfig;
+import com.benlinux.go4lunch.activities.MainActivity;
 import com.benlinux.go4lunch.databinding.FragmentListViewBinding;
 import com.benlinux.go4lunch.ui.adapters.ListAdapter;
-import com.benlinux.go4lunch.ui.models.FetchPlacesData;
+import com.benlinux.go4lunch.modules.FetchPlacesData;
 import com.benlinux.go4lunch.ui.models.Restaurant;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -59,6 +60,10 @@ public class ListFragment extends Fragment {
 
         binding = FragmentListViewBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
+
+        // Get user position set on map in main fragment
+        setUserPosition(MainActivity.userLocation);
+
         mRecyclerView = binding.listRestaurants;
         mRestaurants = new ArrayList<>();
         configRecyclerView();
@@ -69,7 +74,8 @@ public class ListFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        getCurrentLocation();
+        findRestaurants();
+
     }
 
     /**
@@ -101,60 +107,6 @@ public class ListFragment extends Fragment {
 
         FetchPlacesData fetchPlacesData = new FetchPlacesData(getContext(), "list");
         fetchPlacesData.execute(restaurantData);
-    }
-
-    @SuppressLint("MissingPermission")
-    private void getCurrentLocation() {
-        // Initialize location manager
-        LocationManager locationManager = (LocationManager) requireActivity()
-                .getSystemService(Context.LOCATION_SERVICE);
-        // Check condition
-        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
-            try {
-                // When Location is enabled, get last location
-                client.getLastLocation().addOnCompleteListener(task -> {
-                    // Initialize location
-                    Location location = task.getResult();
-                    // Check result
-                    if (location != null) {
-
-                        // save actual location to actualLocation variable
-                        setUserPosition(new LatLng(location.getLatitude(), location.getLongitude()));
-
-                        // When user location is found, find restaurants
-                        findRestaurants();
-
-                    } else {
-                        // When location result is null, initialize location request
-                        LocationRequest locationRequest = new LocationRequest()
-                                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-                                .setInterval(10000)
-                                .setFastestInterval(1000)
-                                .setNumUpdates(1);
-
-                        // Initialize Location callback
-                        LocationCallback locationCallback = new LocationCallback() {
-                            @Override
-                            public void onLocationResult(LocationResult locationResult) {
-                                // Initialize last location
-                                Location lastLocation = locationResult.getLastLocation();
-
-                                // save last location in actualLocation variable
-                                setUserPosition(new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude()));
-
-                                // When user location is found, find restaurants
-                                findRestaurants();
-
-                            }
-                        };
-                        // Request location updates
-                        client.requestLocationUpdates(locationRequest, locationCallback, Looper.myLooper());
-                    }
-                });
-            } catch (Exception ex) {
-                Log.e("Exception: %s", ex.getMessage());
-            }
-        }
     }
 
     public void setUserPosition(LatLng location) {

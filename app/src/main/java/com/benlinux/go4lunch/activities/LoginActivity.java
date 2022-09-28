@@ -13,7 +13,7 @@ import androidx.core.app.ActivityCompat;
 
 import com.benlinux.go4lunch.R;
 import com.benlinux.go4lunch.databinding.ActivityLoginBinding;
-import com.benlinux.go4lunch.ui.userManager.UserManager;
+import com.benlinux.go4lunch.data.userManager.UserManager;
 
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.ErrorCodes;
