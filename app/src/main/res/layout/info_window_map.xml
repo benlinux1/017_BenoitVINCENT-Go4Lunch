@@ -16,39 +16,34 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layoutDirection="locale"
-    android:paddingHorizontal="@dimen/small_margin"
+    android:layout_marginHorizontal="@dimen/small_margin"
+    android:paddingHorizontal="@dimen/default_medium_margin"
     android:paddingVertical="@dimen/small_margin"
-    android:background="@color/white"
+    android:gravity="center"
+    android:elevation="@dimen/small_margin"
+    android:background="@drawable/background_info_window"
     android:orientation="vertical">
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:orientation="horizontal"
-        android:gravity="center">
+        android:textColor="#ff000000"
+        android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="#ff000000"
-            android:textStyle="bold" />
-
-        <RatingBar
-            android:id="@+id/rating"
-            style="@style/Widget.AppCompat.RatingBar.Small"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/default_margin"
-            android:theme="@style/RatingBar" />
-
-    </LinearLayout>
+    <RatingBar
+        android:id="@+id/rating"
+        style="@style/Widget.AppCompat.RatingBar.Small"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/very_small_margin"
+        android:theme="@style/RatingBar" />
 
     <TextView
         android:id="@+id/street"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/very_small_margin"
         android:textColor="#ff7f7f7f" />
 
     <TextView
@@ -69,7 +64,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/colorPrimary"
-        android:layout_gravity="center_horizontal"
         android:layout_marginTop="@dimen/very_small_margin"
         android:textColor="@color/white"
         android:text="@string/details_button"

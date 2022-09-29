@@ -6,4 +6,5 @@
     android:layout_height="?attr/actionBarSize"
     android:background="?attr/colorPrimary"
     app:titleTextColor="@color/white"
+    android:paddingEnd="@dimen/small_margin"
     android:theme="@style/DrawerTheme"/>

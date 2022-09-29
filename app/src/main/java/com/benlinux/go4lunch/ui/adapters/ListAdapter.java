@@ -20,7 +20,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
-
 import com.benlinux.go4lunch.BuildConfig;
 import com.benlinux.go4lunch.R;
 import com.benlinux.go4lunch.activities.RestaurantDetailsActivity;
@@ -204,26 +203,23 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
 
             // TODO : Get and set number of users who booked in the restaurant
 
-
         }
     }
-
-
 
     // Format number of rating stars (between 0.5 and 3) as asked from client
     private Double formatRating(Double rating) {
         Double formattedRating = null;
         if (rating > 0 && rating <= 0.8) {
             formattedRating = 0.5;
-        } else if (rating > 0.8 && rating <= 1.4) {
+        } else if (rating > 0.7 && rating <= 1.6) {
             formattedRating = 1.0;
-        } else if (rating > 1.4 && rating <= 2.3) {
+        } else if (rating > 1.6 && rating <= 2.5) {
             formattedRating = 1.5;
-        } else if (rating > 2.3 && rating <= 3.2) {
+        } else if (rating > 2.5 && rating <= 3.4) {
             formattedRating = 2.0;
-        } else if (rating > 3.2 && rating <= 4.0) {
+        } else if (rating > 3.4 && rating <= 4.3) {
             formattedRating = 2.5;
-        } else if (rating > 4.0 && rating <= 5.0) {
+        } else if (rating > 4.3 && rating <= 5.0) {
             formattedRating = 3.0;
         }
         return formattedRating;
@@ -253,19 +249,12 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         placesClient.fetchPlace(request).addOnSuccessListener((response) -> {
             Place place = response.getPlace();
 
-            // if result is successful, set restaurant's opening hours into textview
-            if (place.getOpeningHours() != null) {
-                setOpeningHours(place, hoursDestination);
-            }
-            // if result is successful, set restaurant's picture into imageView
-            if (place.getPhotoMetadatas() != null) {
-                setPicture(place, placesClient, pictureDestination);
-            } else {
-                Glide.with(pictureDestination.getContext())
-                        .load(R.mipmap.no_photo)
-                        .centerCrop()
-                        .into(pictureDestination);
-            }
+            // Set restaurant's opening hours into textview
+            setOpeningHours(place, hoursDestination);
+
+            // Set restaurant's picture into imageView
+            setPicture(place, placesClient, pictureDestination);
+
         }).addOnFailureListener((exception) -> {
             if (exception instanceof ApiException) {
                 final ApiException apiException = (ApiException) exception;
@@ -278,32 +267,43 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
     private void setOpeningHours(Place place, TextView hoursDestination) {
 
         StringBuilder openingHours = new StringBuilder();
+        final Calendar currentDate = Calendar.getInstance(Locale.getDefault());
+        int today = currentDate.get(Calendar.DAY_OF_WEEK)-1;
+
         // Get Opening hours
         if (place.getOpeningHours() != null) {
-            final Calendar currentDate = Calendar.getInstance(Locale.getDefault());
-            int today = currentDate.get(Calendar.DAY_OF_WEEK)-1;
-            Log.d("today", String.valueOf(today));
-            List<Period> periodList = place.getOpeningHours().getPeriods();
-            Log.d("today for opening hours", String.valueOf(periodList.get(today)));
-            int openHour = Objects.requireNonNull(periodList.get(today).getOpen()).getTime().getHours();
-            int closeHour = Objects.requireNonNull(periodList.get(today).getClose()).getTime().getHours();
-            String openMinutes = String.valueOf(Objects.requireNonNull(periodList.get(today).getOpen()).getTime().getMinutes());
-            String closeMinutes = String.valueOf(Objects.requireNonNull(periodList.get(today).getClose()).getTime().getMinutes());
+            try{
+                List<Period> periodList = place.getOpeningHours().getPeriods();
+                int openHour = periodList.get(today).getOpen().getTime().getHours();
+                int closeHour = Objects.requireNonNull(periodList.get(today).getClose()).getTime().getHours();
+                String openMinutes = String.valueOf(Objects.requireNonNull(periodList.get(today).getOpen()).getTime().getMinutes());
+                String closeMinutes = String.valueOf(Objects.requireNonNull(periodList.get(today).getClose()).getTime().getMinutes());
 
-            // Format opening hours of the day according to user language
-            if (Locale.getDefault().getLanguage().equals("fr")) {
-                openingHours.append("Ouvert aujourd'hui de ").append(openHour).append("h").append(formatMinutes(openMinutes))
-                        .append(" jusqu'à ").append(closeHour).append("h").append(formatMinutes(closeMinutes));
-            } else {
-                openingHours.append("Open today from ").append(openHour).append(":").append(formatMinutes(openMinutes)).append(" am")
-                        .append(" to ").append(closeHour).append(":").append(formatMinutes(closeMinutes)).append(" pm");
+                // Format opening hours of the day according to user language
+                if (Locale.getDefault().getLanguage().equals("fr")) {
+                    openingHours.append("Ouvert aujourd'hui de ").append(openHour).append("h").append(formatMinutes(openMinutes))
+                            .append(" jusqu'à ").append(closeHour).append("h").append(formatMinutes(closeMinutes));
+                } else {
+                    openingHours.append("Open today from ").append(openHour).append(":").append(formatMinutes(openMinutes)).append(" am")
+                            .append(" to ").append(closeHour).append(":").append(formatMinutes(closeMinutes)).append(" pm");
+                }
             }
+            catch(Exception e){
+                Log.d("exception:", e.getMessage());
+                if (Locale.getDefault().getLanguage().equals("fr")) {
+                    openingHours.append("Fermé aujourd'hui");
+                } else {
+                    openingHours.append("Closed today");
+                }
+            }
+
         } else {
             if (Locale.getDefault().getLanguage().equals("fr")) {
                 openingHours.append("Horaires non communiqués");
             } else {
                 openingHours.append("Opening hours not registered yet");
             }
+
         }
         // Set formatted opening hours into destination TextView
         hoursDestination.setText(openingHours.toString());
@@ -312,26 +312,32 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
     // Set place picture with placeClient to imageView
     public void setPicture(Place place, PlacesClient placesClient, ImageView imageView) {
         final List<PhotoMetadata> metadata = place.getPhotoMetadatas();
+        // Set No Picture if result is null
         if (metadata == null || metadata.isEmpty()) {
             Log.w(TAG, "No photo metadata.");
-        }
-        final PhotoMetadata photoMetadata = metadata.get(0);
+            Glide.with(imageView.getContext())
+                    .load(R.mipmap.no_photo)
+                    .centerCrop()
+                    .into(imageView);
+        } else {
+            final PhotoMetadata photoMetadata = metadata.get(0);
 
-        // Create a FetchPhotoRequest.
-        final FetchPhotoRequest photoRequest = FetchPhotoRequest.builder(photoMetadata)
-                .build();
-        // On success, set picture into imageView
-        placesClient.fetchPhoto(photoRequest).addOnSuccessListener((fetchPhotoResponse) -> {
-            Bitmap bitmap = fetchPhotoResponse.getBitmap();
-            imageView.setImageBitmap(bitmap);
-        }).addOnFailureListener((exception) -> {
-            if (exception instanceof ApiException) {
-                final ApiException apiException = (ApiException) exception;
-                Log.e(TAG, "Place not found: " + exception.getMessage());
-                final int statusCode = apiException.getStatusCode();
-                Log.e(TAG, "Status code : " + statusCode);
-            }
-        });
+            // Create a FetchPhotoRequest.
+            final FetchPhotoRequest photoRequest = FetchPhotoRequest.builder(photoMetadata)
+                    .build();
+            // On success, set picture into imageView
+            placesClient.fetchPhoto(photoRequest).addOnSuccessListener((fetchPhotoResponse) -> {
+                Bitmap bitmap = fetchPhotoResponse.getBitmap();
+                imageView.setImageBitmap(bitmap);
+            }).addOnFailureListener((exception) -> {
+                if (exception instanceof ApiException) {
+                    final ApiException apiException = (ApiException) exception;
+                    Log.e(TAG, "Place not found: " + exception.getMessage());
+                    final int statusCode = apiException.getStatusCode();
+                    Log.e(TAG, "Status code : " + statusCode);
+                }
+            });
+        }
     }
 
     // Format 0 minutes to 00 for best user XP

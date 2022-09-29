@@ -9,13 +9,11 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -72,7 +70,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
         this.configureToolBar();
         this.configureNavigation();
         this.configureDrawerLayout();
@@ -110,26 +107,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         getMenuInflater().inflate(R.menu.search_menu, menu);
         MenuItem menuItem = menu.findItem(R.id.search_action);
 
-        // Custom search bar
+        // Define search bar
         SearchView searchView = (SearchView) menuItem.getActionView();
-        searchView.setQueryHint(getResources().getString(R.string.search_bar_hint));
 
-        // Custom search bar layout with no elevation
-        LinearLayout searchPlate = searchView.findViewById(androidx.appcompat.R.id.search_plate);
-        if (searchPlate != null) {
-            searchPlate.setElevation(R.dimen.zero);
-        }
-
-        // Autocomplete text view
+        // Define autocomplete text view
         autoCompleteTextView = searchView.findViewById(androidx.appcompat.R.id.search_src_text);
 
         // Set adapter for Suggestions
-        PlaceAutoCompleteAdapter adapter = new PlaceAutoCompleteAdapter(MainActivity.this, R.layout.search_autocomplete);
+        PlaceAutoCompleteAdapter adapter = new PlaceAutoCompleteAdapter(MainActivity.this, android.R.layout.simple_list_item_1);
         autoCompleteTextView.setAdapter(adapter);
-
-        // Custom search text with corner radius & search icon
-        autoCompleteTextView.setBackgroundResource(R.drawable.background_search_bar);
-       // autoCompleteTextView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_search_black,0,0,0);
 
         // Get the SearchView and set the searchable configuration
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
@@ -151,17 +137,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
-
-
-    private void setDrawerViews() {
-        drawerNavView = findViewById(R.id.activity_main_nav_view);
-        View headerContainer = drawerNavView.getHeaderView(0);
-        userName = headerContainer.findViewById(R.id.user_name);
-        userEmail = headerContainer.findViewById(R.id.user_email);
-        userAvatar = headerContainer.findViewById(R.id.user_avatar);
-    }
-
-
     @Override
     public void onBackPressed() {
         // Handle back click to close menu
@@ -172,17 +147,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-
     public boolean onSupportNavigateUp() {
         // Replace navigation up button with nav drawer button when on start destination
         return NavigationUI.navigateUp(navController, appBarConfiguration) || super.onSupportNavigateUp();
     }
 
-
     @SuppressLint("NonConstantResourceId")
     @Override
+    // Handle Navigation Item Click
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle Navigation Item Click
         int id = item.getItemId();
 
         switch (id){
@@ -200,11 +173,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             default:
                 break;
         }
-
         this.drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
-
 
     // Set custom Toolbar
     @SuppressLint("ResourceAsColor")
@@ -213,15 +184,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Toolbar toolbar = findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setElevation(R.dimen.default_elevation_size);
-    }
-
-
-    // Configure Drawer Layout with toggle
-    private void configureDrawerLayout(){
-        this.drawerLayout = findViewById(R.id.activity_main_drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawerLayout.addDrawerListener(toggle);
-        toggle.syncState();
     }
 
     // Configure Drawer & Bottom Navigation
@@ -234,7 +196,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         // Set navigation controller
         navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
-
 
         // Build and configure App bar
         appBarConfiguration =
@@ -253,8 +214,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawerNavView.setNavigationItemSelectedListener(this);
     }
 
+    // Configure Drawer Layout with toggle
+    private void configureDrawerLayout(){
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
+    }
 
-    // Replace
+    // Drawer layout data views
+    private void setDrawerViews() {
+        drawerNavView = findViewById(R.id.activity_main_nav_view);
+        View headerContainer = drawerNavView.getHeaderView(0);
+        userName = headerContainer.findViewById(R.id.user_name);
+        userEmail = headerContainer.findViewById(R.id.user_email);
+        userAvatar = headerContainer.findViewById(R.id.user_avatar);
+    }
+
+    // Set user data in drawer views
     private void updateUIWithUserData(){
         if(userManager.isCurrentUserLogged()) {
             FirebaseUser user = userManager.getCurrentUser();
@@ -294,7 +270,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         userEmail.setText(email);
     }
 
-    // logout from firebase
+    // Logout from firebase
     private void logout() {
         // On success, close activity & go to login
         userManager.signOut(this).addOnSuccessListener(aVoid -> {
@@ -306,7 +282,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // On failure, show error toast
         .addOnFailureListener(aVoid -> Toast.makeText(getApplicationContext(), getString(R.string.disconnection_failed), Toast.LENGTH_SHORT).show());
     }
-
 
     /**
      * Used to navigate to Main activity

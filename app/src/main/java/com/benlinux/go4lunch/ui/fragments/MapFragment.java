@@ -56,7 +56,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private SupportMapFragment mapFragment;
     // The entry point to the Fused Location Provider.
     private FusedLocationProviderClient client;
-    private static final int DEFAULT_ZOOM = 15;
+    private static final int DEFAULT_ZOOM = 14;
     private boolean locationPermissionGranted;
     public LatLng actualLocation;
     private Double actualLatitude;
@@ -98,7 +98,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         mGoogleMap = googleMap;
         googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
-        if (locationPermissionGranted && actualLocation == null) {
+        // Check permission & get user location if needed
+        if (locationPermissionGranted && getUserLocation() == null) {
             getCurrentLocation();
         }
 
@@ -115,21 +116,16 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
         // Set click listener on Info window
         setInfoWindowClickListener(googleMap);
-
-        // Set camera & find restaurants
-        if (actualLocation != null) {
-            googleMap.clear();
-            setCamera(googleMap);
-            findRestaurants();
-        }
     }
 
     private void setListenerOnMapClick(GoogleMap googleMap) {
         // Set listener for clicks on Map
         googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
+            // When clicked on map
             public void onMapClick(@NonNull LatLng latLng) {
-                // When clicked on map
+                // Remove all marker
+                googleMap.clear();
                 // save new location
                 setUserPosition(new LatLng(latLng.latitude, latLng.longitude));
                 // Initialize marker options
@@ -138,8 +134,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 markerOptions.title("Search location");
                 // Set position of marker
                 markerOptions.position(latLng);
-                // Remove all marker
-                googleMap.clear();
                 // Animating to zoom the marker
                 googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,DEFAULT_ZOOM));
                 // Add marker on map
@@ -275,17 +269,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                         // Initialize location
                         Location location = task.getResult();
 
-                        mGoogleMap.clear();
                         // Check condition
                         if (location != null) {
-
 
                             // save actual location to actualLocation variable
                             setUserPosition(new LatLng(location.getLatitude(), location.getLongitude()));
                             // set markers
                             setMarkerForUserLocation(new LatLng(location.getLatitude(), location.getLongitude()),
                                     "actual");
-
 
                             setCamera(mGoogleMap);
                             findRestaurants();
@@ -354,7 +345,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     }
 
     public void findRestaurants() {
-        mGoogleMap.clear();
         // Build Place request with URL
         String apiKey = BuildConfig.PLACE_API_KEY;
 
@@ -380,15 +370,17 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private Double getUserLatitude() {
         return actualLatitude;
     }
-
     private Double getUserLongitude() {
         return actualLongitude;
+    }
+    private LatLng getUserLocation() {
+        return MainActivity.userLocation;
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if (locationPermissionGranted) {
+        if (getUserLocation() == null) {
             getCurrentLocation();
         }
     }

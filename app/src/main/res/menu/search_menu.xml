@@ -9,6 +9,6 @@
         android:title="@string/search_bar_title"
         android:voiceSearchMode="showVoiceSearchButton|launchRecognizer"
         app:voiceIcon="@drawable/ic_voice_search"
-        app:actionViewClass="androidx.appcompat.widget.SearchView"
+        app:actionLayout="@layout/search_bar_layout"
         app:showAsAction="ifRoom|collapseActionView" />
 </menu>

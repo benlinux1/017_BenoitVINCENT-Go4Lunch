@@ -1,13 +1,8 @@
 package com.benlinux.go4lunch.ui.fragments;
 
-import android.annotation.SuppressLint;
-import android.content.Context;
-import android.location.Location;
-import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Looper;
-import android.util.Log;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,11 +21,6 @@ import com.benlinux.go4lunch.databinding.FragmentListViewBinding;
 import com.benlinux.go4lunch.ui.adapters.ListAdapter;
 import com.benlinux.go4lunch.modules.FetchPlacesData;
 import com.benlinux.go4lunch.ui.models.Restaurant;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationCallback;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationResult;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
@@ -41,7 +31,6 @@ public class ListFragment extends Fragment {
     private FragmentListViewBinding binding;
     private ListAdapter adapter;
     private List<Restaurant> mRestaurants;
-    private FusedLocationProviderClient client;
     public  LatLng actualLocation;
     private Double actualLatitude;
     private Double actualLongitude;
@@ -50,8 +39,6 @@ public class ListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // Initialize user location
-        client = LocationServices.getFusedLocationProviderClient(requireActivity());
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)

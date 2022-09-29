@@ -1,19 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.appcompat.widget.SearchView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/search_action"
     android:layout_width="match_parent"
-    android:layout_height="fill_parent" >
+    android:layout_height="wrap_content"
+    android:background="@drawable/background_search_bar"
+    android:voiceSearchMode="showVoiceSearchButton|launchRecognizer"
+    android:imeOptions="actionSearch"
+    android:elevation="@dimen/default_elevation_size">
 
-    <AutoCompleteTextView
-        android:id="@+id/editText1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:imeOptions="actionSearch"
-        android:layout_marginHorizontal="@dimen/small_margin"
-        android:inputType="textAutoComplete|textAutoCorrect"
-        android:textColor="#FFFFFF" >
+    <requestFocus />
+</androidx.appcompat.widget.SearchView>
 
-        <requestFocus />
-    </AutoCompleteTextView>
 
-</LinearLayout>

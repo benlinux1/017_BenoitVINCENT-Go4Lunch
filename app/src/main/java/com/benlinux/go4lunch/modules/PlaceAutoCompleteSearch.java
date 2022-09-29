@@ -64,7 +64,6 @@ public class PlaceAutoCompleteSearch {
                 String id = prediction.getJSONObject(i).getString("place_id");
                 Restaurant restaurant = new Restaurant(id, description, null, null, null, null, null);
 
-
                 restaurantsList.add(restaurant);
             }
 

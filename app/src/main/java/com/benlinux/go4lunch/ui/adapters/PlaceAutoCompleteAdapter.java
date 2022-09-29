@@ -29,16 +29,8 @@ public class PlaceAutoCompleteAdapter extends ArrayAdapter implements Filterable
         return restaurants.get(pos).getName();
     }
 
-    public List<Restaurant> getRestaurantList() {
-        return restaurants;
-    }
-
     public String getRestaurantId(int pos) {
         return restaurants.get(pos).getId();
-    }
-
-    public String getRestaurantName(int pos) {
-        return restaurants.get(pos).getName();
     }
 
     @Override
@@ -68,5 +60,4 @@ public class PlaceAutoCompleteAdapter extends ArrayAdapter implements Filterable
         };
         return filter;
     }
-
 }
