@@ -94,6 +94,10 @@
     <string name="search_bar_hint">Search restaurants</string>
 
 
+    // WORKMATES FRAGMENT
+    <string name="workmates_text_eating">Scarlett is eating french (Le Zinc)</string>
+
+
 
 
 

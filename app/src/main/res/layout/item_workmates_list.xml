@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/workmate_item"
+    android:layout_width="match_parent"
+    android:background="@color/white"
+    android:layout_height="wrap_content"
+    android:layout_marginVertical="@dimen/small_margin"
+    android:layout_marginHorizontal="@dimen/small_margin">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/workmate_avatar"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:backgroundTint="@color/white"
+                android:src="@drawable/background_workmate_avatar"
+                tools:tint="@color/colorSand" />
+
+            <TextView
+                android:id="@+id/workmate_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toEndOf="@id/workmate_avatar"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginStart="@dimen/default_medium_margin"
+                android:ellipsize="end"
+                android:lines="1"
+                android:textStyle="bold"
+                android:textSize="@dimen/higher_text_size"
+                tools:text="@string/workmates_text_eating" />
+
+            <TextView
+                android:id="@+id/workmate_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toEndOf="@id/workmate_name"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginStart="@dimen/default_medium_margin"
+                android:ellipsize="end"
+                android:lines="1"
+                android:textStyle="bold"
+                android:textSize="@dimen/higher_text_size"
+                android:visibility="gone" />
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
