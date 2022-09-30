@@ -7,14 +7,17 @@ public class User {
 
     private String uid;
     private String name;
+    @Nullable
     private String email;
     @Nullable
     private  String urlAvatar;
     private String restaurantOfTheDay;
     private Boolean isNotified;
 
+    public User(){}
 
-    public User(String uid, String name, String email, @Nullable String urlAvatar,
+
+    public User(String uid, String name, @Nullable String email, @Nullable String urlAvatar,
                 String restaurantOfTheDay, Boolean isNotified) {
         this.uid = uid;
         this.name = name;
@@ -38,6 +41,7 @@ public class User {
         this.name = name;
     }
 
+    @Nullable
     public String getEmail() {
         return email;
     }

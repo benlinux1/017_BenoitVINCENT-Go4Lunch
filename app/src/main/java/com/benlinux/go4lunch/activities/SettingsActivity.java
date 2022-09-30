@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
@@ -23,6 +24,7 @@ import com.benlinux.go4lunch.data.userManager.UserManager;
 import com.benlinux.go4lunch.ui.models.User;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseUser;
@@ -108,10 +110,11 @@ public class SettingsActivity extends AppCompatActivity {
             // Set the data with the user information
             String username = TextUtils.isEmpty(user.getName()) ? getString(R.string.info_no_username_found) : user.getName();
             userName.setText(username);
-            // Toggle notification
-            switchNotifications.setChecked(user.isNotified());
-            // Set email
-            userEmail.setText(user.getEmail());
+            // User email
+            String email = TextUtils.isEmpty(user.getEmail()) ? getString(R.string.info_no_email_found) : user.getEmail();
+            userEmail.setText(email);
+            // Notifications switch
+            setNotificationSwitch();
             // Set avatar
             if (user.getAvatar() != null) {
                 setProfilePicture(user.getAvatar());
@@ -119,7 +122,20 @@ public class SettingsActivity extends AppCompatActivity {
                 setNoPhoto(userAvatar);
             }
         });
+        getData.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d("EXCEPTION", e.toString());
+            }
+        });
     }
+
+    private void setNotificationSwitch(){
+        switchNotifications.setOnCheckedChangeListener((compoundButton, checked) -> {
+            userManager.updateIsNotified(checked);
+        });
+    }
+
 
     private void setProfilePicture(String profilePictureUrl){
         Glide.with(this)
