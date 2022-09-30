@@ -1,59 +1,39 @@
 package com.benlinux.go4lunch.ui.adapters;
 
-import static android.content.ContentValues.TAG;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Build;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.benlinux.go4lunch.BuildConfig;
 import com.benlinux.go4lunch.R;
 import com.benlinux.go4lunch.activities.RestaurantDetailsActivity;
-import com.benlinux.go4lunch.ui.models.Restaurant;
-import com.benlinux.go4lunch.ui.models.Workmate;
+import com.benlinux.go4lunch.ui.models.Booking;
+import com.benlinux.go4lunch.ui.models.User;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
-import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.libraries.places.api.Places;
-import com.google.android.libraries.places.api.model.Period;
-import com.google.android.libraries.places.api.model.PhotoMetadata;
-import com.google.android.libraries.places.api.model.Place;
-import com.google.android.libraries.places.api.net.FetchPhotoRequest;
-import com.google.android.libraries.places.api.net.FetchPlaceRequest;
-import com.google.android.libraries.places.api.net.PlacesClient;
 
-import java.util.Arrays;
-import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
-import java.util.Objects;
 import java.util.Random;
 
 public class WorkmateAdapter extends RecyclerView.Adapter<WorkmateAdapter.ViewHolder> {
 
-    private List<Workmate> mWorkmates;
+    private List<User> mWorkmates;
     private final Context localContext;
 
     /**
      * Instantiates a new ListAdapter.
      * @param workmates the list of restaurants the adapter deals with to set
      */
-    public WorkmateAdapter(List<Workmate> workmates, Context context) {
+    public WorkmateAdapter(List<User> workmates, Context context) {
         mWorkmates = workmates;
         localContext = context;
     }
@@ -85,7 +65,7 @@ public class WorkmateAdapter extends RecyclerView.Adapter<WorkmateAdapter.ViewHo
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    public void initList(List<Workmate> workmates) {
+    public void initList(List<User> workmates) {
         this.mWorkmates = workmates;
         notifyItemRangeChanged(- 1, mWorkmates.size());
     }
@@ -135,12 +115,13 @@ public class WorkmateAdapter extends RecyclerView.Adapter<WorkmateAdapter.ViewHo
          * Binds data to the item view.
          * @param workmate the restaurant to bind in the item view
          */
-        void bind(Workmate workmate) {
-
-            // Set name
-            name.setText(workmate.getName() + " is eating to " + workmate.getRestaurant());
+        void bind(User workmate) {
+            StringBuilder booking = new StringBuilder();
+            booking.append(workmate.getName()).append(" is eating to ").append(workmate.getRestaurantOfTheDay());
+            // Set name & booking of the day
+            name.setText(booking.toString());
             // Set id
-            id.setText(workmate.getId().toString());
+            id.setText(workmate.getId());
             // Set avatar
             if (workmate.getAvatar() != null) {
                 Glide.with(avatar.getContext())

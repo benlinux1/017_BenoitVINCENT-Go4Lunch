@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.benlinux.go4lunch.databinding.FragmentWorkmatesBinding;
 
 import com.benlinux.go4lunch.ui.adapters.WorkmateAdapter;
-import com.benlinux.go4lunch.ui.models.Workmate;
+import com.benlinux.go4lunch.ui.models.User;
 import com.google.android.material.divider.MaterialDividerItemDecoration;
 
 import java.util.ArrayList;
@@ -26,7 +26,7 @@ public class WorkmatesFragment extends Fragment {
 
     private FragmentWorkmatesBinding binding;
     private WorkmateAdapter adapter;
-    private List<Workmate> mWorkmates;
+    private List<User> mWorkmates;
     private RecyclerView mRecyclerView;
     MaterialDividerItemDecoration divider;
 
@@ -42,12 +42,11 @@ public class WorkmatesFragment extends Fragment {
         binding = FragmentWorkmatesBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
 
-
         mRecyclerView = binding.listWorkmates;
         mWorkmates = new ArrayList<>();
-        mWorkmates.add(new Workmate(123L, "Scarlett", null, "Le Zinc"));
-        mWorkmates.add(new Workmate(1234L, "Hugh", null, "Le Zinc"));
-        mWorkmates.add(new Workmate(12345L, "Nana", null, "Le Seoul"));
+        mWorkmates.add(new User("1", "Scarlett", "scarlett@test.com",null, "Le Zinc", true));
+        mWorkmates.add(new User("2", "Hugh","hugh@test.com", null, "Le Zinc", true));
+        mWorkmates.add(new User("3", "Nana", "nana@test.com",  null, "Le Seoul", true));
         configRecyclerView();
 
         return view;

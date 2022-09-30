@@ -99,8 +99,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
         // Check permission & get user location if needed
-        if (locationPermissionGranted && getUserLocation() == null) {
-            getCurrentLocation();
+        if (locationPermissionGranted) {
+            if (getUserLocation() == null) {
+                getCurrentLocation();
+            } else {
+                setCamera(googleMap);
+                findRestaurants();
+            }
         }
 
         // update UI with or without blue point location and map centering button
@@ -145,13 +150,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     }
 
     private void setListenerOnMyLocationIcon(GoogleMap googleMap) {
+        mGoogleMap = googleMap;
         googleMap.setOnMyLocationClickListener(new GoogleMap.OnMyLocationClickListener() {
             @Override
             public void onMyLocationClick(@NonNull Location location) {
+                googleMap.clear();
                 LatLng userPosition = new LatLng(location.getLatitude(), location.getLongitude());
                 // Actualize user fictive position on click
                 setUserPosition(userPosition);
-
                 setMarkerForUserLocation(userPosition, "actual");
                 googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(actualLatitude, actualLongitude), DEFAULT_ZOOM));
                 findRestaurants();
@@ -161,13 +167,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
 
     private void setListenerOnMyLocationButton(GoogleMap googleMap) {
+        mGoogleMap = googleMap;
         googleMap.setOnMyLocationButtonClickListener(new GoogleMap.OnMyLocationButtonClickListener() {
             @Override
             public boolean onMyLocationButtonClick() {
                 googleMap.clear();
                 getCurrentLocation();
-                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(actualLatitude, actualLongitude), DEFAULT_ZOOM));
-                setMarkerForUserLocation(new LatLng(actualLatitude, actualLongitude), "actual");
                 return true;
             }
         });
@@ -332,15 +337,16 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
                 // Add marker & move camera to user location
                 if (locationType.equals("actual")) {
-                    mGoogleMap.addMarker(new MarkerOptions().position(userLocation).title("Actual location"));
+                    googleMap.addMarker(new MarkerOptions().position(userLocation).title("Actual location"));
                 } else if (locationType.equals("last")) {
-                    mGoogleMap.addMarker(new MarkerOptions().position(userLocation).title("Last known location"));
+                    googleMap.addMarker(new MarkerOptions().position(userLocation).title("Last known location"));
                 }
             }
         });
     }
 
     private void setCamera(GoogleMap googleMap) {
+        mGoogleMap = googleMap;
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(getUserLatitude(), getUserLongitude()), DEFAULT_ZOOM));
     }
 
@@ -368,10 +374,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     }
 
     private Double getUserLatitude() {
-        return actualLatitude;
+        return MainActivity.userLocation.latitude;
     }
     private Double getUserLongitude() {
-        return actualLongitude;
+        return MainActivity.userLocation.longitude;
     }
     private LatLng getUserLocation() {
         return MainActivity.userLocation;

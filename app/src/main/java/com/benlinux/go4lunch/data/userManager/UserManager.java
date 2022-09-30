@@ -3,8 +3,11 @@ package com.benlinux.go4lunch.data.userManager;
 import android.content.Context;
 
 import com.benlinux.go4lunch.data.userRepository.UserRepository;
+import com.benlinux.go4lunch.ui.models.User;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseUser;
+
+import java.util.Objects;
 
 public class UserManager {
 
@@ -43,6 +46,46 @@ public class UserManager {
 
     public Task<Void> deleteUser(Context context){
         return userRepository.deleteUser(context);
+    }
+
+    public void createUser(){
+        userRepository.createUser();
+    }
+
+
+    public Task<User> getUserData(){
+        // Get the user from Firestore and cast it to a User model Object
+        return userRepository.getUserData().continueWith(task -> task.getResult().toObject(User.class)) ;
+    }
+
+
+
+    public Task<Void> updateUsername(String username){
+        return userRepository.updateUsername(username);
+    }
+
+    public Task<Void> updateUserAvatarUrl(String avatarUrl){
+        return userRepository.updateUserAvatar(avatarUrl);
+    }
+
+    public Task<Void> updateUserEmail(String email){
+        return userRepository.updateUserAvatar(email);
+    }
+
+    public Task<Void> updateUserRestaurantOfTheDay(String restaurantName){
+        return userRepository.updateUserRestaurantOfTheDay(restaurantName);
+    }
+
+    public void updateIsNotified(Boolean isNotified){
+        userRepository.updateIsNotified(isNotified);
+    }
+
+    public Task<Void> deleteUserFromFirestore(Context context){
+        // Delete the user account from the Auth
+        return userRepository.deleteUser(context).addOnCompleteListener(task -> {
+            // Once done, delete the user datas from Firestore
+            userRepository.deleteUserFromFirestore();
+        });
     }
 
 }

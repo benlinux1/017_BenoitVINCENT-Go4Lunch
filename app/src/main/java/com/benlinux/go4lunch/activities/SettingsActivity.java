@@ -4,21 +4,26 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 
 import com.benlinux.go4lunch.R;
 import com.benlinux.go4lunch.data.userManager.UserManager;
+import com.benlinux.go4lunch.ui.models.User;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -34,6 +39,7 @@ public class SettingsActivity extends AppCompatActivity {
     private Button deleteButton;
     private Button updateButton;
     private Toolbar mToolbar;
+    private SwitchCompat switchNotifications;
 
     // FOR DATA
     private final UserManager userManager = UserManager.getInstance();
@@ -77,23 +83,45 @@ public class SettingsActivity extends AppCompatActivity {
         userEmail = findViewById(R.id.settings_user_email_field);
         deleteButton = findViewById(R.id.settings_delete_button);
         updateButton = findViewById(R.id.settings_update_button);
+        switchNotifications = findViewById(R.id.settings_notification_switch);
     }
 
     // Set User data in fields
     private void updateUIWithUserData(){
+        // If user is logged
+        if(userManager.isCurrentUserLogged()){
+            getUserData();
+        }
+        /**
         if(userManager.isCurrentUserLogged()) {
-            FirebaseUser user = userManager.getCurrentUser();
 
-            if (user.getPhotoUrl() != null) {
-                setProfilePicture(user.getPhotoUrl());
-            } else {
-               setNoPhoto(userAvatar);
-            }
+
+
             setTextUserData(user);
         }
+         */
     }
 
-    private void setProfilePicture(Uri profilePictureUrl){
+    private void getUserData(){
+        Task<User> getData = userManager.getUserData();
+        getData.addOnSuccessListener(user -> {
+            // Set the data with the user information
+            String username = TextUtils.isEmpty(user.getName()) ? getString(R.string.info_no_username_found) : user.getName();
+            userName.setText(username);
+            // Toggle notification
+            switchNotifications.setChecked(user.isNotified());
+            // Set email
+            userEmail.setText(user.getEmail());
+            // Set avatar
+            if (user.getAvatar() != null) {
+                setProfilePicture(user.getAvatar());
+            } else {
+                setNoPhoto(userAvatar);
+            }
+        });
+    }
+
+    private void setProfilePicture(String profilePictureUrl){
         Glide.with(this)
             .load(profilePictureUrl)
             .apply(RequestOptions.circleCropTransform())
@@ -107,6 +135,7 @@ public class SettingsActivity extends AppCompatActivity {
             .into(destination);
     }
 
+    /**
     private void setTextUserData(FirebaseUser user){
         //Get email & username from User
         String email = TextUtils.isEmpty(user.getEmail()) ? getString(R.string.info_no_email_found) : user.getEmail();
@@ -116,6 +145,7 @@ public class SettingsActivity extends AppCompatActivity {
         userName.setText(username);
         userEmail.setText(email);
     }
+     */
 
     private void setDeleteButtonListener() {
         deleteButton.setOnClickListener(v -> {

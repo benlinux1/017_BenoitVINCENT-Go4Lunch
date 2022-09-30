@@ -3,6 +3,7 @@ package com.benlinux.go4lunch.modules;
 import android.util.Log;
 
 import com.benlinux.go4lunch.BuildConfig;
+import com.benlinux.go4lunch.ui.models.Booking;
 import com.benlinux.go4lunch.ui.models.Restaurant;
 
 import org.json.JSONArray;
@@ -62,7 +63,7 @@ public class PlaceAutoCompleteSearch {
 
                 String description = prediction.getJSONObject(i).getString("description");
                 String id = prediction.getJSONObject(i).getString("place_id");
-                Restaurant restaurant = new Restaurant(id, description, null, null, null, null, null);
+                Restaurant restaurant = new Restaurant(id, description, null, null, null, null, null, new ArrayList<Booking>());
 
                 restaurantsList.add(restaurant);
             }

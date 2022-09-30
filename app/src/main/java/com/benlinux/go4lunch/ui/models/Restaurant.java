@@ -1,7 +1,10 @@
 package com.benlinux.go4lunch.ui.models;
 
+import androidx.annotation.Nullable;
+
 import com.google.android.gms.maps.model.LatLng;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 public class Restaurant {
@@ -20,8 +23,10 @@ public class Restaurant {
     private LatLng latLng;
     private String pictureUrl;
     private String hours;
+    @Nullable
+    private ArrayList<Booking> bookings;
 
-    public Restaurant(String id, String name, String address, Double rating, String hours, String distance, LatLng latLng) {
+    public Restaurant(String id, String name, String address, Double rating, String hours, String distance, LatLng latLng, ArrayList<Booking> bookings) {
         this.id = id;
         this.name = name;
         this.address = address;
@@ -29,6 +34,7 @@ public class Restaurant {
         this.hours = hours;
         this.distance = distance;
         this.latLng = latLng;
+        this.bookings = bookings;
     }
 
     public String getId() {
@@ -93,6 +99,22 @@ public class Restaurant {
 
     public void setPictureUrl(String pictureUrl) {
         this.pictureUrl = pictureUrl;
+    }
+
+    public String getHours() {
+        return hours;
+    }
+
+    public void setHours(String hours) {
+        this.hours = hours;
+    }
+
+    public ArrayList<Booking> getBookings() {
+        return bookings;
+    }
+
+    public void setBookings(ArrayList<Booking> bookings) {
+        this.bookings = bookings;
     }
 
     @Override

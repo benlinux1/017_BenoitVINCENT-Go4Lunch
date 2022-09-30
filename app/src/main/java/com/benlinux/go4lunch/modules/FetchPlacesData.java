@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 
 import com.benlinux.go4lunch.R;
 import com.benlinux.go4lunch.ui.adapters.ListAdapter;
+import com.benlinux.go4lunch.ui.models.Booking;
 import com.benlinux.go4lunch.ui.models.Restaurant;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -20,6 +21,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -120,7 +122,7 @@ public class FetchPlacesData extends AsyncTask<Object, String, String> {
                         String distance = calculateAndFormatDistance(userLocation, restaurantLocation);
 
                         // Create new restaurant for each result of Nearby Places API
-                        Restaurant restaurant = new Restaurant(placeId, name, formattedAddress, rating, null, distance, restaurantLocation);
+                        Restaurant restaurant = new Restaurant(placeId, name, formattedAddress, rating, null, distance, restaurantLocation, new ArrayList<Booking>());
 
                         // Add each restaurant in the list
                         restaurantsList.add(restaurant);
