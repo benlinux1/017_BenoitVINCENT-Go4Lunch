@@ -18,6 +18,10 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -32,6 +36,8 @@ import com.benlinux.go4lunch.databinding.ActivitySettingsBinding;
 import com.benlinux.go4lunch.ui.models.User;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract;
+import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
@@ -194,21 +200,15 @@ public class SettingsActivity extends AppCompatActivity {
         });
     }
 
-
-
+    // Easy permission result for photo access
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        this.handleResponse(requestCode, resultCode, data);
-    }
 
-
+    // When photo access is granted
     @AfterPermissionGranted(RC_IMAGE_PERMS)
     private void updateAvatarPicture() {
         if (!EasyPermissions.hasPermissions(this, PERMS)) {
@@ -216,28 +216,38 @@ public class SettingsActivity extends AppCompatActivity {
             return;
         }
         Toast.makeText(this, "You can choose a picture !", Toast.LENGTH_SHORT).show();
-        Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        // TODO : replace deprecated
-        startActivityForResult(i, RC_CHOOSE_PHOTO);
+        Intent pickPhotoIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        actionPick.launch(pickPhotoIntent);
     }
 
-    // Handle activity response (after user has chosen or not a picture)
-    private void handleResponse(int requestCode, int resultCode, Intent data){
-        if (requestCode == RC_CHOOSE_PHOTO) {
-            if (resultCode == RESULT_OK) { //SUCCESS
-                this.uriImageSelected = data.getData();
-                Glide.with(this) //SHOWING PREVIEW OF IMAGE
-                        .load(this.uriImageSelected)
-                        .apply(RequestOptions.circleCropTransform())
-                        .into(userAvatar);
-            } else {
-                Toast.makeText(this, "No image chosen", Toast.LENGTH_SHORT).show();
+
+    // Create callback when user pick a photo on his device
+    private final ActivityResultLauncher<Intent> actionPick = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    onPickPhotoResult(result);
+                }
             }
+    );
+
+    // Handle result of photo picking activity
+    private void onPickPhotoResult(ActivityResult result) {
+        if (result.getResultCode() == RESULT_OK) { //SUCCESS
+            assert result.getData() != null;
+            this.uriImageSelected = result.getData().getData();
+            Glide.with(this) //SHOWING PREVIEW OF IMAGE
+                .load(this.uriImageSelected)
+                .apply(RequestOptions.circleCropTransform())
+                .into(userAvatar);
+        } else {
+            Toast.makeText(this, "No image chosen", Toast.LENGTH_SHORT).show();
         }
     }
 
 
-
+    // Alert Dialog to delete account from firestore & firebase
     private void deleteAccountDialog() {
         new AlertDialog.Builder(this)
             .setMessage(R.string.popup_message_confirmation_delete_account)
