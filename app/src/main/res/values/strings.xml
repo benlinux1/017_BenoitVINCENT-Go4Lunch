@@ -86,7 +86,7 @@
     <dimen name="settings_progressbar_size">80dip</dimen>
     <string name="settings_user_name_title">Full name</string>
     <string name="settings_user_name">John Doe</string>
-    <string name="settings_user_email_title">Email</string>
+    <string name="settings_user_email_title">Email (not editable)</string>
     <string name="settings_user_email">johndoe@test.com</string>
 
     // SEARCH BAR

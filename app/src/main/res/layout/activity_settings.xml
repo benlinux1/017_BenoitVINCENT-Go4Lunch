@@ -74,7 +74,10 @@
             android:text="@string/settings_user_email"
             android:hint="@string/settings_user_email"
             android:inputType="textEmailAddress"
-            android:imeOptions="actionDone"
+            android:enabled="false"
+            android:clickable="false"
+            android:focusable="false"
+            android:cursorVisible="false"
             android:autofillHints="" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -99,7 +102,8 @@
             android:id="@+id/settings_notification_switch"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:checked="true"/>
     </LinearLayout>
 
     <Button
@@ -108,7 +112,7 @@
         android:layout_width="@dimen/profile_button_width"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/default_large_margin"
-        android:backgroundTint="@android:color/holo_blue_bright"
+        android:backgroundTint="@color/colorAccent"
         android:textSize="@dimen/high_text_size"
         android:textColor="@color/white"
         app:iconTint="@color/white"

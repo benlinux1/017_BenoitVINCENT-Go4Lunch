@@ -1,17 +1,29 @@
 package com.benlinux.go4lunch.data.userRepository;
 
 import android.content.Context;
+import android.net.Uri;
+import android.nfc.Tag;
+import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
 import com.benlinux.go4lunch.ui.models.User;
 import com.firebase.ui.auth.AuthUI;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserInfo;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
+import java.util.List;
+import java.util.UUID;
 
 public final class UserRepository {
 
@@ -21,7 +33,7 @@ public final class UserRepository {
     private static final String EMAIL_FIELD = "email";
     private static final String AVATAR_FIELD = "avatar";
     private static final String RESTAURANT_FIELD = "restaurantOfTheDay";
-    private static final String IS_NOTIFIED_FIELD = "isNotified";
+    private static final String NOTIFIED_FIELD = "notified";
 
     private static volatile UserRepository instance;
 
@@ -69,17 +81,26 @@ public final class UserRepository {
     public void createUser() {
         FirebaseUser user = getCurrentUser();
         if(user != null){
+
+            List<? extends UserInfo> providerData = user.getProviderData();
+
             String urlPicture = (user.getPhotoUrl() != null) ? user.getPhotoUrl().toString() : null;
             String username = user.getDisplayName();
             String uid = user.getUid();
-            String email = user.getEmail();
+            String email = providerData.get(1).getEmail();
 
             User userToCreate = new User(uid, username, email, urlPicture, null, true);
 
             Task<DocumentSnapshot> userData = getUserData();
-            // If the user already exist in Firestore, we get his data (isMentor)
+            // Check if user exists in database
             userData.addOnSuccessListener(documentSnapshot -> {
-                this.getUsersCollection().document(uid).set(userToCreate);
+                // if user exists in database, continue
+                if (documentSnapshot.contains(EMAIL_FIELD)){
+                    Log.d("INFO", "user already exists");
+                // if user doesn't exists in database, create it
+                } else {
+                    this.getUsersCollection().document(uid).set(userToCreate);
+                }
             });
         }
     }
@@ -117,12 +138,10 @@ public final class UserRepository {
     }
 
     // Update User Avatar
-    public Task<Void> updateUserAvatar(String avatarUrl) {
+    public void updateUserAvatar(String avatarUrl) {
         String uid = this.getCurrentUserUID();
         if(uid != null) {
-            return this.getUsersCollection().document(uid).update(AVATAR_FIELD, avatarUrl);
-        } else {
-            return null;
+            this.getUsersCollection().document(uid).update(AVATAR_FIELD, avatarUrl);
         }
     }
 
@@ -140,15 +159,29 @@ public final class UserRepository {
     public void updateIsNotified(Boolean isNotified) {
         String uid = this.getCurrentUserUID();
         if(uid != null) {
-            this.getUsersCollection().document(uid).update(IS_NOTIFIED_FIELD, isNotified);
+            this.getUsersCollection().document(uid).update(NOTIFIED_FIELD, isNotified);
         }
     }
 
-    // Delete the User from Firestore
-    public void deleteUserFromFirestore() {
-        FirebaseUser user = getCurrentUser();
-        assert user != null;
-        String uid = user.getUid();
-        this.getUsersCollection().document(uid).delete();
+
+    // Upload image from device to firebase storage
+    public UploadTask uploadImage(Uri imageUri, String pictures){
+        String uuid = UUID.randomUUID().toString(); // GENERATE UNIQUE STRING
+        StorageReference mImageRef = FirebaseStorage.getInstance().getReference(pictures + "/" + uuid);
+        return mImageRef.putFile(imageUri);
     }
+
+    // Delete the User from Firestore
+    // if result ok, delete from firebase & logout
+    public Task<Void> deleteUserFromFirestore(Context context) {
+        String uid = this.getCurrentUserUID();
+        return this.getUsersCollection().document(uid).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                deleteUser(context);
+                signOut(context);
+            }
+        });
+    }
+
 }

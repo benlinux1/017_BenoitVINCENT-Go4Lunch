@@ -7,24 +7,24 @@ public class User {
 
     private String uid;
     private String name;
-    @Nullable
+
     private String email;
-    @Nullable
-    private  String urlAvatar;
+
+    private String avatar;
     private String restaurantOfTheDay;
-    private Boolean isNotified;
+    private Boolean notified;
 
     public User(){}
 
 
-    public User(String uid, String name, @Nullable String email, @Nullable String urlAvatar,
-                String restaurantOfTheDay, Boolean isNotified) {
+    public User(String uid, String name, String email, String avatar,
+                String restaurantOfTheDay, Boolean notified) {
         this.uid = uid;
         this.name = name;
         this.email = email;
-        this.urlAvatar = urlAvatar;
+        this.avatar = avatar;
         this.restaurantOfTheDay = restaurantOfTheDay;
-        this.isNotified = isNotified;
+        this.notified = notified;
     }
 
     public String getId() {
@@ -41,7 +41,6 @@ public class User {
         this.name = name;
     }
 
-    @Nullable
     public String getEmail() {
         return email;
     }
@@ -49,12 +48,11 @@ public class User {
         this.email = email;
     }
 
-    @Nullable
     public String getAvatar() {
-        return urlAvatar;
+        return avatar;
     }
     public void setAvatar(String avatar) {
-        this.urlAvatar = urlAvatar;
+        this.avatar = avatar;
     }
 
     public String getRestaurantOfTheDay() {
@@ -64,10 +62,11 @@ public class User {
         this.restaurantOfTheDay = restaurantOfTheDay;
     }
 
+    @Nullable
     public Boolean isNotified() {
-        return isNotified;
+        return notified;
     }
     public void setIsNotified(Boolean isNotified) {
-        this.isNotified = isNotified;
+        this.notified = isNotified;
     }
 }

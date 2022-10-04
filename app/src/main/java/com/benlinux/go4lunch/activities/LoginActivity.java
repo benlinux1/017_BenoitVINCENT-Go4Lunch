@@ -42,13 +42,13 @@ public class LoginActivity extends AppCompatActivity {
 
     // Create callback for Firebase authentication result
     private final ActivityResultLauncher<Intent> signInLauncher = registerForActivityResult(
-            new FirebaseAuthUIActivityResultContract(),
-            new ActivityResultCallback<FirebaseAuthUIAuthenticationResult>() {
-                @Override
-                public void onActivityResult(FirebaseAuthUIAuthenticationResult result) {
-                    onSignInResult(result);
-                }
+        new FirebaseAuthUIActivityResultContract(),
+        new ActivityResultCallback<FirebaseAuthUIAuthenticationResult>() {
+            @Override
+            public void onActivityResult(FirebaseAuthUIAuthenticationResult result) {
+                onSignInResult(result);
             }
+        }
     );
 
     // Firebase SignIn

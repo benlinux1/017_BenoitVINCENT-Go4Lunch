@@ -1,13 +1,12 @@
 package com.benlinux.go4lunch.data.userManager;
 
 import android.content.Context;
+import android.net.Uri;
 
 import com.benlinux.go4lunch.data.userRepository.UserRepository;
 import com.benlinux.go4lunch.ui.models.User;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseUser;
-
-import java.util.Objects;
 
 public class UserManager {
 
@@ -64,12 +63,17 @@ public class UserManager {
         return userRepository.updateUsername(username);
     }
 
-    public Task<Void> updateUserAvatarUrl(String avatarUrl){
-        return userRepository.updateUserAvatar(avatarUrl);
+
+    public void updateUserAvatarUrl(Uri avatarUrl){
+        userRepository.uploadImage(avatarUrl, "avatar").addOnSuccessListener(taskSnapshot -> {
+            taskSnapshot.getStorage().getDownloadUrl().addOnSuccessListener(uri -> {
+                userRepository.updateUserAvatar(uri.toString());
+            });
+        });
     }
 
     public Task<Void> updateUserEmail(String email){
-        return userRepository.updateUserAvatar(email);
+        return userRepository.updateUserEmail(email);
     }
 
     public Task<Void> updateUserRestaurantOfTheDay(String restaurantName){
@@ -82,10 +86,8 @@ public class UserManager {
 
     public Task<Void> deleteUserFromFirestore(Context context){
         // Delete the user account from the Auth
-        return userRepository.deleteUser(context).addOnCompleteListener(task -> {
-            // Once done, delete the user datas from Firestore
-            userRepository.deleteUserFromFirestore();
-        });
+        return userRepository.deleteUserFromFirestore(context);
+
     }
 
 }
