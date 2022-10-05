@@ -58,9 +58,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     private ImageView userAvatar;
 
-    private TextInputLayout userNameLayout;
     private EditText userName;
-    private TextInputLayout userEmailLayout;
     private TextView userEmail;
     private Button deleteButton;
     private Button updateButton;
@@ -117,12 +115,10 @@ public class SettingsActivity extends AppCompatActivity {
         userAvatar = findViewById(R.id.settings_user_avatar);
         updateAvatarButton = findViewById(R.id.settings_user_avatar_update);
         userName = findViewById(R.id.settings_user_name_field);
-        userEmailLayout = findViewById(R.id.settings_user_email_input);
         userEmail = findViewById(R.id.settings_user_email_field);
         deleteButton = findViewById(R.id.settings_delete_button);
         updateButton = findViewById(R.id.settings_update_button);
         switchNotifications = findViewById(R.id.settings_notification_switch);
-
     }
 
     // Set User data in fields
@@ -144,9 +140,8 @@ public class SettingsActivity extends AppCompatActivity {
             userEmail.setText(email);
             // Set notification switch
             switchNotifications.setChecked(user.isNotified());
-
+            // Set Avatar picture
             setProfilePicture(user.getAvatar());
-
 
         });
         getData.addOnFailureListener(new OnFailureListener() {

@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,12 +22,17 @@ import com.benlinux.go4lunch.R;
 import com.benlinux.go4lunch.ui.adapters.PlaceAutoCompleteAdapter;
 import com.benlinux.go4lunch.data.userManager.UserManager;
 
+import com.benlinux.go4lunch.ui.models.User;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -199,9 +205,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         // Build and configure App bar
         appBarConfiguration =
-                new AppBarConfiguration.Builder(navController.getGraph()) //Pass the ids of fragments from nav_graph which you dont want to show back button in toolbar
-                        .setOpenableLayout(drawerLayout)
-                        .build();
+            new AppBarConfiguration.Builder(navController.getGraph()) //Pass the ids of fragments from nav_graph which you dont want to show back button in toolbar
+                .setOpenableLayout(drawerLayout)
+                .build();
 
         //Setup toolbar with back button and drawer icon according to appBarConfiguration
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
@@ -233,41 +239,41 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     // Set user data in drawer views
     private void updateUIWithUserData(){
         if(userManager.isCurrentUserLogged()) {
-            FirebaseUser user = userManager.getCurrentUser();
+            // Check in Firestore
+            Task<User> getData = userManager.getUserData();
+            getData.addOnSuccessListener(user -> {
+                // Set user name
+                String username = TextUtils.isEmpty(user.getName()) ? getString(R.string.info_no_username_found) : user.getName();
+                userName.setText(username);
+                // Set user email
+                String email = TextUtils.isEmpty(user.getEmail()) ? getString(R.string.info_no_email_found) : user.getEmail();
+                userEmail.setText(email);
+                // Set avatar
+                setProfileAvatar(user.getAvatar());
 
-            if (user.getPhotoUrl() != null) {
-                setProfilePicture(user.getPhotoUrl());
-            } else {
-                setNoPhoto(userAvatar);
-            }
-            setTextUserData(user);
+            });
+            getData.addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.d("EXCEPTION", e.toString());
+                }
+            });
         }
     }
 
-    private void setProfilePicture(Uri profilePictureUrl){
-        View headerContainer = drawerNavView.getHeaderView(0);
-        ImageView userAvatar = headerContainer.findViewById(R.id.user_avatar);
-        Glide.with(this)
+    // Set user avatar according to avatar url
+    private void setProfileAvatar(@Nullable String profilePictureUrl){
+        if (profilePictureUrl != null) {
+            Glide.with(this)
                 .load(profilePictureUrl)
                 .apply(RequestOptions.circleCropTransform())
                 .into(userAvatar);
-    }
-
-    private void setNoPhoto(ImageView destination) {
-        Glide.with(this)
-            .load(R.mipmap.no_photo)
-            .apply(RequestOptions.circleCropTransform())
-            .into(destination);
-    }
-
-    private void setTextUserData(FirebaseUser user){
-        //Get email & username from User
-        String email = TextUtils.isEmpty(user.getEmail()) ? getString(R.string.info_no_email_found) : user.getEmail();
-        String username = TextUtils.isEmpty(user.getDisplayName()) ? getString(R.string.info_no_username_found) : user.getDisplayName();
-
-        //Update views with data
-        userName.setText(username);
-        userEmail.setText(email);
+        } else {
+            Glide.with(this)
+                .load(R.mipmap.no_photo)
+                .apply(RequestOptions.circleCropTransform())
+                .into(userAvatar);
+        }
     }
 
     // Logout from firebase
