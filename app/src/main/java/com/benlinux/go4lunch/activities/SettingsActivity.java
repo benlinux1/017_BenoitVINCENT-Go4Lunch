@@ -9,12 +9,9 @@ import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.MotionEvent;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,23 +29,13 @@ import androidx.core.app.ActivityCompat;
 
 import com.benlinux.go4lunch.R;
 import com.benlinux.go4lunch.data.userManager.UserManager;
-import com.benlinux.go4lunch.databinding.ActivitySettingsBinding;
 import com.benlinux.go4lunch.ui.models.User;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract;
-import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.textfield.TextInputLayout;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
 
-import java.util.Locale;
+import java.util.Objects;
 
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
@@ -71,9 +58,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     private static final String PERMS = Manifest.permission.READ_EXTERNAL_STORAGE;
     private static final int RC_IMAGE_PERMS = 100;
-    private static final int RC_CHOOSE_PHOTO = 200;
     private Uri uriImageSelected;
-    private ActivitySettingsBinding binding;
 
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,7 +77,7 @@ public class SettingsActivity extends AppCompatActivity {
     private void setToolbar() {
         mToolbar = (Toolbar) findViewById(R.id.main_toolbar);
         setSupportActionBar(mToolbar);
-        getSupportActionBar().setTitle("Settings");
+        Objects.requireNonNull(getSupportActionBar()).setTitle("Settings");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
@@ -139,7 +124,7 @@ public class SettingsActivity extends AppCompatActivity {
             String email = TextUtils.isEmpty(user.getEmail()) ? getString(R.string.info_no_email_found) : user.getEmail();
             userEmail.setText(email);
             // Set notification switch
-            switchNotifications.setChecked(user.isNotified());
+            switchNotifications.setChecked(Boolean.TRUE.equals(user.isNotified()));
             // Set Avatar picture
             setProfilePicture(user.getAvatar());
 

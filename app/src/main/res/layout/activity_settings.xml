@@ -15,7 +15,8 @@
         <!-- Toolbar -->
         <include
             layout="@layout/toolbar_main"
-            android:id="@+id/main_toolbar" />
+            android:id="@+id/main_toolbar"
+            style="@style/DrawerArrowStyle"/>
 
     </LinearLayout>
 

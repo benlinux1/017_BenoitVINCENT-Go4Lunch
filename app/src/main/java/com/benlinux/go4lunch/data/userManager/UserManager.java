@@ -84,10 +84,16 @@ public class UserManager {
         userRepository.updateIsNotified(isNotified);
     }
 
+    public void addRestaurantToFavorites(String restaurantId){
+        userRepository.addRestaurantToFavorites(restaurantId);
+    }
+    public Task<Void> removeRestaurantFromFavorites(String restaurantId){
+        return userRepository.removeRestaurantFromFavorites(restaurantId);
+    }
+
     public Task<Void> deleteUserFromFirestore(Context context){
         // Delete the user account from the Auth
         return userRepository.deleteUserFromFirestore(context);
-
     }
 
 }

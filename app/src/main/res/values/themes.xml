@@ -12,12 +12,12 @@
         <!-- Text cursor color when search view is active -->
         <item name="colorControlActivated">@color/colorGreenSwitch</item>
         <!-- Arrow color when search view is active -->
-        <item name="android:colorControlNormal">@color/white</item>
-        <!-- Arrow color when search view is active -->
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
-
+        <!-- Rating Bar -->
+        <item name="ratingBarStyle">@style/RatingBar</item>
+        
     </style>
 
 

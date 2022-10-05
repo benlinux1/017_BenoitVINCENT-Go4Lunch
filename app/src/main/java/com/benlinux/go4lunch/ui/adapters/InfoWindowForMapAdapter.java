@@ -12,6 +12,8 @@ import android.widget.Button;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+
 import com.benlinux.go4lunch.BuildConfig;
 import com.benlinux.go4lunch.R;
 
@@ -38,9 +40,8 @@ public class InfoWindowForMapAdapter implements GoogleMap.InfoWindowAdapter {
     }
 
     @Override
-    public View getInfoContents(Marker marker) {
-    return null;
-
+    public View getInfoContents(@NonNull Marker marker) {
+        return null;
     }
 
     @Override
@@ -64,7 +65,7 @@ public class InfoWindowForMapAdapter implements GoogleMap.InfoWindowAdapter {
         // Get reference to the info window button
         Button seeDetailsButton = (Button) view.findViewById(R.id.seeDetailsButton);
 
-        // Getting restaurant's data to set rating & place_id in invisible textView
+        // Getting restaurant's data to set rating & place_id
         if (marker.getTag() != null) {
             getRestaurantInfo(marker.getTag().toString());
             restaurantId.setText(marker.getTag().toString());
@@ -159,10 +160,8 @@ public class InfoWindowForMapAdapter implements GoogleMap.InfoWindowAdapter {
             // Set postal code & city info into dedicated textView
             restaurantCity.setText(mPostalCode + " " + mCity);
 
-
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 }

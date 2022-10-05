@@ -67,12 +67,16 @@
     // RESTAURANT DETAILS
     <string name="call">CALL</string>
     <string name="like">LIKE</string>
+    <string name="unlike">UNLIKE</string>
     <string name="website">WEBSITE</string>
     <string name="no_website_notification">This restaurant doesn\'t have website…</string>
     <string name="no_secured_website">This website\'s link is not safe…</string>
     <string name="no_phoneNumber_notification">This restaurant doesn\'t phone number…</string>
     <string name="distance_in_meters_end" translatable="false">%d m</string>
     <string name="restaurant_location" translatable="false">Restaurant location</string>
+    <string name="restaurant_address" translatable="false">12 rue du Faubourg Poissonnière</string>
+    <string name="restaurant_postal_code_and_city" translatable="false">75000 PARIS</string>
+
 
     // SETTINGS ACTIVITY
     <string name="popup_message_choice_yes">YES</string>
@@ -93,12 +97,8 @@
     <string name="search_bar_title">Search</string>
     <string name="search_bar_hint">Search restaurants</string>
 
-
     // WORKMATES FRAGMENT
     <string name="workmates_text_eating">Scarlett is eating french (Le Zinc)</string>
-
-
-
 
 
 </resources>

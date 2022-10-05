@@ -4,6 +4,8 @@
     android:id="@+id/search_action"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:theme="@style/SearchBar"
+    android:gravity="center_vertical"
     android:background="@drawable/background_search_bar"
     android:voiceSearchMode="showVoiceSearchButton|launchRecognizer"
     android:imeOptions="actionSearch"

@@ -78,10 +78,9 @@
 
             <RatingBar
                 android:id="@+id/restaurantDetailsRating"
-                style="@style/Widget.AppCompat.RatingBar.Small"
+                style="@style/RatingBar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:foregroundGravity="center_vertical"
                 android:layout_marginStart="@dimen/default_margin"
                 android:theme="@style/RatingBar"
                 android:paddingTop="@dimen/very_small_margin"
@@ -146,22 +145,39 @@
         android:backgroundTint="#00FFFFFF"
         android:layout_marginBottom="@dimen/default_margin"
         app:layout_constraintBottom_toTopOf="@+id/guideline3"
-        app:layout_constraintEnd_toStartOf="@+id/restaurantDetailsLikeButton"
+        app:layout_constraintEnd_toStartOf="@+id/restaurantDetailsLikeButtonLayout"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline4"
         app:srcCompat="@drawable/ic_phone" />
 
-    <ImageButton
-        android:id="@+id/restaurantDetailsLikeButton"
+    <LinearLayout
+        android:id="@+id/restaurantDetailsLikeButtonLayout"
         android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:backgroundTint="#00FFFFFF"
-        android:layout_marginBottom="@dimen/default_margin"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:foregroundGravity="center_horizontal"
         app:layout_constraintBottom_toTopOf="@+id/guideline3"
         app:layout_constraintEnd_toStartOf="@+id/restaurantDetailsWebsiteButton"
         app:layout_constraintStart_toEndOf="@+id/restaurantDetailsCallButton"
         app:layout_constraintTop_toTopOf="@+id/guideline4"
-        app:srcCompat="@drawable/ic_star" />
+        android:orientation="horizontal">
+
+        <androidx.appcompat.widget.AppCompatCheckBox
+            android:id="@+id/restaurantDetailsLikeButton"
+            style="@style/LikeButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:layout_marginBottom="@dimen/default_margin"
+            android:button="@drawable/toggle_like"
+            android:checked="false"
+            android:theme="@style/LikeButtonStyle"
+            tools:ignore="ObsoleteLayoutParam" />
+    </LinearLayout>
+
+
+
 
     <ImageButton
         android:id="@+id/restaurantDetailsWebsiteButton"
@@ -171,7 +187,7 @@
         android:layout_marginBottom="@dimen/default_margin"
         app:layout_constraintBottom_toTopOf="@+id/guideline3"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/restaurantDetailsLikeButton"
+        app:layout_constraintStart_toEndOf="@+id/restaurantDetailsLikeButtonLayout"
         app:layout_constraintTop_toTopOf="@+id/guideline4"
         app:srcCompat="@drawable/ic_website" />
 
@@ -196,7 +212,7 @@
         android:text="@string/like"
         android:textColor="@color/colorPrimary"
         app:layout_constraintBottom_toTopOf="@+id/guideline3"
-        app:layout_constraintEnd_toEndOf="@+id/restaurantDetailsLikeButton"
+        app:layout_constraintEnd_toEndOf="@+id/restaurantDetailsLikeButtonLayout"
         app:layout_constraintStart_toEndOf="@+id/restaurantDetailsCallButton" />
 
     <TextView
@@ -209,7 +225,7 @@
         android:textColor="@color/colorPrimary"
         app:layout_constraintBottom_toTopOf="@+id/guideline3"
         app:layout_constraintEnd_toEndOf="@+id/restaurantDetailsWebsiteButton"
-        app:layout_constraintStart_toEndOf="@+id/restaurantDetailsLikeButton" />
+        app:layout_constraintStart_toEndOf="@+id/restaurantDetailsLikeButtonLayout" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="0dp"

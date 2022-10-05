@@ -27,6 +27,7 @@
     <!-- STYLE NAV DRAWER HEADER -->
     <style name="DrawerTheme" parent="Theme.MyApplication">
         <item name="colorPrimary">@color/red</item>
+        <item name="colorControlNormal">@color/white</item>
         <item name="android:textColor">@android:color/white</item>
     </style>
 
@@ -34,13 +35,30 @@
     <!-- STYLE HAMBURGER / BACK ARROW IN TOOLBAR -->
     <style name="DrawerArrowStyle" parent="@style/Widget.AppCompat.DrawerArrowToggle">
         <item name="spinBars">true</item>
+        <item name="colorControlNormal">@color/white</item>
         <item name="color">@android:color/white</item>
     </style>
 
 
     <!-- STYLE RATING BAR -->
-    <style name="RatingBar" parent="Theme.MyApplication">
-        <item name="colorControlNormal">@android:color/transparent</item>
+    <style name="RatingBar" parent="@style/Widget.AppCompat.RatingBar.Small">
+        <item name="colorControlNormal" tools:override="true">@color/grey</item>
+        <item name="color">@color/grey</item>
+        <item name="colorControlActivated">@color/gold</item>
+    </style>
+
+
+    <!-- STYLE RATING BAR -->
+    <style name="SearchBar" parent="Theme.MyApplication">
+        <item name="colorControlNormal">@color/dark_grey</item>
+        <item name="color">@color/grey</item>
+        <item name="colorControlActivated">@color/gold</item>
+    </style>
+
+
+    <!-- STYLE LIKE BUTTON -->
+    <style name="LikeButtonStyle" parent="Theme.MyApplication">
+        <item name="colorControlNormal">@color/colorPrimary</item>
         <item name="colorControlActivated">@color/gold</item>
     </style>
 

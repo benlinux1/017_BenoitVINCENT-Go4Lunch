@@ -18,8 +18,10 @@ import com.benlinux.go4lunch.databinding.FragmentWorkmatesBinding;
 import com.benlinux.go4lunch.ui.adapters.WorkmateAdapter;
 import com.benlinux.go4lunch.ui.models.User;
 import com.google.android.material.divider.MaterialDividerItemDecoration;
+import com.google.common.collect.Lists;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class WorkmatesFragment extends Fragment {
@@ -44,9 +46,10 @@ public class WorkmatesFragment extends Fragment {
 
         mRecyclerView = binding.listWorkmates;
         mWorkmates = new ArrayList<>();
-        mWorkmates.add(new User("1", "Scarlett", "scarlett@test.com",null, "Le Zinc", true));
-        mWorkmates.add(new User("2", "Hugh","hugh@test.com", null, "Le Zinc", true));
-        mWorkmates.add(new User("3", "Nana", "nana@test.com",  null, "Le Seoul", true));
+        List<String> favorites = Collections.emptyList();
+        mWorkmates.add(new User("1", "Scarlett", "scarlett@test.com",null, "Le Zinc", true, favorites));
+        mWorkmates.add(new User("2", "Hugh","hugh@test.com", null, "Le Zinc", true, favorites));
+        mWorkmates.add(new User("3", "Nana", "nana@test.com",  null, "Le Seoul", true, favorites));
         configRecyclerView();
 
         return view;

@@ -7,4 +7,4 @@
     android:background="?attr/colorPrimary"
     app:titleTextColor="@color/white"
     android:paddingEnd="@dimen/small_margin"
-    android:theme="@style/DrawerTheme"/>
+    android:theme="@style/DrawerTheme" />

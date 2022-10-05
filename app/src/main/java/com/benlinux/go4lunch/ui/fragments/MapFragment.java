@@ -386,7 +386,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onResume() {
         super.onResume();
-        if (getUserLocation() == null) {
+        if (locationPermissionGranted && getUserLocation() == null) {
             getCurrentLocation();
         }
     }

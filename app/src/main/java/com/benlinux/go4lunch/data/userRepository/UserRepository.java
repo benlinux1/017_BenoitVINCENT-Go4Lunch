@@ -2,9 +2,7 @@ package com.benlinux.go4lunch.data.userRepository;
 
 import android.content.Context;
 import android.net.Uri;
-import android.nfc.Tag;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
@@ -17,11 +15,16 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserInfo;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 
@@ -34,6 +37,7 @@ public final class UserRepository {
     private static final String AVATAR_FIELD = "avatar";
     private static final String RESTAURANT_FIELD = "restaurantOfTheDay";
     private static final String NOTIFIED_FIELD = "notified";
+    private static final String FAVORITES_FIELD = "favoriteRestaurants";
 
     private static volatile UserRepository instance;
 
@@ -89,7 +93,9 @@ public final class UserRepository {
             String uid = user.getUid();
             String email = providerData.get(1).getEmail();
 
-            User userToCreate = new User(uid, username, email, urlPicture, null, true);
+            List<String> favorites = Collections.emptyList();
+
+            User userToCreate = new User(uid, username, email, urlPicture, null, true, favorites);
 
             Task<DocumentSnapshot> userData = getUserData();
             // Check if user exists in database
@@ -163,6 +169,23 @@ public final class UserRepository {
         }
     }
 
+    // Add restaurant to favorites
+    public void addRestaurantToFavorites(String restaurantId) {
+        String uid = this.getCurrentUserUID();
+        if (uid != null) {
+            this.getUsersCollection().document(uid).update(FAVORITES_FIELD, FieldValue.arrayUnion(restaurantId));
+        }
+    }
+
+    // Remove restaurant from favorites
+    public Task<Void> removeRestaurantFromFavorites(String restaurantId) {
+        String uid = this.getCurrentUserUID();
+        if(uid != null) {
+            return this.getUsersCollection().document(uid).update(FAVORITES_FIELD, FieldValue.arrayRemove(restaurantId));
+        } else {
+            return null;
+        }
+    }
 
     // Upload image from device to firebase storage
     public UploadTask uploadImage(Uri imageUri, String pictures){

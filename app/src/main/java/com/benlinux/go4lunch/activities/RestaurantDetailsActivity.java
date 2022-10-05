@@ -8,20 +8,25 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatCheckBox;
 
 import com.benlinux.go4lunch.BuildConfig;
 import com.benlinux.go4lunch.R;
+import com.benlinux.go4lunch.data.userManager.UserManager;
 import com.benlinux.go4lunch.databinding.ActivityRestaurantDetailsBinding;
 import com.benlinux.go4lunch.modules.FormatAddressModule;
+import com.benlinux.go4lunch.ui.models.User;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Period;
 import com.google.android.libraries.places.api.model.PhotoMetadata;
@@ -51,10 +56,15 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
     private TextView restaurantDistance;
     private ImageView restaurantPicture;
 
-
     private ImageButton phoneButton;
-    // TODO : private ImageButton likeButton;
+    private AppCompatCheckBox likeButton;
+    private TextView likeText;
     private ImageButton webSiteButton;
+
+    private String restaurantId;
+
+    // FOR DATA
+    private final UserManager userManager = UserManager.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,10 +74,13 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
 
         setContentView(view);
         getUserLocationFromIntent();
-        getRestaurantIdFromIntent();
+        // Define the Place ID.
+        restaurantId = getRestaurantIdFromIntent();
         setViews();
         getRestaurantInfo();
         setListeners();
+        setLikeButton();
+        setListenerOnLikeButton();
     }
 
     // Retrieve Place Id from previous activity
@@ -91,8 +104,9 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
         restaurantHours = binding.restaurantDetailsOpening;
         restaurantPicture = binding.restaurantDetailsPhoto;
         phoneButton = binding.restaurantDetailsCallButton;
-        // TODO : likeButton = binding.restaurantDetailsLikeButton;
+        likeButton = binding.restaurantDetailsLikeButton;
         webSiteButton = binding.restaurantDetailsWebsiteButton;
+        likeText = binding.restaurantDetailsLikeText;
     }
 
     // Set listeners on buttons
@@ -118,8 +132,6 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
 
     // Retrieve place details
     private void getRestaurantInfo() {
-        // Define the Place ID.
-        final String placeId = getRestaurantIdFromIntent();
 
         // Specify the fields to return from request
         final List<Place.Field> placeFields = Arrays.asList(
@@ -135,7 +147,7 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
         );
 
         // Construct a request object, passing the place ID and fields array.
-        final FetchPlaceRequest request = FetchPlaceRequest.newInstance(placeId, placeFields);
+        final FetchPlaceRequest request = FetchPlaceRequest.newInstance(restaurantId, placeFields);
 
         // Initialize Places API
         Places.initialize(getApplicationContext(), BuildConfig.PLACE_API_KEY);
@@ -289,6 +301,31 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
         } else {
             showSnackBar(binding.getRoot().getRootView(), getString(R.string.no_secured_website));
         }
+    }
+
+    private void setLikeButton() {
+        Task<User> getData = userManager.getUserData();
+        getData.addOnSuccessListener(user -> {
+            if (user.getFavoriteRestaurants().contains(restaurantId)) {
+                likeButton.setChecked(true);
+                likeText.setText(getString(R.string.unlike));
+            }
+        });
+    }
+
+    private void setListenerOnLikeButton() {
+        likeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (likeButton.isChecked()) {
+                    userManager.addRestaurantToFavorites(restaurantId);
+                    likeText.setText(getString(R.string.unlike));
+                } else {
+                    userManager.removeRestaurantFromFavorites(restaurantId);
+                    likeText.setText(getString(R.string.like));
+                }
+            }
+        });
     }
 
     // Show snackBar on activity
