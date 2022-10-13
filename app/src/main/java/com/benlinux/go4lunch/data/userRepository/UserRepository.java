@@ -4,19 +4,24 @@ import android.content.Context;
 import android.net.Uri;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.benlinux.go4lunch.ui.models.User;
 import com.firebase.ui.auth.AuthUI;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserInfo;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -98,7 +103,7 @@ public final class UserRepository {
 
             List<String> favorites = Collections.emptyList();
 
-            User userToCreate = new User(uid, username, email, urlPicture, null, true, favorites);
+            User userToCreate = new User(uid, username, email, urlPicture, "", true, favorites);
 
             Task<DocumentSnapshot> userData = getUserData();
             // Check if user exists in database
@@ -122,6 +127,12 @@ public final class UserRepository {
         } else {
             return null;
         }
+    }
+
+    public Task<QuerySnapshot> getAllUsersData() {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference usersRef = db.collection(COLLECTION_NAME);
+        return usersRef.get();
     }
 
 

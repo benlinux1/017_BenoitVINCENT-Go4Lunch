@@ -65,10 +65,11 @@ dependencies {
     implementation "com.google.android.gms:play-services-auth:20.3.0"
 
     // FIRESTORE DATABASE
-    implementation 'com.google.firebase:firebase-firestore:24.3.1'
+    implementation 'com.google.firebase:firebase-firestore:24.4.0'
 
     // FIREBASE STORAGE
     implementation 'com.firebaseui:firebase-ui-storage:7.1.1'
+
 
     // FACEBOOK login
     implementation 'com.facebook.android:facebook-android-sdk:14.1.1'

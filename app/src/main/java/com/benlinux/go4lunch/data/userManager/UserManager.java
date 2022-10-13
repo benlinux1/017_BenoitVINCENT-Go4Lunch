@@ -8,6 +8,7 @@ import com.benlinux.go4lunch.ui.models.User;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.List;
 import java.util.Objects;
 
 public class UserManager {
@@ -54,6 +55,14 @@ public class UserManager {
     }
 
 
+
+    public Task<List<User>> getAllUsersData() {
+        return Objects.requireNonNull(userRepository.getAllUsersData()).continueWith(task -> task.getResult().toObjects(User.class)) ;
+    }
+
+
+
+
     public Task<User> getUserData(){
         // Get the user from Firestore and cast it to a User model Object
         return Objects.requireNonNull(userRepository.getUserData()).continueWith(task -> task.getResult().toObject(User.class)) ;
@@ -61,8 +70,8 @@ public class UserManager {
 
 
 
-    public Task<Void> updateUsername(String username){
-        return userRepository.updateUsername(username);
+    public void updateUsername(String username){
+        userRepository.updateUsername(username);
     }
 
 
@@ -89,8 +98,8 @@ public class UserManager {
     public void addRestaurantToFavorites(String restaurantId){
         userRepository.addRestaurantToFavorites(restaurantId);
     }
-    public Task<Void> removeRestaurantFromFavorites(String restaurantId){
-        return userRepository.removeRestaurantFromFavorites(restaurantId);
+    public void removeRestaurantFromFavorites(String restaurantId){
+        userRepository.removeRestaurantFromFavorites(restaurantId);
     }
 
     public Task<Void> deleteUserFromFirestore(Context context){

@@ -67,7 +67,7 @@ public class WorkmateAdapter extends RecyclerView.Adapter<WorkmateAdapter.ViewHo
     @SuppressLint("NotifyDataSetChanged")
     public void initList(List<User> workmates) {
         this.mWorkmates = workmates;
-        notifyItemRangeChanged(- 1, mWorkmates.size());
+        notifyDataSetChanged();
     }
 
 
@@ -117,7 +117,12 @@ public class WorkmateAdapter extends RecyclerView.Adapter<WorkmateAdapter.ViewHo
          */
         void bind(User workmate) {
             StringBuilder booking = new StringBuilder();
-            booking.append(workmate.getName()).append(" is eating to ").append(workmate.getRestaurantOfTheDay());
+            if (workmate.getRestaurantOfTheDay() != null) {
+                booking.append(workmate.getName()).append(" is eating to ").append(workmate.getRestaurantOfTheDay());
+            } else {
+                booking.append(workmate.getName()).append(" didn't select a restaurant for the moment...");
+            }
+
             // Set name & booking of the day
             name.setText(booking.toString());
             // Set id
@@ -144,10 +149,5 @@ public class WorkmateAdapter extends RecyclerView.Adapter<WorkmateAdapter.ViewHo
             return colorCode;
         }
     }
-
-
-
-
-
 
 }
