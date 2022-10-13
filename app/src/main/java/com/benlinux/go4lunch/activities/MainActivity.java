@@ -47,8 +47,6 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.navigation.NavigationView;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Objects;
 
@@ -66,7 +64,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     // FOR DATA
     private final UserManager userManager = UserManager.getInstance();
     public static LatLng userLocation;
-    private FirebaseAuth.AuthStateListener mAuthListener;
 
     // For autocomplete search feature
     private SearchView.SearchAutoComplete autoCompleteTextView;
@@ -77,23 +74,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mAuthListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user == null) {
-                    logout();
-                }
-            }
-        };
-
         this.configureToolBar();
         this.configureNavigation();
         this.configureDrawerLayout();
         this.setDrawerViews();
+        redirectUserIfNotLogged();
         this.updateUIWithUserData();
-
-
     }
 
     private LatLng getUserLocation() {
@@ -252,9 +238,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     // Set user data in drawer views
     private void updateUIWithUserData(){
         if(userManager.isCurrentUserLogged()) {
-            // Check in Firestore
-            Task<User> getData = userManager.getUserData();
-            getData.addOnSuccessListener(user -> {
+            // Let short time to register user for the first time in Firestore
+            try {
+                Thread.sleep(60);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            Task<User> getData = userManager.getUserData().addOnSuccessListener(user -> {
                 // Set user name
                 String username = TextUtils.isEmpty(user.getName()) ? getString(R.string.info_no_username_found) : user.getName();
                 userName.setText(username);
@@ -263,7 +253,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 userEmail.setText(email);
                 // Set avatar
                 setProfileAvatar(user.getAvatar());
-
             });
             getData.addOnFailureListener(new OnFailureListener() {
                 @Override
@@ -293,19 +282,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void logout() {
         // On success, close activity & go to login
         userManager.signOut(this).addOnSuccessListener(aVoid -> {
+            Toast.makeText(getApplicationContext(), getString(R.string.disconnection_succeed), Toast.LENGTH_SHORT).show();
             redirectUserIfNotLogged();
         })
         // On failure, show error toast
         .addOnFailureListener(aVoid -> Toast.makeText(getApplicationContext(), getString(R.string.disconnection_failed), Toast.LENGTH_SHORT).show());
     }
 
-    // Close current activity & go to login if user is not logged
+    // Close current activities & go to login if user is not logged
     private void redirectUserIfNotLogged() {
         if (!userManager.isCurrentUserLogged()) {
-            finish();
+            finishAndRemoveTask();
             Intent loginActivityIntent = new Intent(this, LoginActivity.class);
             ActivityCompat.startActivity(this, loginActivityIntent, null);
-            Toast.makeText(getApplicationContext(), getString(R.string.disconnection_succeed), Toast.LENGTH_SHORT).show();
         }
     }
 

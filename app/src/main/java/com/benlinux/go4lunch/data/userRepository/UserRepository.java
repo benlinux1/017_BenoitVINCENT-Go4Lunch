@@ -91,7 +91,10 @@ public final class UserRepository {
             String urlPicture = (user.getPhotoUrl() != null) ? user.getPhotoUrl().toString() : null;
             String username = user.getDisplayName();
             String uid = user.getUid();
-            String email = providerData.get(1).getEmail();
+            String email = user.getEmail();
+            if (email == null) {
+                email = providerData.get(1).getEmail();
+            }
 
             List<String> favorites = Collections.emptyList();
 
@@ -101,8 +104,8 @@ public final class UserRepository {
             // Check if user exists in database
             userData.addOnSuccessListener(documentSnapshot -> {
                 // if user exists in database, continue
-                if (documentSnapshot.contains(EMAIL_FIELD)){
-                    Log.d("INFO", "user already exists");
+                if (documentSnapshot.contains(uid)){
+                    Log.d("USER CREATION INFO", "user already exists");
                 // if user doesn't exists in database, create it
                 } else {
                     this.getUsersCollection().document(uid).set(userToCreate);

@@ -8,6 +8,8 @@ import com.benlinux.go4lunch.ui.models.User;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.Objects;
+
 public class UserManager {
 
     private static volatile UserManager instance;
@@ -54,7 +56,7 @@ public class UserManager {
 
     public Task<User> getUserData(){
         // Get the user from Firestore and cast it to a User model Object
-        return userRepository.getUserData().continueWith(task -> task.getResult().toObject(User.class)) ;
+        return Objects.requireNonNull(userRepository.getUserData()).continueWith(task -> task.getResult().toObject(User.class)) ;
     }
 
 
