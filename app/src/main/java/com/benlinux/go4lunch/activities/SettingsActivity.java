@@ -33,7 +33,10 @@ import com.benlinux.go4lunch.ui.models.User;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Objects;
 
@@ -72,6 +75,7 @@ public class SettingsActivity extends AppCompatActivity {
         setDeleteButtonListener();
         setUpdateButtonListener();
         setUpdateAvatarButtonListener();
+
     }
 
     private void setToolbar() {
@@ -235,10 +239,17 @@ public class SettingsActivity extends AppCompatActivity {
                 userManager.deleteUserFromFirestore(SettingsActivity.this)
                     // On success, go to login activity
                     .addOnSuccessListener(aVoid -> {
-                        Intent loginActivityIntent = new Intent(this, LoginActivity.class);
-                        ActivityCompat.startActivity(this, loginActivityIntent, null);
-                        Toast.makeText(getApplicationContext(), getString(R.string.delete_account_succeed), Toast.LENGTH_SHORT).show();
-
+                        userManager.deleteUser(getApplicationContext()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void unused) {
+                                userManager.signOut(getApplicationContext()).addOnSuccessListener(aVoid -> {
+                                        Toast.makeText(getApplicationContext(), getString(R.string.disconnection_succeed), Toast.LENGTH_SHORT).show();
+                                        finish();
+                                    })
+                                    // On failure, show error toast
+                                    .addOnFailureListener(aVoid -> Toast.makeText(getApplicationContext(), getString(R.string.disconnection_failed), Toast.LENGTH_SHORT).show());
+                            }
+                        });
                     })
                     // On failure, show error toast
                     .addOnFailureListener(aVoid -> {

@@ -198,13 +198,7 @@ public final class UserRepository {
     // if result ok, delete from firebase & logout
     public Task<Void> deleteUserFromFirestore(Context context) {
         String uid = this.getCurrentUserUID();
-        return this.getUsersCollection().document(uid).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void unused) {
-                deleteUser(context);
-                signOut(context);
-            }
-        });
+        return this.getUsersCollection().document(uid).delete();
     }
 
 }
