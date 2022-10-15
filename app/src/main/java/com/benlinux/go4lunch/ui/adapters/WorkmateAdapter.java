@@ -17,17 +17,23 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.benlinux.go4lunch.R;
 import com.benlinux.go4lunch.activities.RestaurantDetailsActivity;
+import com.benlinux.go4lunch.data.userManager.UserManager;
 import com.benlinux.go4lunch.ui.models.Booking;
 import com.benlinux.go4lunch.ui.models.User;
 import com.bumptech.glide.Glide;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 public class WorkmateAdapter extends RecyclerView.Adapter<WorkmateAdapter.ViewHolder> {
 
     private List<User> mWorkmates;
     private final Context localContext;
+    Map<Integer,Object> deletedItems;
+
+    // FOR DATA
+    private final UserManager userManager = UserManager.getInstance();
 
     /**
      * Instantiates a new ListAdapter.
@@ -39,6 +45,7 @@ public class WorkmateAdapter extends RecyclerView.Adapter<WorkmateAdapter.ViewHo
     }
 
 
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder (ViewGroup parent, int viewType) {
@@ -47,19 +54,28 @@ public class WorkmateAdapter extends RecyclerView.Adapter<WorkmateAdapter.ViewHo
         return new WorkmateAdapter.ViewHolder(view);
     }
 
+
     @Override
     public void onBindViewHolder(final WorkmateAdapter.ViewHolder holder, int position) {
         // bind restaurant according to position in the list
         holder.bind(mWorkmates.get(position));
+
+        // If name is hidden (current user) remove viewHolder
+        if (holder.name.getVisibility() == View.GONE) {
+            holder.itemView.setLayoutParams(new RecyclerView.LayoutParams(0, 0));
+        }
+
 
         // Launch Restaurant Details according to the Restaurant Id
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(View restaurantItem) {
+                /** TODO : On workmate item click
                 Intent restaurantDetailsActivityIntent = new Intent(restaurantItem.getContext(), RestaurantDetailsActivity.class);
                 restaurantDetailsActivityIntent.putExtra("PLACE_ID", holder.id.getText());
                 restaurantItem.getContext().startActivity(restaurantDetailsActivityIntent);
+                 */
             }
         });
     }
@@ -68,6 +84,11 @@ public class WorkmateAdapter extends RecyclerView.Adapter<WorkmateAdapter.ViewHo
     public void initList(List<User> workmates) {
         this.mWorkmates = workmates;
         notifyDataSetChanged();
+    }
+
+
+    public User getItem(int i) {
+        return mWorkmates.get(i);
     }
 
 
@@ -82,17 +103,17 @@ public class WorkmateAdapter extends RecyclerView.Adapter<WorkmateAdapter.ViewHo
      */
     protected class ViewHolder extends RecyclerView.ViewHolder {
         /**
-         * The square picture of the restaurant
+         * The square picture of the workmate
          */
         private final ImageView avatar;
 
         /**
-         * The TextView displaying the id of the restaurant
+         * The TextView displaying the id of the workmate
          */
         private final TextView id;
 
         /**
-         * The TextView displaying the name of the restaurant
+         * The TextView displaying the name of the restaurant of the day
          */
         private final TextView name;
 
@@ -120,7 +141,7 @@ public class WorkmateAdapter extends RecyclerView.Adapter<WorkmateAdapter.ViewHo
             if (workmate.getRestaurantOfTheDay() != null) {
                 booking.append(workmate.getName()).append(" is eating to ").append(workmate.getRestaurantOfTheDay());
             } else {
-                booking.append(workmate.getName()).append(" didn't select a restaurant for the moment...");
+                booking.append(workmate.getName()).append(" didn't select a restaurant yet...");
             }
 
             // Set name & booking of the day
@@ -130,12 +151,18 @@ public class WorkmateAdapter extends RecyclerView.Adapter<WorkmateAdapter.ViewHo
             // Set avatar
             if (workmate.getAvatar() != null) {
                 Glide.with(avatar.getContext())
-                        .load(workmate.getAvatar())
-                        .centerCrop()
-                        .into(avatar);
+                    .load(workmate.getAvatar())
+                    .circleCrop()
+                    .into(avatar);
             } else {
                 String mAvatarColor = generateRandomColor();
                 avatar.setColorFilter(Color.parseColor(mAvatarColor));
+            }
+
+            // Hide current User Name & restaurant
+            String myId = userManager.getCurrentUser().getUid();
+            if (workmate.getId().equals(myId)) {
+                name.setVisibility(View.GONE);
             }
 
         }

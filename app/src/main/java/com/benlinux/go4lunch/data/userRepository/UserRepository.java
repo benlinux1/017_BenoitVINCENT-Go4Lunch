@@ -129,15 +129,14 @@ public final class UserRepository {
         }
     }
 
+
+    // Get all users from Firestore
     public Task<QuerySnapshot> getAllUsersData() {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference usersRef = db.collection(COLLECTION_NAME);
-        return usersRef.get();
+        return this.getUsersCollection().get();
     }
 
 
-
-    // Update User Username
+    // Update Username in FireStore
     public Task<Void> updateUsername(String username) {
         String uid = this.getCurrentUserUID();
         if(uid != null) {
@@ -147,7 +146,7 @@ public final class UserRepository {
         }
     }
 
-    // Update User Email
+    // Update User Email in FireStore
     public Task<Void> updateUserEmail(String email) {
         String uid = this.getCurrentUserUID();
         if(uid != null) {
@@ -157,7 +156,7 @@ public final class UserRepository {
         }
     }
 
-    // Update User Avatar
+    // Update User Avatar in FireStore
     public void updateUserAvatar(String avatarUrl) {
         String uid = this.getCurrentUserUID();
         if(uid != null) {
@@ -165,7 +164,7 @@ public final class UserRepository {
         }
     }
 
-    // Update User Restaurant of the Day
+    // Update User Restaurant of the Day in FireStore
     public Task<Void> updateUserRestaurantOfTheDay(String restaurantName) {
         String uid = this.getCurrentUserUID();
         if(uid != null) {
@@ -175,7 +174,7 @@ public final class UserRepository {
         }
     }
 
-    // Update User isNotified
+    // Update User isNotified in FireStore
     public void updateIsNotified(Boolean isNotified) {
         String uid = this.getCurrentUserUID();
         if(uid != null) {
@@ -183,7 +182,7 @@ public final class UserRepository {
         }
     }
 
-    // Add restaurant to favorites
+    // Add restaurant to favorites in FireStore
     public void addRestaurantToFavorites(String restaurantId) {
         String uid = this.getCurrentUserUID();
         if (uid != null) {
@@ -191,7 +190,7 @@ public final class UserRepository {
         }
     }
 
-    // Remove restaurant from favorites
+    // Remove restaurant from favorites in FireStore
     public Task<Void> removeRestaurantFromFavorites(String restaurantId) {
         String uid = this.getCurrentUserUID();
         if(uid != null) {
