@@ -4,27 +4,18 @@ import java.util.Date;
 
 public class Booking {
 
-    private String bookingId;
     private String restaurantId;
     private String restaurantName;
     // user who booked
     private String userId;
-    private Date bookingDate;
+    private String bookingDate;
 
 
-    public Booking(String bookingId, String restaurantId, String restaurantName, String userId, Date bookingDate) {
-        this.bookingId = bookingId;
+    public Booking(String restaurantId, String restaurantName, String userId, String bookingDate) {
         this.restaurantId = restaurantId;
         this.restaurantName = restaurantName;
         this.userId = userId;
         this.bookingDate = bookingDate;
-    }
-
-    public String getBookingId() {
-        return bookingId;
-    }
-    public void setBookingId(String bookingId) {
-        this.bookingId = bookingId;
     }
 
     public String getRestaurantId() {
@@ -48,10 +39,10 @@ public class Booking {
         this.userId = userId;
     }
 
-    public Date getBookingDate() {
+    public String getBookingDate() {
         return bookingDate;
     }
-    public void setBookingDate(Date bookingDate) {
+    public void setBookingDate(String bookingDate) {
         this.bookingDate = bookingDate;
     }
 

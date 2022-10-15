@@ -2,6 +2,9 @@ package com.benlinux.go4lunch.activities;
 
 import static android.content.ContentValues.TAG;
 
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -9,23 +12,31 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.TimePicker;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatCheckBox;
 
 import com.benlinux.go4lunch.BuildConfig;
 import com.benlinux.go4lunch.R;
+import com.benlinux.go4lunch.data.bookingManager.BookingManager;
 import com.benlinux.go4lunch.data.userManager.UserManager;
 import com.benlinux.go4lunch.databinding.ActivityRestaurantDetailsBinding;
 import com.benlinux.go4lunch.modules.FormatAddressModule;
+import com.benlinux.go4lunch.ui.models.Booking;
 import com.benlinux.go4lunch.ui.models.User;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Period;
@@ -34,10 +45,12 @@ import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.net.FetchPhotoRequest;
 import com.google.android.libraries.places.api.net.FetchPlaceRequest;
 import com.google.android.libraries.places.api.net.PlacesClient;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.maps.android.SphericalUtil;
 
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
@@ -63,8 +76,11 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
 
     private String restaurantId;
 
+    private FloatingActionButton bookingButton;
+
     // FOR DATA
     private final UserManager userManager = UserManager.getInstance();
+    private final BookingManager bookingManager = BookingManager.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,6 +123,7 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
         likeButton = binding.restaurantDetailsLikeButton;
         webSiteButton = binding.restaurantDetailsWebsiteButton;
         likeText = binding.restaurantDetailsLikeText;
+        bookingButton = binding.fabRestaurantDetailsBooking;
     }
 
     // Set listeners on buttons
@@ -127,6 +144,32 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
                 }
             }
         });
+        String userId = userManager.getCurrentUser().getUid();
+        bookingButton.setOnClickListener(new View.OnClickListener() {
+           Calendar date;
+           Calendar currentDate = Calendar.getInstance(Locale.FRANCE);
+
+            @Override
+            public void onClick(View v) {
+
+                date = Calendar.getInstance(Locale.FRANCE);
+
+                // Date Select Listener
+                new DatePickerDialog(RestaurantDetailsActivity.this, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker datePicker, int year, int monthOfYear, int dayOfMonth) {
+                        date.set(year, monthOfYear, dayOfMonth);
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+
+                        Booking booking = new Booking(restaurantId, restaurantName.getText().toString(), userId, dateFormat.format(date.getTime()));
+                        bookingManager.createBooking(booking);
+                        Toast.makeText(getApplicationContext(), "Booking created successfully", Toast.LENGTH_SHORT).show();
+                    }
+                }, currentDate.get(Calendar.YEAR), currentDate.get(Calendar.MONTH), currentDate.get(Calendar.DATE)).show();
+            }
+
+        });
+
     }
 
 
