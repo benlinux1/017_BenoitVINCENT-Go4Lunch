@@ -60,12 +60,6 @@ public class WorkmateAdapter extends RecyclerView.Adapter<WorkmateAdapter.ViewHo
         // bind restaurant according to position in the list
         holder.bind(mWorkmates.get(position));
 
-        // If name is hidden (current user) remove viewHolder
-        if (holder.name.getVisibility() == View.GONE) {
-            holder.itemView.setLayoutParams(new RecyclerView.LayoutParams(0, 0));
-        }
-
-
         // Launch Restaurant Details according to the Restaurant Id
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.N)
@@ -157,12 +151,6 @@ public class WorkmateAdapter extends RecyclerView.Adapter<WorkmateAdapter.ViewHo
             } else {
                 String mAvatarColor = generateRandomColor();
                 avatar.setColorFilter(Color.parseColor(mAvatarColor));
-            }
-
-            // Hide current User Name & restaurant
-            String myId = userManager.getCurrentUser().getUid();
-            if (workmate.getId().equals(myId)) {
-                name.setVisibility(View.GONE);
             }
 
         }

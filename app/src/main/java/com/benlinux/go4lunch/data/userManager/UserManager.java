@@ -55,12 +55,12 @@ public class UserManager {
     }
 
     public Task<List<User>> getAllUsersData() {
-        return Objects.requireNonNull(userRepository.getAllUsersData()).continueWith(task -> task.getResult().toObjects(User.class)) ;
+        return Objects.requireNonNull(userRepository.getAllUsersData()).continueWith(task -> task.getResult().toObjects(User.class));
     }
 
     public Task<User> getUserData(){
         // Get the user from Firestore and cast it to a User model Object
-        return Objects.requireNonNull(userRepository.getUserData()).continueWith(task -> task.getResult().toObject(User.class)) ;
+        return Objects.requireNonNull(userRepository.getUserData()).continueWith(task -> task.getResult().toObject(User.class));
     }
 
     public void updateUsername(String username){

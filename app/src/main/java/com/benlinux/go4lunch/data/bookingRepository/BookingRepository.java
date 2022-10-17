@@ -3,13 +3,17 @@ package com.benlinux.go4lunch.data.bookingRepository;
 import android.content.Context;
 import android.net.Uri;
 import android.util.Log;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.benlinux.go4lunch.R;
 import com.benlinux.go4lunch.data.userRepository.UserRepository;
 import com.benlinux.go4lunch.ui.models.Booking;
 import com.benlinux.go4lunch.ui.models.User;
 import com.firebase.ui.auth.AuthUI;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -26,6 +30,7 @@ import com.google.firebase.storage.UploadTask;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 public class BookingRepository {
@@ -36,6 +41,8 @@ public class BookingRepository {
     private static final String RESTAURANT_NAME_FIELD = "restaurantName";
     private static final String USER_ID_FIELD = "userId";
     private static final String DATE_FIELD = "bookingDate";
+
+    private Boolean bookingExists = false;
 
 
     private static volatile BookingRepository instance;

@@ -10,6 +10,8 @@ public class Booking {
     private String userId;
     private String bookingDate;
 
+    public Booking(){}
+
 
     public Booking(String restaurantId, String restaurantName, String userId, String bookingDate) {
         this.restaurantId = restaurantId;

@@ -76,6 +76,9 @@
     <string name="restaurant_location" translatable="false">Restaurant location</string>
     <string name="restaurant_address" translatable="false">12 rue du Faubourg Poissonnière</string>
     <string name="restaurant_postal_code_and_city" translatable="false">75000 PARIS</string>
+    <string name="booking_date_dialog_title">Select a booking date</string>
+    <string name="booking_success">Booking created successfully for the</string>
+    <string name="booking_error">You already booked for the</string>
 
 
     // SETTINGS ACTIVITY

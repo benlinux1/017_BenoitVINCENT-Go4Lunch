@@ -77,7 +77,14 @@ public class WorkmatesFragment extends Fragment {
             public void onComplete(@NonNull Task<List<User>> task) {
                 if (task.isSuccessful()) {
                     // if result OK, set workmates list & configure recycler view
-                    List<User> workmates = task.getResult();
+                    List<User> workmates = new ArrayList<>();
+                    String currentUserId = userManager.getCurrentUser().getUid();
+                    for (User user : task.getResult()) {
+                        // Add workmates except current user to list
+                        if (!Objects.equals(user.getId(), currentUserId)) {
+                            workmates.add(user);
+                        }
+                    }
                     if (workmates != null) {
                         setWorkmatesList(workmates);
                         configRecyclerView();

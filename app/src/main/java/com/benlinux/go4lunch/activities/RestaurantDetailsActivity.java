@@ -7,16 +7,21 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RatingBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -155,21 +160,67 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
                 date = Calendar.getInstance(Locale.FRANCE);
 
                 // Date Select Listener
-                new DatePickerDialog(RestaurantDetailsActivity.this, new DatePickerDialog.OnDateSetListener() {
+                DatePickerDialog datePickerDialog = new DatePickerDialog(RestaurantDetailsActivity.this, new DatePickerDialog.OnDateSetListener() {
+                    Boolean bookingExists = false;
                     @Override
                     public void onDateSet(DatePicker datePicker, int year, int monthOfYear, int dayOfMonth) {
                         date.set(year, monthOfYear, dayOfMonth);
+                        // Format calendar date
                         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+                        String formattedDate = dateFormat.format(date.getTime());
 
-                        Booking booking = new Booking(restaurantId, restaurantName.getText().toString(), userId, dateFormat.format(date.getTime()));
-                        bookingManager.createBooking(booking);
-                        Toast.makeText(getApplicationContext(), "Booking created successfully", Toast.LENGTH_SHORT).show();
+                        // Create booking object
+                        Booking booking = new Booking(restaurantId, restaurantName.getText().toString(), userId, formattedDate);
+
+                        // Check if booking exists in database
+                        bookingManager.getAllBookingsData().addOnCompleteListener(new OnCompleteListener<List<Booking>>() {
+                            @Override
+                            public void onComplete(@NonNull Task<List<Booking>> task) {
+                                for (Booking existingBooking : task.getResult()) {
+                                    // If booking already exists, boolean set to true
+                                    if (Objects.equals(existingBooking.getUserId(), userId) &&
+                                            Objects.equals(existingBooking.getBookingDate(), formattedDate) &&
+                                            Objects.equals(existingBooking.getRestaurantId(), restaurantId)) {
+                                        bookingExists = true;
+                                    }
+                                }
+                                // Booking already exists
+                                if (bookingExists) {
+                                    showSnackBar(getString(R.string.booking_error) + " " + formattedDate);
+                                } else {
+                                    // If not, create booking in database
+                                    bookingManager.createBooking(booking);
+                                    showSnackBar(getString(R.string.booking_success) + " " + formattedDate);
+                                }
+                            }
+                        });
                     }
-                }, currentDate.get(Calendar.YEAR), currentDate.get(Calendar.MONTH), currentDate.get(Calendar.DATE)).show();
-            }
+                }, currentDate.get(Calendar.YEAR), currentDate.get(Calendar.MONTH), currentDate.get(Calendar.DATE));
 
+                // Disable dates before today in date picker
+                datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis());
+
+                // Customize title view
+                TextView customTitle = new TextView(getApplicationContext());
+                customTitle.setText(R.string.booking_date_dialog_title);
+                customTitle.setTextColor(getResources().getColor(R.color.white));
+                customTitle.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+                customTitle.setGravity(Gravity.CENTER);
+                customTitle.setTextSize(TypedValue.COMPLEX_UNIT_DIP,16);
+                customTitle.setPadding(8, 16, 8, 16);
+                // Set custom title
+                datePickerDialog.setCustomTitle(customTitle);
+                // Show date dialog
+                datePickerDialog.show();
+            }
         });
 
+    }
+
+    // Show Snack Bar with a message
+    private void showSnackBar(String message){
+        View container = findViewById(R.id.restaurant_details_main_container);
+        Snackbar.make(container, message, Snackbar.LENGTH_SHORT).show();
     }
 
 
