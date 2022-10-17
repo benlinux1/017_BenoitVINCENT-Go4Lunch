@@ -2,6 +2,7 @@ package com.benlinux.go4lunch.activities;
 
 import static android.content.ContentValues.TAG;
 
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
@@ -102,6 +103,8 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
         setListeners();
         setLikeButton();
         setListenerOnLikeButton();
+        setBookingButtonListener();
+        checkIfUserBookedForToday();
     }
 
     // Retrieve Place Id from previous activity
@@ -114,6 +117,35 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
     private LatLng getUserLocationFromIntent() {
         Intent intent = getIntent();
         return intent.getParcelableExtra("USER_LOCATION");
+    }
+
+    // Set booking button drawable according to existing bookings
+    private void checkIfUserBookedForToday() {
+        bookingManager.getAllBookingsData().addOnCompleteListener(new OnCompleteListener<List<Booking>>() {
+            @Override
+            public void onComplete(@NonNull Task<List<Booking>> task) {
+                Calendar currentDate = Calendar.getInstance(Locale.FRANCE);
+                @SuppressLint("SimpleDateFormat") SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+                String formattedDate = dateFormat.format(currentDate.getTime());
+
+                String userId = userManager.getCurrentUser().getUid();
+                boolean userBookedToday = false;
+
+                for (Booking existingBooking : task.getResult()) {
+                    // If current user booked for today
+                    if (Objects.equals(existingBooking.getUserId(), userId) &&
+                            Objects.equals(existingBooking.getBookingDate(), formattedDate)) {
+                        userBookedToday = true;
+                        break;
+                    }
+                }
+                if (userBookedToday) {
+                    bookingButton.setImageResource(R.drawable.ic_check_circle);
+                } else {
+                    bookingButton.setImageResource(R.drawable.ic_edit_calendar);
+                }
+            }
+        });
     }
 
     // Define views
@@ -149,10 +181,14 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+
+    private void setBookingButtonListener() {
         String userId = userManager.getCurrentUser().getUid();
         bookingButton.setOnClickListener(new View.OnClickListener() {
-           Calendar date;
-           Calendar currentDate = Calendar.getInstance(Locale.FRANCE);
+            Calendar date;
+            final Calendar currentDate = Calendar.getInstance(Locale.FRANCE);
 
             @Override
             public void onClick(View v) {
@@ -166,8 +202,10 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
                     public void onDateSet(DatePicker datePicker, int year, int monthOfYear, int dayOfMonth) {
                         date.set(year, monthOfYear, dayOfMonth);
                         // Format calendar date
-                        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+                        @SuppressLint("SimpleDateFormat") SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
                         String formattedDate = dateFormat.format(date.getTime());
+
+                        String today = dateFormat.format(currentDate.getTime());
 
                         // Create booking object
                         Booking booking = new Booking(restaurantId, restaurantName.getText().toString(), userId, formattedDate);
@@ -182,6 +220,7 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
                                             Objects.equals(existingBooking.getBookingDate(), formattedDate) &&
                                             Objects.equals(existingBooking.getRestaurantId(), restaurantId)) {
                                         bookingExists = true;
+                                        break;
                                     }
                                 }
                                 // Booking already exists
@@ -191,6 +230,10 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
                                     // If not, create booking in database
                                     bookingManager.createBooking(booking);
                                     showSnackBar(getString(R.string.booking_success) + " " + formattedDate);
+                                    // Update booking button
+                                    if (formattedDate.equals(today)) {
+                                        bookingButton.setImageResource(R.drawable.ic_check_circle);
+                                    }
                                 }
                             }
                         });
@@ -214,7 +257,6 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
                 datePickerDialog.show();
             }
         });
-
     }
 
     // Show Snack Bar with a message
