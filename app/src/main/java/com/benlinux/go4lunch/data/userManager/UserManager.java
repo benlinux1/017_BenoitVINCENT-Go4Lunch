@@ -7,6 +7,7 @@ import com.benlinux.go4lunch.data.userRepository.UserRepository;
 import com.benlinux.go4lunch.ui.models.User;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.List;
 import java.util.Objects;
@@ -50,8 +51,8 @@ public class UserManager {
         return userRepository.deleteUser(context);
     }
 
-    public void createUser(){
-        userRepository.createUser();
+    public Task<DocumentSnapshot> createUser(){
+        return userRepository.createUser();
     }
 
     public Task<List<User>> getAllUsersData() {
@@ -79,8 +80,12 @@ public class UserManager {
         return userRepository.updateUserEmail(email);
     }
 
-    public Task<Void> updateUserRestaurantOfTheDay(String restaurantName){
-        return userRepository.updateUserRestaurantOfTheDay(restaurantName);
+    public void updateUserRestaurantOfTheDay(String userId, String restaurantName){
+        userRepository.updateUserRestaurantOfTheDay(userId, restaurantName);
+    }
+
+    public void updateUserRestaurantIdOfTheDay(String userId, String restaurantId){
+        userRepository.updateUserRestaurantIdOfTheDay(userId, restaurantId);
     }
 
     public void updateIsNotified(Boolean isNotified){

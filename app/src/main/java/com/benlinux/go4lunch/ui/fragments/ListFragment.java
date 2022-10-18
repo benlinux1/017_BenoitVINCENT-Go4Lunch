@@ -49,7 +49,7 @@ public class ListFragment extends Fragment {
         View view = binding.getRoot();
 
         // Get user position set on map in main fragment
-        setUserPosition(MainActivity.userLocation);
+        setUserPosition(MapFragment.actualLocation);
 
         mRecyclerView = binding.listRestaurants;
         mRestaurants = new ArrayList<>();
@@ -86,11 +86,10 @@ public class ListFragment extends Fragment {
                 "&key=" + apiKey +
                 "&rankBy=distance";
 
-        Object[] restaurantData = new Object[4];
+        Object[] restaurantData = new Object[3];
         restaurantData[0] = this.mRestaurants;
         restaurantData[1] = url;
         restaurantData[2] = this.adapter;
-        restaurantData[3] = this.actualLocation;
 
         FetchPlacesData fetchPlacesData = new FetchPlacesData(getContext(), "list");
         fetchPlacesData.execute(restaurantData);

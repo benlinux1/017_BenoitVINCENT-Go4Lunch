@@ -58,9 +58,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private FusedLocationProviderClient client;
     private static final int DEFAULT_ZOOM = 14;
     private boolean locationPermissionGranted;
-    public LatLng actualLocation;
+
     private Double actualLatitude;
     private Double actualLongitude;
+
+    public static LatLng actualLocation;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -221,11 +223,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 Intent restaurantDetailsIntent = new Intent(getContext(), RestaurantDetailsActivity.class);
                 // Retrieve place_id in tag
                 String placeId= String.valueOf(marker.getTag());
-                // Retrieve user location
-                LatLng userLocation = actualLocation;
+
                 // Send place_id & user location in order to get it in details activity
                 restaurantDetailsIntent.putExtra("PLACE_ID", placeId);
-                restaurantDetailsIntent.putExtra("USER_LOCATION", userLocation);
+                restaurantDetailsIntent.putExtra("USER_LOCATION", getUserLocation());
 
                 if (!placeId.equals("null")) {
                     startActivity(restaurantDetailsIntent);
@@ -279,6 +280,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
                             // save actual location to actualLocation variable
                             setUserPosition(new LatLng(location.getLatitude(), location.getLongitude()));
+                            MainActivity.setUserLocation(new LatLng(location.getLatitude(), location.getLongitude()));
                             // set markers
                             setMarkerForUserLocation(new LatLng(location.getLatitude(), location.getLongitude()),
                                     "actual");
@@ -303,6 +305,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                                     Location lastLocation = locationResult.getLastLocation();
                                     // save last location in actualLocation variable
                                     setUserPosition(new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude()));
+                                    MainActivity.setUserLocation(new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude()));
                                     // set markers
                                     setMarkerForUserLocation(new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude()),
                                             "last");
@@ -354,7 +357,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         // Build Place request with URL
         String apiKey = BuildConfig.PLACE_API_KEY;
 
-        String url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?" + "location=" + getUserLatitude() + "," + getUserLongitude() +
+        String url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?" + "location=" + actualLatitude + "," + actualLongitude +
                 "&radius=2000" +
                 "&type=restaurant" +
                 "&key=" + apiKey;
@@ -370,7 +373,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         actualLocation = location;
         actualLatitude = location.latitude;
         actualLongitude = location.longitude;
-        MainActivity.setUserLocation(location);
     }
 
     private Double getUserLatitude() {
@@ -388,13 +390,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         super.onResume();
         if (locationPermissionGranted && getUserLocation() == null) {
             getCurrentLocation();
+        } else if (locationPermissionGranted && actualLocation != null) {
+            mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(actualLatitude, actualLongitude), DEFAULT_ZOOM));
         }
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        binding = null;
     }
 
 

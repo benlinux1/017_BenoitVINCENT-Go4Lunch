@@ -4,32 +4,25 @@ import android.content.Context;
 import android.net.Uri;
 import android.util.Log;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.benlinux.go4lunch.ui.models.User;
 import com.firebase.ui.auth.AuthUI;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserInfo;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 
@@ -40,7 +33,8 @@ public final class UserRepository {
     private static final String USERNAME_FIELD = "name";
     private static final String EMAIL_FIELD = "email";
     private static final String AVATAR_FIELD = "avatar";
-    private static final String RESTAURANT_FIELD = "restaurantOfTheDay";
+    private static final String RESTAURANT_FIELD = "restaurantName";
+    private static final String BOOKINGID_FIELD = "restaurantId";
     private static final String NOTIFIED_FIELD = "notified";
     private static final String FAVORITES_FIELD = "favoriteRestaurants";
 
@@ -87,7 +81,7 @@ public final class UserRepository {
     }
 
     // Create User in Firestore
-    public void createUser() {
+    public Task<DocumentSnapshot> createUser() {
         FirebaseUser user = getCurrentUser();
         if(user != null){
 
@@ -103,11 +97,11 @@ public final class UserRepository {
 
             List<String> favorites = Collections.emptyList();
 
-            User userToCreate = new User(uid, username, email, urlPicture, "", true, favorites);
+            User userToCreate = new User(uid, username, email, urlPicture, "", "", true, favorites);
 
             Task<DocumentSnapshot> userData = getUserData();
             // Check if user exists in database
-            userData.addOnSuccessListener(documentSnapshot -> {
+            return userData.addOnSuccessListener(documentSnapshot -> {
                 // if user exists in database, continue
                 if (documentSnapshot.contains(uid)){
                     Log.d("USER CREATION INFO", "user already exists");
@@ -116,6 +110,8 @@ public final class UserRepository {
                     this.getUsersCollection().document(uid).set(userToCreate);
                 }
             });
+        } else {
+            return null;
         }
     }
 
@@ -132,7 +128,7 @@ public final class UserRepository {
 
     // Get all users from Firestore
     public Task<QuerySnapshot> getAllUsersData() {
-        return this.getUsersCollection().get();
+        return this.getUsersCollection().orderBy(RESTAURANT_FIELD, Query.Direction.DESCENDING).get();
     }
 
 
@@ -165,13 +161,15 @@ public final class UserRepository {
     }
 
     // Update User Restaurant of the Day in FireStore
-    public Task<Void> updateUserRestaurantOfTheDay(String restaurantName) {
-        String uid = this.getCurrentUserUID();
-        if(uid != null) {
-            return this.getUsersCollection().document(uid).update(RESTAURANT_FIELD, restaurantName);
-        } else {
-            return null;
-        }
+    public void updateUserRestaurantOfTheDay(String userId, String restaurantName) {
+        this.getUsersCollection().document(userId).update(RESTAURANT_FIELD, restaurantName);
+
+    }
+
+    // Update User Restaurant Id of the Day in FireStore
+    public void updateUserRestaurantIdOfTheDay(String userId, String restaurantId) {
+        this.getUsersCollection().document(userId).update(BOOKINGID_FIELD, restaurantId);
+
     }
 
     // Update User isNotified in FireStore

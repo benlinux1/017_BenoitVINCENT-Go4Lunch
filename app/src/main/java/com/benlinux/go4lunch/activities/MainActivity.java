@@ -26,6 +26,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -47,6 +48,7 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Objects;
 
@@ -244,16 +246,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            Task<User> getData = userManager.getUserData().addOnSuccessListener(user -> {
-                // Set user name
-                String username = TextUtils.isEmpty(user.getName()) ? getString(R.string.info_no_username_found) : user.getName();
-                userName.setText(username);
-                // Set user email
-                String email = TextUtils.isEmpty(user.getEmail()) ? getString(R.string.info_no_email_found) : user.getEmail();
-                userEmail.setText(email);
-                // Set avatar
-                setProfileAvatar(user.getAvatar());
-            });
+            Task<User> getData = userManager.getUserData().addOnCompleteListener(new OnCompleteListener<User>() {
+                 @Override
+                 public void onComplete(@NonNull Task<User> task) {
+                     User user = task.getResult();
+                     // Set user name
+                     String username = TextUtils.isEmpty(user.getName()) ? getString(R.string.info_no_username_found) : user.getName();
+                     userName.setText(username);
+                     // Set user email
+                     String email = TextUtils.isEmpty(user.getEmail()) ? getString(R.string.info_no_email_found) : user.getEmail();
+                     userEmail.setText(email);
+                     // Set avatar
+                     setProfileAvatar(user.getAvatar());
+                 }
+             });
+
             getData.addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
@@ -282,11 +289,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void logout() {
         // On success, close activity & go to login
         userManager.signOut(this).addOnSuccessListener(aVoid -> {
-            Toast.makeText(getApplicationContext(), getString(R.string.disconnection_succeed), Toast.LENGTH_SHORT).show();
             redirectUserIfNotLogged();
+            Toast.makeText(this, getString(R.string.disconnection_succeed), Toast.LENGTH_SHORT).show();
         })
         // On failure, show error toast
-        .addOnFailureListener(aVoid -> Toast.makeText(getApplicationContext(), getString(R.string.disconnection_failed), Toast.LENGTH_SHORT).show());
+        .addOnFailureListener(aVoid -> Toast.makeText(this, getString(R.string.disconnection_failed), Toast.LENGTH_SHORT).show());
     }
 
     // Close current activities & go to login if user is not logged
@@ -297,6 +304,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             ActivityCompat.startActivity(this, loginActivityIntent, null);
         }
     }
+
 
     /**
      * Used to navigate to Main activity

@@ -29,15 +29,17 @@
                 app:layout_constraintStart_toEndOf="@id/workmate_avatar"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginStart="@dimen/default_medium_margin"
-                android:ellipsize="end"
-                android:lines="1"
-                android:textStyle="bold"
-                android:textSize="@dimen/higher_text_size"
+                app:layout_constrainedWidth="true"
+                app:layout_constraintHorizontal_bias="0"
+                android:maxLines="1"
+                android:textColor="@color/black"
+                android:textSize="@dimen/default_text_size"
                 tools:text="@string/workmates_text_eating" />
 
             <TextView
-                android:id="@+id/workmate_id"
+                android:id="@+id/restaurant_id"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintStart_toEndOf="@id/workmate_name"

@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class Restaurant {
@@ -24,9 +25,9 @@ public class Restaurant {
     private String pictureUrl;
     private String hours;
     @Nullable
-    private ArrayList<Booking> bookings;
+    private List<Booking> bookings;
 
-    public Restaurant(String id, String name, String address, Double rating, String hours, String distance, LatLng latLng, ArrayList<Booking> bookings) {
+    public Restaurant(String id, String name, String address, Double rating, String hours, String distance, LatLng latLng, @Nullable List<Booking> bookings) {
         this.id = id;
         this.name = name;
         this.address = address;
@@ -109,11 +110,12 @@ public class Restaurant {
         this.hours = hours;
     }
 
-    public ArrayList<Booking> getBookings() {
+    @Nullable
+    public List<Booking> getBookings() {
         return bookings;
     }
 
-    public void setBookings(ArrayList<Booking> bookings) {
+    public void setBookings(List<Booking> bookings) {
         this.bookings = bookings;
     }
 

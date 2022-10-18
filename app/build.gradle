@@ -38,6 +38,7 @@ android {
         viewBinding true
         buildConfig = true
     }
+    namespace 'com.benlinux.go4lunch'
 }
 
 dependencies {

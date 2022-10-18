@@ -79,6 +79,7 @@
     <string name="booking_date_dialog_title">Select a booking date</string>
     <string name="booking_success">Booking created successfully for the</string>
     <string name="booking_error">You already booked for the</string>
+    <string name="nobody_booked_today">Nobody booked for today in this restaurant</string>
 
 
     // SETTINGS ACTIVITY
@@ -102,6 +103,13 @@
 
     // WORKMATES FRAGMENT
     <string name="workmates_text_eating">Scarlett is eating french (Le Zinc)</string>
+
+    // WORKMATES ADAPTER
+    <string name="no_restaurant">No restaurant found for this workmate</string>
+    <string name="website_button_description">website button</string>
+    <string name="phone_button_description">phone to restaurant</string>
+    <string name="restaurant_photo">photo of the restaurant</string>
+    <string name="booking_button_description">make booking in the restaurant</string>
 
 
 </resources>

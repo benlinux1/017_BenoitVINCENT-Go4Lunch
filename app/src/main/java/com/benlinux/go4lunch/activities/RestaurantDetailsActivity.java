@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
@@ -30,6 +31,9 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatCheckBox;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.benlinux.go4lunch.BuildConfig;
 import com.benlinux.go4lunch.R;
@@ -37,6 +41,8 @@ import com.benlinux.go4lunch.data.bookingManager.BookingManager;
 import com.benlinux.go4lunch.data.userManager.UserManager;
 import com.benlinux.go4lunch.databinding.ActivityRestaurantDetailsBinding;
 import com.benlinux.go4lunch.modules.FormatAddressModule;
+import com.benlinux.go4lunch.ui.adapters.GuestAdapter;
+import com.benlinux.go4lunch.ui.adapters.WorkmateAdapter;
 import com.benlinux.go4lunch.ui.models.Booking;
 import com.benlinux.go4lunch.ui.models.User;
 import com.bumptech.glide.Glide;
@@ -51,12 +57,14 @@ import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.net.FetchPhotoRequest;
 import com.google.android.libraries.places.api.net.FetchPlaceRequest;
 import com.google.android.libraries.places.api.net.PlacesClient;
+import com.google.android.material.divider.MaterialDividerItemDecoration;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.maps.android.SphericalUtil;
 
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
@@ -74,6 +82,7 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
     private TextView restaurantHours;
     private TextView restaurantDistance;
     private ImageView restaurantPicture;
+    private Toolbar mToolbar;
 
     private ImageButton phoneButton;
     private AppCompatCheckBox likeButton;
@@ -81,8 +90,12 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
     private ImageButton webSiteButton;
 
     private String restaurantId;
-
     private FloatingActionButton bookingButton;
+
+    private GuestAdapter adapter;
+    private RecyclerView mRecyclerView;
+    private List<String> mGuests;
+
 
     // FOR DATA
     private final UserManager userManager = UserManager.getInstance();
@@ -98,6 +111,7 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
         getUserLocationFromIntent();
         // Define the Place ID.
         restaurantId = getRestaurantIdFromIntent();
+        setToolbar();
         setViews();
         getRestaurantInfo();
         setListeners();
@@ -105,6 +119,26 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
         setListenerOnLikeButton();
         setBookingButtonListener();
         checkIfUserBookedForToday();
+    }
+
+    private void setToolbar() {
+        mToolbar = (Toolbar) findViewById(R.id.main_toolbar);
+        setSupportActionBar(mToolbar);
+        Objects.requireNonNull(getSupportActionBar()).setTitle("Restaurant Details");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    /**
+     * Close details page and turn back to main activity if back button is clicked
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            MainActivity.navigate(this);
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     // Retrieve Place Id from previous activity
@@ -126,7 +160,7 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<List<Booking>> task) {
                 Calendar currentDate = Calendar.getInstance(Locale.FRANCE);
                 @SuppressLint("SimpleDateFormat") SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-                String formattedDate = dateFormat.format(currentDate.getTime());
+                String today = dateFormat.format(currentDate.getTime());
 
                 String userId = userManager.getCurrentUser().getUid();
                 boolean userBookedToday = false;
@@ -134,7 +168,7 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
                 for (Booking existingBooking : task.getResult()) {
                     // If current user booked for today
                     if (Objects.equals(existingBooking.getUserId(), userId) &&
-                            Objects.equals(existingBooking.getBookingDate(), formattedDate)) {
+                            Objects.equals(existingBooking.getBookingDate(), today)) {
                         userBookedToday = true;
                         break;
                     }
@@ -144,8 +178,43 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
                 } else {
                     bookingButton.setImageResource(R.drawable.ic_edit_calendar);
                 }
+                for (Booking existingBooking : task.getResult()) {
+                    mGuests = new ArrayList<>();
+                    // If current user booked for today
+                    if (Objects.equals(existingBooking.getRestaurantId(), restaurantId) &&
+                            Objects.equals(existingBooking.getBookingDate(), today)) {
+                        mGuests.add(existingBooking.getUserId());
+                    }
+                }
+                setGuestsList(mGuests);
+                configRecyclerView();
             }
         });
+    }
+
+    private void setGuestsList(List<String> guests) {
+        this.mGuests = guests;
+    }
+
+    private List<String> getGuestsList() {
+        return this.mGuests;
+    }
+
+    /**
+     * Init the recyclerView that contains workmates who booked in this restaurant
+     */
+    private void configRecyclerView() {
+        adapter = new GuestAdapter(getGuestsList(), this);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        mRecyclerView.setAdapter(adapter);
+
+        // If workmates list is empty, show notification text instead of recyclerview
+        adapter.notifyItemRangeInserted(-1, mGuests.size());
+        if (mGuests.size() == 0) {
+            binding.textNoWorkmates.setText(getString(R.string.nobody_booked_today));
+        }
+
     }
 
     // Define views
@@ -161,6 +230,7 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
         webSiteButton = binding.restaurantDetailsWebsiteButton;
         likeText = binding.restaurantDetailsLikeText;
         bookingButton = binding.fabRestaurantDetailsBooking;
+        mRecyclerView = binding.workmatesDetails;
     }
 
     // Set listeners on buttons
@@ -184,10 +254,11 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
     }
 
 
+    // Set FAB button for booking feature, with date picker
     private void setBookingButtonListener() {
         String userId = userManager.getCurrentUser().getUid();
         bookingButton.setOnClickListener(new View.OnClickListener() {
-            Calendar date;
+            private Calendar date;
             final Calendar currentDate = Calendar.getInstance(Locale.FRANCE);
 
             @Override
@@ -195,16 +266,18 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
 
                 date = Calendar.getInstance(Locale.FRANCE);
 
-                // Date Select Listener
+                // Date Picker dialog
                 DatePickerDialog datePickerDialog = new DatePickerDialog(RestaurantDetailsActivity.this, new DatePickerDialog.OnDateSetListener() {
                     Boolean bookingExists = false;
                     @Override
                     public void onDateSet(DatePicker datePicker, int year, int monthOfYear, int dayOfMonth) {
                         date.set(year, monthOfYear, dayOfMonth);
+
                         // Format calendar date
                         @SuppressLint("SimpleDateFormat") SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
                         String formattedDate = dateFormat.format(date.getTime());
 
+                        // Define today formatted date
                         String today = dateFormat.format(currentDate.getTime());
 
                         // Create booking object
@@ -214,23 +287,24 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
                         bookingManager.getAllBookingsData().addOnCompleteListener(new OnCompleteListener<List<Booking>>() {
                             @Override
                             public void onComplete(@NonNull Task<List<Booking>> task) {
+                                String bookedRestaurant = "";
                                 for (Booking existingBooking : task.getResult()) {
                                     // If booking already exists, boolean set to true
                                     if (Objects.equals(existingBooking.getUserId(), userId) &&
-                                            Objects.equals(existingBooking.getBookingDate(), formattedDate) &&
-                                            Objects.equals(existingBooking.getRestaurantId(), restaurantId)) {
+                                            Objects.equals(existingBooking.getBookingDate(), formattedDate)) {
                                         bookingExists = true;
+                                        bookedRestaurant = existingBooking.getRestaurantName();
                                         break;
                                     }
                                 }
-                                // Booking already exists
+                                // If booking already exists, show toast to user
                                 if (bookingExists) {
-                                    showSnackBar(getString(R.string.booking_error) + " " + formattedDate);
+                                    showSnackBar(getString(R.string.booking_error) + " " + formattedDate + " at " + bookedRestaurant);
                                 } else {
                                     // If not, create booking in database
                                     bookingManager.createBooking(booking);
                                     showSnackBar(getString(R.string.booking_success) + " " + formattedDate);
-                                    // Update booking button
+                                    // Update booking button if booking for today
                                     if (formattedDate.equals(today)) {
                                         bookingButton.setImageResource(R.drawable.ic_check_circle);
                                     }
@@ -350,8 +424,8 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
 
         // Get distance between user & restaurant
         LatLng restaurantPosition = place.getLatLng();
-        LatLng userPosition = getUserLocationFromIntent();
-        String distance = calculateAndFormatDistance(userPosition, restaurantPosition);
+
+        String distance = calculateAndFormatDistance(MainActivity.userLocation, restaurantPosition);
 
         // Set restaurant distance from user
         restaurantDistance.setText(distance);

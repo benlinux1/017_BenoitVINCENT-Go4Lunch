@@ -6,7 +6,11 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.os.AsyncTask;
 
+import androidx.annotation.NonNull;
+
 import com.benlinux.go4lunch.R;
+import com.benlinux.go4lunch.activities.MainActivity;
+import com.benlinux.go4lunch.data.bookingManager.BookingManager;
 import com.benlinux.go4lunch.ui.adapters.ListAdapter;
 import com.benlinux.go4lunch.ui.models.Booking;
 import com.benlinux.go4lunch.ui.models.Restaurant;
@@ -14,6 +18,8 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.maps.android.SphericalUtil;
 
 import org.json.JSONArray;
@@ -21,7 +27,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -37,6 +46,9 @@ public class FetchPlacesData extends AsyncTask<Object, String, String> {
     private List<Restaurant> restaurantsList;
     private ListAdapter adapter;
     private LatLng userLocation;
+    private List<Booking> bookingsOfToday;
+
+    int restaurantMarker;
 
 
     public FetchPlacesData(Context context, String data) {
@@ -57,8 +69,6 @@ public class FetchPlacesData extends AsyncTask<Object, String, String> {
             // If request come from map fragment, set elements on google map
             if (dataType.equals("map") ) {
 
-                int restaurantMarker;
-
                 // Loop to get restaurants details from each result of the Place request
                 for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject restaurantInfo = jsonArray.getJSONObject(i);
@@ -73,24 +83,36 @@ public class FetchPlacesData extends AsyncTask<Object, String, String> {
                     JSONObject getInfo = jsonArray.getJSONObject(i);
                     String name = getInfo.getString("name");
 
-                    // Define restaurant marker icon
-                    restaurantMarker = R.drawable.ic_marker_48;
-
                     // Define restaurant LatLng for marker
                     LatLng latLng = new LatLng(Double.parseDouble(lat), Double.parseDouble(lng));
 
                     // Get place id (used to retrieve place info in details activity)
                     String placeId = getInfo.getString("place_id");
 
-                    // Define marker options (restaurant's name, address, position, icon)
-                    MarkerOptions markerOptions = new MarkerOptions()
-                            .title(name)
-                            .position(latLng)
-                            .icon(BitmapDescriptorFactory.fromResource(restaurantMarker));
+                    // Set marker color according to booked restaurants of day
+                    getBookingsOfToday().addOnCompleteListener(new OnCompleteListener<List<Booking>>() {
+                        @Override
+                        public void onComplete(@NonNull Task<List<Booking>> task) {
+                            for (Booking booking : task.getResult()) {
+                                if (booking.getRestaurantId().equals(placeId)) {
+                                    restaurantMarker = R.drawable.ic_marker_green;
+                                    break;
+                                } else {
+                                    restaurantMarker = R.drawable.ic_marker_48;
+                                }
+                            }
 
-                    // Set place id in tag (used to retrieve place info in details activity)
-                    Objects.requireNonNull(googleMap.addMarker(markerOptions)).setTag(placeId);
-                    // googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
+                            // Define marker options (restaurant's name, address, position, icon)
+                            MarkerOptions markerOptions = new MarkerOptions()
+                                    .title(name)
+                                    .position(latLng)
+                                    .icon(BitmapDescriptorFactory.fromResource(restaurantMarker));
+
+                            // Set place id in tag (used to retrieve place info in details activity)
+                            Objects.requireNonNull(googleMap.addMarker(markerOptions)).setTag(placeId);
+                            // googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
+                        }
+                    });
                 }
 
             // else, request come from list fragment, so set elements into recyclerview adapter
@@ -112,6 +134,8 @@ public class FetchPlacesData extends AsyncTask<Object, String, String> {
                         String lat = getLocation.getString("lat");
                         String lng = getLocation.getString("lng");
 
+                        userLocation = MainActivity.userLocation;
+
                         // Define restaurant's LatLng
                         LatLng restaurantLocation = new LatLng(Double.parseDouble(lat), Double.parseDouble(lng));
 
@@ -121,8 +145,22 @@ public class FetchPlacesData extends AsyncTask<Object, String, String> {
                         // Formatted distance
                         String distance = calculateAndFormatDistance(userLocation, restaurantLocation);
 
+                        final List<Booking> numberOfBookings = new ArrayList<>();
+
+                        // Set number of bookings according to bookings of day
+                        getBookingsOfToday().addOnCompleteListener(new OnCompleteListener<List<Booking>>() {
+                           @Override
+                           public void onComplete(@NonNull Task<List<Booking>> task) {
+                               for (Booking booking : task.getResult()) {
+                                   if (booking.getRestaurantId().equals(placeId)) {
+                                       numberOfBookings.add(booking);
+                                   }
+                               }
+                           }
+                       });
+
                         // Create new restaurant for each result of Nearby Places API
-                        Restaurant restaurant = new Restaurant(placeId, name, formattedAddress, rating, null, distance, restaurantLocation, new ArrayList<Booking>());
+                        Restaurant restaurant = new Restaurant(placeId, name, formattedAddress, rating, null, distance, restaurantLocation, numberOfBookings);
 
                         // Add each restaurant in the list
                         restaurantsList.add(restaurant);
@@ -165,8 +203,6 @@ public class FetchPlacesData extends AsyncTask<Object, String, String> {
                 restaurantsList = (List<Restaurant>) objects[0];
                 url = (String) objects[1];
                 adapter = (ListAdapter) objects[2];
-                // get user location from request parameters to calculate distance
-                userLocation = (LatLng) objects[3];
                 PlaceDownloadUrl downloadUrl = new PlaceDownloadUrl();
                 googleNearByPlacesData = downloadUrl.downloadUrl(url);
 
@@ -208,6 +244,25 @@ public class FetchPlacesData extends AsyncTask<Object, String, String> {
     private String calculateAndFormatDistance(LatLng startPoint, LatLng endPoint) {
         double distance = SphericalUtil.computeDistanceBetween(startPoint, endPoint);
         return String.format("%d m", Math.round(distance));
+    }
+
+    private Task<List<Booking>> getBookingsOfToday() {
+        final BookingManager bookingManager = BookingManager.getInstance();
+        return bookingManager.getAllBookingsData().addOnCompleteListener(new OnCompleteListener<List<Booking>>() {
+            @Override
+            public void onComplete(@NonNull Task<List<Booking>> bookingTask) {
+                bookingsOfToday = new ArrayList<>();
+                final Calendar currentDate = Calendar.getInstance(Locale.FRANCE);
+                // Define today formatted date
+                @SuppressLint("SimpleDateFormat") SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+                String today = dateFormat.format(currentDate.getTime());
+                for (Booking booking : bookingTask.getResult()) {
+                    if (booking.getBookingDate().equals(today)) {
+                        bookingsOfToday.add(booking);
+                    }
+                }
+            }
+        });
     }
 
 }

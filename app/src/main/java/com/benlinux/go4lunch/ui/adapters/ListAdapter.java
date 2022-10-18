@@ -201,17 +201,27 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
             // Get and set formatted opening hours and picture into respective views
             getAndSetOpeningHoursAndPicture(restaurant.getId(), hours, picture);
 
-            // TODO : Get and set number of users who booked in the restaurant
-
+            // Get and set number of users who booked in the restaurant
+            if (restaurant.getBookings().size() == 0 || restaurant.getBookings() == null) {
+                userPicture.setVisibility(View.GONE);
+                numberOfBookings.setVisibility(View.GONE);
+            } else {
+                String bookingsNumber = String.valueOf(restaurant.getBookings().size());
+                StringBuilder sb = new StringBuilder();
+                sb.append("(").append(bookingsNumber).append(")");
+                numberOfBookings.setText(sb.toString());
+                userPicture.setVisibility(View.VISIBLE);
+                numberOfBookings.setVisibility(View.VISIBLE);
+            }
         }
     }
 
     // Format number of rating stars (between 0.5 and 3) as asked from client
     private Double formatRating(Double rating) {
         Double formattedRating = null;
-        if (rating > 0 && rating <= 0.8) {
+        if (rating >= 0 && rating <= 0.8) {
             formattedRating = 0.5;
-        } else if (rating > 0.7 && rating <= 1.6) {
+        } else if (rating > 0.8 && rating <= 1.6) {
             formattedRating = 1.0;
         } else if (rating > 1.6 && rating <= 2.5) {
             formattedRating = 1.5;
