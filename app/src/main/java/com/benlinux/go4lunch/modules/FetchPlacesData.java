@@ -252,10 +252,10 @@ public class FetchPlacesData extends AsyncTask<Object, String, String> {
             @Override
             public void onComplete(@NonNull Task<List<Booking>> bookingTask) {
                 bookingsOfToday = new ArrayList<>();
-                final Calendar currentDate = Calendar.getInstance(Locale.FRANCE);
+                long currentDate = System.currentTimeMillis();
                 // Define today formatted date
                 @SuppressLint("SimpleDateFormat") SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-                String today = dateFormat.format(currentDate.getTime());
+                String today = dateFormat.format(currentDate);
                 for (Booking booking : bookingTask.getResult()) {
                     if (booking.getBookingDate().equals(today)) {
                         bookingsOfToday.add(booking);

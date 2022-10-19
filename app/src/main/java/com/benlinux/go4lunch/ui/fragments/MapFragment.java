@@ -105,8 +105,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             if (getUserLocation() == null) {
                 getCurrentLocation();
             } else {
-                setCamera(googleMap);
-                findRestaurants();
+                if (getUserLocation() != MainActivity.userLocation) {
+                    setMarkerForUserLocation(getUserLocation(), "search");
+                } else {
+                    setMarkerForUserLocation(getUserLocation(), "actual");
+                }
+                moveCamera(mGoogleMap, getUserLocation());
+                findRestaurants(getUserLocation());
             }
         }
 
@@ -126,6 +131,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     }
 
     private void setListenerOnMapClick(GoogleMap googleMap) {
+        mGoogleMap = googleMap;
         // Set listener for clicks on Map
         googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
@@ -135,18 +141,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 googleMap.clear();
                 // save new location
                 setUserPosition(new LatLng(latLng.latitude, latLng.longitude));
-                // Initialize marker options
-                MarkerOptions markerOptions = new MarkerOptions();
-                // Set title of marker
-                markerOptions.title("Search location");
-                // Set position of marker
-                markerOptions.position(latLng);
                 // Animating to zoom the marker
-                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,DEFAULT_ZOOM));
+                animateCamera(googleMap, latLng);
                 // Add marker on map
-                googleMap.addMarker(markerOptions);
+                setMarkerForUserLocation(latLng, "search");
                 // Actualize restaurants on map
-                findRestaurants();
+                findRestaurants(latLng);
             }
         });
     }
@@ -162,7 +162,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 setUserPosition(userPosition);
                 setMarkerForUserLocation(userPosition, "actual");
                 googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(actualLatitude, actualLongitude), DEFAULT_ZOOM));
-                findRestaurants();
+                findRestaurants(userPosition);
             }
         });
     }
@@ -285,8 +285,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                             setMarkerForUserLocation(new LatLng(location.getLatitude(), location.getLongitude()),
                                     "actual");
 
-                            setCamera(mGoogleMap);
-                            findRestaurants();
+                            moveCamera(mGoogleMap, getUserLocation());
+                            findRestaurants(getUserLocation());
 
                         } else {
 
@@ -310,8 +310,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                                     setMarkerForUserLocation(new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude()),
                                             "last");
 
-                                    setCamera(mGoogleMap);
-                                    findRestaurants();
+                                    moveCamera(mGoogleMap, getUserLocation());
+                                    findRestaurants(getUserLocation());
                                 }
                             };
                             // Request location updates
@@ -343,21 +343,28 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                     googleMap.addMarker(new MarkerOptions().position(userLocation).title("Actual location"));
                 } else if (locationType.equals("last")) {
                     googleMap.addMarker(new MarkerOptions().position(userLocation).title("Last known location"));
+                } else if (locationType.equals("search")) {
+                    googleMap.addMarker(new MarkerOptions().position(userLocation).title("Search location"));
                 }
             }
         });
     }
 
-    private void setCamera(GoogleMap googleMap) {
+    private void moveCamera(GoogleMap googleMap, LatLng userLocation) {
         mGoogleMap = googleMap;
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(getUserLatitude(), getUserLongitude()), DEFAULT_ZOOM));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(userLocation.latitude, userLocation.longitude), DEFAULT_ZOOM));
     }
 
-    public void findRestaurants() {
+    private void animateCamera(GoogleMap googleMap, LatLng userLocation) {
+        mGoogleMap = googleMap;
+        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(userLocation.latitude, userLocation.longitude), DEFAULT_ZOOM));
+    }
+
+    public void findRestaurants(LatLng userLocation) {
         // Build Place request with URL
         String apiKey = BuildConfig.PLACE_API_KEY;
 
-        String url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?" + "location=" + actualLatitude + "," + actualLongitude +
+        String url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?" + "location=" + userLocation.latitude + "," + userLocation.longitude +
                 "&radius=2000" +
                 "&type=restaurant" +
                 "&key=" + apiKey;
@@ -371,27 +378,32 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     public void setUserPosition(LatLng location) {
         actualLocation = location;
-        actualLatitude = location.latitude;
-        actualLongitude = location.longitude;
+        this.actualLatitude = location.latitude;
+        this.actualLongitude = location.longitude;
     }
 
-    private Double getUserLatitude() {
-        return MainActivity.userLocation.latitude;
-    }
-    private Double getUserLongitude() {
-        return MainActivity.userLocation.longitude;
-    }
     private LatLng getUserLocation() {
-        return MainActivity.userLocation;
+        return actualLocation;
     }
+
 
     @Override
     public void onResume() {
         super.onResume();
+        // Get current location if not set yet
         if (locationPermissionGranted && getUserLocation() == null) {
             getCurrentLocation();
+        // Set markers according to last know search or last known location
         } else if (locationPermissionGranted && actualLocation != null) {
-            mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(actualLatitude, actualLongitude), DEFAULT_ZOOM));
+            moveCamera(mGoogleMap, getUserLocation());
+            // If user made a search, set search location marker
+            if (getUserLocation() != MainActivity.userLocation) {
+                setMarkerForUserLocation(getUserLocation(), "search");
+            // else set marker with actual location
+            } else {
+                setMarkerForUserLocation(getUserLocation(), "actual");
+            }
+            findRestaurants(getUserLocation());
         }
     }
 

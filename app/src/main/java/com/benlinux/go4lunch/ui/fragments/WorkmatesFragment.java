@@ -99,7 +99,7 @@ public class WorkmatesFragment extends Fragment {
         });
     }
 
-
+    // Check bookings of today & update users restaurants of day for each of them
     private Task<List<User>> setBookingsOfTodayInUserDatabase() {
         return userManager.getAllUsersData().addOnCompleteListener(new OnCompleteListener<List<User>>() {
             @Override
@@ -110,6 +110,9 @@ public class WorkmatesFragment extends Fragment {
                         if (bookingOfDay.getUserId().equals(user.getId())) {
                             userManager.updateUserRestaurantOfTheDay(user.getId(), bookingOfDay.getRestaurantName());
                             userManager.updateUserRestaurantIdOfTheDay(user.getId(), bookingOfDay.getRestaurantId());
+                        } else {
+                            userManager.updateUserRestaurantOfTheDay(user.getId(), "");
+                            userManager.updateUserRestaurantIdOfTheDay(user.getId(), "");
                         }
                     }
                 }
