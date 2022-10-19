@@ -161,20 +161,14 @@ public class WorkmateAdapter extends RecyclerView.Adapter<WorkmateAdapter.ViewHo
                     .circleCrop()
                     .into(avatar);
             } else {
-                String mAvatarColor = generateRandomColor();
-                avatar.setColorFilter(Color.parseColor(mAvatarColor));
+                Glide.with(avatar.getContext())
+                    .load(R.mipmap.no_photo)
+                    .circleCrop()
+                    .into(avatar);
             }
 
         }
 
-        public String generateRandomColor() {
-            // create object of Random class
-            Random obj = new Random();
-            int rand_num = obj.nextInt(0xffffff + 1);
-            // format it as hexadecimal string and print
-            String colorCode = String.format("#%06x", rand_num);
-            return colorCode;
-        }
     }
 
 }

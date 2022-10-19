@@ -1,5 +1,7 @@
 package com.benlinux.go4lunch.data.bookingManager;
 
+import android.content.Context;
+
 import com.benlinux.go4lunch.data.bookingRepository.BookingRepository;
 import com.benlinux.go4lunch.data.userRepository.UserRepository;
 import com.benlinux.go4lunch.ui.models.Booking;
@@ -38,6 +40,10 @@ public class BookingManager {
 
     public Task<List<Booking>> getAllBookingsData() {
         return Objects.requireNonNull(bookingRepository.getAllBookingsData()).continueWith(task -> task.getResult().toObjects(Booking.class)) ;
+    }
+
+    public Task<Void> deleteBooking(Context context, Booking booking){
+        return bookingRepository.deleteBooking(context, booking);
     }
 
 

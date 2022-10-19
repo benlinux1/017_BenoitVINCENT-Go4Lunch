@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_setting_layout"
@@ -28,7 +29,8 @@
         app:layout_constraintTop_toBottomOf="@id/layout_toolbar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        tools:srcCompat="@tools:sample/avatars" />
+        tools:srcCompat="@tools:sample/avatars"
+        android:contentDescription="@string/user_avatar_description" />
 
     <ImageView
         android:id="@+id/settings_user_avatar_update"
@@ -36,7 +38,8 @@
         android:layout_height="36dp"
         android:src="@drawable/ic_add_photo"
         app:layout_constraintBottom_toBottomOf="@id/settings_user_avatar"
-        app:layout_constraintEnd_toEndOf="@id/settings_user_avatar" />
+        app:layout_constraintEnd_toEndOf="@id/settings_user_avatar"
+        android:contentDescription="@string/user_avatar_update" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/settings_user_name_input"
@@ -45,7 +48,7 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/small_margin"
         android:layout_marginTop="@dimen/default_large_margin"
-        app:layout_constraintTop_toBottomOf="@id/settings_user_avatar"
+        app:layout_constraintTop_toBottomOf="@+id/settings_user_avatar"
         android:hint="@string/settings_user_name_title">
 
         <EditText
@@ -140,7 +143,7 @@
         app:iconTint="@color/white"
         app:icon="@drawable/ic_delete_account"
         android:layout_marginTop="@dimen/small_margin"
-        app:layout_constraintTop_toBottomOf="@id/settings_update_button"
+        app:layout_constraintTop_toBottomOf="@+id/settings_update_button"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 

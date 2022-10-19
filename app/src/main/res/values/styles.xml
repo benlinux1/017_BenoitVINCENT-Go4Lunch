@@ -41,7 +41,7 @@
 
 
     <!-- STYLE RATING BAR -->
-    <style name="RatingBar" parent="@style/Widget.AppCompat.RatingBar.Small">
+    <style name="RatingBar" parent="Theme.MyApplication">
         <item name="colorControlNormal">@color/grey</item>
         <item name="color">@color/grey</item>
         <item name="colorControlActivated">@color/gold</item>
@@ -60,6 +60,12 @@
     <style name="LikeButtonStyle" parent="Theme.MyApplication">
         <item name="colorControlNormal">@color/colorPrimary</item>
         <item name="colorControlActivated">@color/gold</item>
+    </style>
+
+
+    <style name="SwitchStyle" parent="Theme.MyApplication">
+        !-- Text cursor color when search view is active -->
+        <item name="colorControlActivated">@color/colorGreenSwitch</item>
     </style>
 
 </resources>

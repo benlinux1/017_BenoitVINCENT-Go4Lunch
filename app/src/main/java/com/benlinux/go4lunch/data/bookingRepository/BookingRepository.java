@@ -71,12 +71,14 @@ public class BookingRepository {
     // Create User in Firestore
     public void createBooking(Booking booking) {
 
+        long bookingId = booking.getBookingId();
         String restaurantId = booking.getRestaurantId();
         String restaurantName = booking.getRestaurantName();
         String userId = booking.getUserId();
         String date = booking.getBookingDate();
 
-        Booking bookingToCreate = new Booking(restaurantId, restaurantName, userId, date);
+
+        Booking bookingToCreate = new Booking(bookingId, restaurantId, restaurantName, userId, date);
 
         Task<QuerySnapshot> bookingsData = getAllBookingsData();
         // TODO : Check if booking exists in database
@@ -96,6 +98,14 @@ public class BookingRepository {
     // Get all users from Firestore
     public Task<QuerySnapshot> getAllBookingsData() {
         return this.getBookingsCollection().get();
+    }
+
+
+    // Delete the User from Firestore
+    // if result ok, delete from firebase & logout
+    public Task<Void> deleteBooking(Context context, Booking booking) {
+        String uid = Long.toString(booking.getBookingId());
+        return this.getBookingsCollection().document(uid).delete();
     }
 
 }

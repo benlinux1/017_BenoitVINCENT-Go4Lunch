@@ -82,7 +82,6 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
     private TextView restaurantHours;
     private TextView restaurantDistance;
     private ImageView restaurantPicture;
-    private Toolbar mToolbar;
 
     private ImageButton phoneButton;
     private AppCompatCheckBox likeButton;
@@ -92,10 +91,8 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
     private String restaurantId;
     private FloatingActionButton bookingButton;
 
-    private GuestAdapter adapter;
     private RecyclerView mRecyclerView;
     private List<String> mGuests;
-
 
     // FOR DATA
     private final UserManager userManager = UserManager.getInstance();
@@ -108,8 +105,6 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
         View view = binding.getRoot();
 
         setContentView(view);
-        getUserLocationFromIntent();
-        // Define the Place ID.
         restaurantId = getRestaurantIdFromIntent();
         setToolbar();
         setViews();
@@ -122,7 +117,7 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
     }
 
     private void setToolbar() {
-        mToolbar = (Toolbar) findViewById(R.id.main_toolbar);
+        Toolbar mToolbar = (Toolbar) findViewById(R.id.main_toolbar);
         setSupportActionBar(mToolbar);
         Objects.requireNonNull(getSupportActionBar()).setTitle("Restaurant Details");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -147,12 +142,6 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
         return intent.getStringExtra("PLACE_ID");
     }
 
-    // Retrieve User location from previous activity
-    private LatLng getUserLocationFromIntent() {
-        Intent intent = getIntent();
-        return intent.getParcelableExtra("USER_LOCATION");
-    }
-
     // Set booking button drawable according to existing bookings
     private void checkIfUserBookedForToday() {
         bookingManager.getAllBookingsData().addOnCompleteListener(new OnCompleteListener<List<Booking>>() {
@@ -161,9 +150,9 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
                 Calendar currentDate = Calendar.getInstance(Locale.FRANCE);
                 @SuppressLint("SimpleDateFormat") SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
                 String today = dateFormat.format(currentDate.getTime());
-
                 String userId = userManager.getCurrentUser().getUid();
                 boolean userBookedToday = false;
+                mGuests = new ArrayList<>();
 
                 for (Booking existingBooking : task.getResult()) {
                     // If current user booked for today
@@ -179,8 +168,7 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
                     bookingButton.setImageResource(R.drawable.ic_edit_calendar);
                 }
                 for (Booking existingBooking : task.getResult()) {
-                    mGuests = new ArrayList<>();
-                    // If current user booked for today
+                    // Add guests to list for this restaurant at date of today
                     if (Objects.equals(existingBooking.getRestaurantId(), restaurantId) &&
                             Objects.equals(existingBooking.getBookingDate(), today)) {
                         mGuests.add(existingBooking.getUserId());
@@ -204,17 +192,21 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
      * Init the recyclerView that contains workmates who booked in this restaurant
      */
     private void configRecyclerView() {
-        adapter = new GuestAdapter(getGuestsList(), this);
+        GuestAdapter adapter = new GuestAdapter(getGuestsList(), this);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-
         mRecyclerView.setAdapter(adapter);
-
-        // If workmates list is empty, show notification text instead of recyclerview
         adapter.notifyItemRangeInserted(-1, mGuests.size());
+
+        // If current user is alone to eat in this restaurant
+        String userId = userManager.getCurrentUser().getUid();
+        if (mGuests.contains(userId) && mGuests.size() == 1) {
+            binding.textNoWorkmates.setText(getString(R.string.nobody_booked_today_except_you));
+            mRecyclerView.setVisibility(View.GONE);
+        }
+        // If workmates list is empty, show notification text instead of recyclerview
         if (mGuests.size() == 0) {
             binding.textNoWorkmates.setText(getString(R.string.nobody_booked_today));
         }
-
     }
 
     // Define views
@@ -256,79 +248,10 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
 
     // Set FAB button for booking feature, with date picker
     private void setBookingButtonListener() {
-        String userId = userManager.getCurrentUser().getUid();
         bookingButton.setOnClickListener(new View.OnClickListener() {
-            private Calendar date;
-            final Calendar currentDate = Calendar.getInstance(Locale.FRANCE);
-
             @Override
             public void onClick(View v) {
-
-                date = Calendar.getInstance(Locale.FRANCE);
-
-                // Date Picker dialog
-                DatePickerDialog datePickerDialog = new DatePickerDialog(RestaurantDetailsActivity.this, new DatePickerDialog.OnDateSetListener() {
-                    Boolean bookingExists = false;
-                    @Override
-                    public void onDateSet(DatePicker datePicker, int year, int monthOfYear, int dayOfMonth) {
-                        date.set(year, monthOfYear, dayOfMonth);
-
-                        // Format calendar date
-                        @SuppressLint("SimpleDateFormat") SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-                        String formattedDate = dateFormat.format(date.getTime());
-
-                        // Define today formatted date
-                        String today = dateFormat.format(currentDate.getTime());
-
-                        // Create booking object
-                        Booking booking = new Booking(restaurantId, restaurantName.getText().toString(), userId, formattedDate);
-
-                        // Check if booking exists in database
-                        bookingManager.getAllBookingsData().addOnCompleteListener(new OnCompleteListener<List<Booking>>() {
-                            @Override
-                            public void onComplete(@NonNull Task<List<Booking>> task) {
-                                String bookedRestaurant = "";
-                                for (Booking existingBooking : task.getResult()) {
-                                    // If booking already exists, boolean set to true
-                                    if (Objects.equals(existingBooking.getUserId(), userId) &&
-                                            Objects.equals(existingBooking.getBookingDate(), formattedDate)) {
-                                        bookingExists = true;
-                                        bookedRestaurant = existingBooking.getRestaurantName();
-                                        break;
-                                    }
-                                }
-                                // If booking already exists, show toast to user
-                                if (bookingExists) {
-                                    showSnackBar(getString(R.string.booking_error) + " " + formattedDate + " at " + bookedRestaurant);
-                                } else {
-                                    // If not, create booking in database
-                                    bookingManager.createBooking(booking);
-                                    showSnackBar(getString(R.string.booking_success) + " " + formattedDate);
-                                    // Update booking button if booking for today
-                                    if (formattedDate.equals(today)) {
-                                        bookingButton.setImageResource(R.drawable.ic_check_circle);
-                                    }
-                                }
-                            }
-                        });
-                    }
-                }, currentDate.get(Calendar.YEAR), currentDate.get(Calendar.MONTH), currentDate.get(Calendar.DATE));
-
-                // Disable dates before today in date picker
-                datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis());
-
-                // Customize title view
-                TextView customTitle = new TextView(getApplicationContext());
-                customTitle.setText(R.string.booking_date_dialog_title);
-                customTitle.setTextColor(getResources().getColor(R.color.white));
-                customTitle.setBackgroundColor(getResources().getColor(R.color.colorAccent));
-                customTitle.setGravity(Gravity.CENTER);
-                customTitle.setTextSize(TypedValue.COMPLEX_UNIT_DIP,16);
-                customTitle.setPadding(8, 16, 8, 16);
-                // Set custom title
-                datePickerDialog.setCustomTitle(customTitle);
-                // Show date dialog
-                datePickerDialog.show();
+                launchDateDialog();
             }
         });
     }
@@ -337,6 +260,80 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
     private void showSnackBar(String message){
         View container = findViewById(R.id.restaurant_details_main_container);
         Snackbar.make(container, message, Snackbar.LENGTH_SHORT).show();
+    }
+
+    private void launchDateDialog() {
+        final Calendar currentDate = Calendar.getInstance(Locale.FRANCE);
+        String userId = userManager.getCurrentUser().getUid();
+
+        // Date Picker dialog
+        DatePickerDialog datePickerDialog = new DatePickerDialog(RestaurantDetailsActivity.this, new DatePickerDialog.OnDateSetListener() {
+            private Boolean bookingExists = false;
+            private final Calendar date = Calendar.getInstance(Locale.FRANCE);
+
+            @Override
+            public void onDateSet(DatePicker datePicker, int year, int monthOfYear, int dayOfMonth) {
+                date.set(year, monthOfYear, dayOfMonth);
+
+                // Format calendar date
+                @SuppressLint("SimpleDateFormat") SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+                String formattedDate = dateFormat.format(date.getTime());
+
+                // Define today formatted date
+                String today = dateFormat.format(currentDate.getTime());
+
+                // Define booking id
+                long bookingId = System.currentTimeMillis();
+
+                // Create booking object
+                Booking booking = new Booking(bookingId, restaurantId, restaurantName.getText().toString(), userId, formattedDate);
+
+                // Check if booking exists in database
+                bookingManager.getAllBookingsData().addOnCompleteListener(new OnCompleteListener<List<Booking>>() {
+                    @Override
+                    public void onComplete(@NonNull Task<List<Booking>> task) {
+                        String bookedRestaurant = "";
+                        for (Booking existingBooking : task.getResult()) {
+                            // If booking already exists, boolean set to true
+                            if (Objects.equals(existingBooking.getUserId(), userId) &&
+                                    Objects.equals(existingBooking.getBookingDate(), formattedDate)) {
+                                bookingExists = true;
+                                bookedRestaurant = existingBooking.getRestaurantName();
+                                break;
+                            }
+                        }
+                        // If booking already exists, show toast to user
+                        if (bookingExists) {
+                            showSnackBar(getString(R.string.booking_error) + " " + formattedDate + " at " + bookedRestaurant);
+                        } else {
+                            // If not, create booking in database
+                            bookingManager.createBooking(booking);
+                            showSnackBar(getString(R.string.booking_success) + " " + formattedDate);
+                            // Update booking button if booking for today
+                            if (formattedDate.equals(today)) {
+                                bookingButton.setImageResource(R.drawable.ic_check_circle);
+                            }
+                        }
+                    }
+                });
+            }
+        }, currentDate.get(Calendar.YEAR), currentDate.get(Calendar.MONTH), currentDate.get(Calendar.DATE));
+
+        // Disable dates before today in date picker
+        datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis());
+
+        // Customize title view
+        TextView customTitle = new TextView(getApplicationContext());
+        customTitle.setText(R.string.booking_date_dialog_title);
+        customTitle.setTextColor(getResources().getColor(R.color.white));
+        customTitle.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+        customTitle.setGravity(Gravity.CENTER);
+        customTitle.setTextSize(TypedValue.COMPLEX_UNIT_DIP,16);
+        customTitle.setPadding(8, 16, 8, 16);
+        // Set custom title
+        datePickerDialog.setCustomTitle(customTitle);
+        // Show date dialog
+        datePickerDialog.show();
     }
 
 
@@ -436,9 +433,9 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
             setPicture(place, placesClient, restaurantPicture);
         } else {
             Glide.with(restaurantPicture.getContext())
-                    .load(R.mipmap.no_photo)
-                    .centerCrop()
-                    .into(restaurantPicture);
+                .load(R.mipmap.no_photo)
+                .centerInside()
+                .into(restaurantPicture);
         }
     }
 

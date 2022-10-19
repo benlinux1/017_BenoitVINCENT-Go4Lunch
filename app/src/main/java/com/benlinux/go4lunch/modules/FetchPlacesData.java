@@ -27,10 +27,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -93,13 +95,16 @@ public class FetchPlacesData extends AsyncTask<Object, String, String> {
                     getBookingsOfToday().addOnCompleteListener(new OnCompleteListener<List<Booking>>() {
                         @Override
                         public void onComplete(@NonNull Task<List<Booking>> task) {
-                            for (Booking booking : task.getResult()) {
+                            for (Booking booking : bookingsOfToday) {
                                 if (booking.getRestaurantId().equals(placeId)) {
                                     restaurantMarker = R.drawable.ic_marker_green;
                                     break;
                                 } else {
                                     restaurantMarker = R.drawable.ic_marker_48;
                                 }
+                            }
+                            if (bookingsOfToday.isEmpty()) {
+                                restaurantMarker = R.drawable.ic_marker_48;
                             }
 
                             // Define marker options (restaurant's name, address, position, icon)
@@ -259,6 +264,17 @@ public class FetchPlacesData extends AsyncTask<Object, String, String> {
                 for (Booking booking : bookingTask.getResult()) {
                     if (booking.getBookingDate().equals(today)) {
                         bookingsOfToday.add(booking);
+                    }
+                    // Delete old bookings
+                    try {
+                        Date dateOfToday = dateFormat.parse(today);
+                        Date dateOfBooking = dateFormat.parse(booking.getBookingDate());
+                        assert dateOfBooking != null;
+                        if (dateOfBooking.before(dateOfToday)) {
+                            bookingManager.deleteBooking(localContext, booking);
+                        }
+                    } catch (ParseException e) {
+                        e.printStackTrace();
                     }
                 }
             }

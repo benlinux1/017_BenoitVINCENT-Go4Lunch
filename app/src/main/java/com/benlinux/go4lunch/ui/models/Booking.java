@@ -4,6 +4,7 @@ import java.util.Date;
 
 public class Booking {
 
+    private long bookingId;
     private String restaurantId;
     private String restaurantName;
     // user who booked
@@ -13,11 +14,19 @@ public class Booking {
     public Booking(){}
 
 
-    public Booking(String restaurantId, String restaurantName, String userId, String bookingDate) {
+    public Booking(long bookingId, String restaurantId, String restaurantName, String userId, String bookingDate) {
+        this.bookingId = bookingId;
         this.restaurantId = restaurantId;
         this.restaurantName = restaurantName;
         this.userId = userId;
         this.bookingDate = bookingDate;
+    }
+
+    public long getBookingId() {
+        return bookingId;
+    }
+    public void setBookingId(long bookingId) {
+        this.bookingId = bookingId;
     }
 
     public String getRestaurantId() {

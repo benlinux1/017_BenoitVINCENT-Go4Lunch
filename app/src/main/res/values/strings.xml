@@ -80,6 +80,7 @@
     <string name="booking_success">Booking created successfully for the</string>
     <string name="booking_error">You already booked for the</string>
     <string name="nobody_booked_today">Nobody booked for today in this restaurant</string>
+    <string name="nobody_booked_today_except_you">Except you, nobody booked here for today</string>
 
 
     // SETTINGS ACTIVITY
@@ -110,6 +111,8 @@
     <string name="phone_button_description">phone to restaurant</string>
     <string name="restaurant_photo">photo of the restaurant</string>
     <string name="booking_button_description">make booking in the restaurant</string>
+    <string name="user_avatar_description">user avatar picture</string>
+    <string name="user_avatar_update">update avatar picture</string>
 
 
 </resources>
