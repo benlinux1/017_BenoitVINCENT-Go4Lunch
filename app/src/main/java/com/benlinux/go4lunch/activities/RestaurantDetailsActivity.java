@@ -22,6 +22,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -32,6 +33,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatCheckBox;
 import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -49,6 +51,7 @@ import com.bumptech.glide.Glide;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Period;
@@ -60,6 +63,7 @@ import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.material.divider.MaterialDividerItemDecoration;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.maps.android.SphericalUtil;
 
 
@@ -89,9 +93,11 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
     private ImageButton webSiteButton;
 
     private String restaurantId;
+    private String restaurantPictureUrl;
     private FloatingActionButton bookingButton;
 
     private RecyclerView mRecyclerView;
+    private GuestAdapter adapter;
     private List<String> mGuests;
 
     // FOR DATA
@@ -192,7 +198,7 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
      * Init the recyclerView that contains workmates who booked in this restaurant
      */
     private void configRecyclerView() {
-        GuestAdapter adapter = new GuestAdapter(getGuestsList(), this);
+        adapter = new GuestAdapter(getGuestsList(), this);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setAdapter(adapter);
         adapter.notifyItemRangeInserted(-1, mGuests.size());
@@ -283,10 +289,11 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
                 String today = dateFormat.format(currentDate.getTime());
 
                 // Define booking id
-                long bookingId = System.currentTimeMillis();
+                String bookingId = Long.toString(System.currentTimeMillis());
 
                 // Create booking object
-                Booking booking = new Booking(bookingId, restaurantId, restaurantName.getText().toString(), userId, formattedDate);
+                Booking booking = new Booking(bookingId, restaurantId, restaurantName.getText().toString(),
+                        restaurantAddress.getText().toString(), restaurantPicture.getTransitionName(),  userId, formattedDate);
 
                 // Check if booking exists in database
                 bookingManager.getAllBookingsData().addOnCompleteListener(new OnCompleteListener<List<Booking>>() {
@@ -307,12 +314,12 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
                             showSnackBar(getString(R.string.booking_error) + " " + formattedDate + " at " + bookedRestaurant);
                         } else {
                             // If not, create booking in database
-                            bookingManager.createBooking(booking);
-                            showSnackBar(getString(R.string.booking_success) + " " + formattedDate);
-                            // Update booking button if booking for today
-                            if (formattedDate.equals(today)) {
-                                bookingButton.setImageResource(R.drawable.ic_check_circle);
-                            }
+                            bookingManager.createBooking(booking).addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                @Override
+                                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                    checkIfUserBookedForToday();
+                                }
+                            });
                         }
                     }
                 });
@@ -391,28 +398,41 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
         }
         // Set Rating
         if (place.getRating() != null) {
-            restaurantRating.setRating(place.getRating().floatValue());
+            Double ratingValue = place.getRating();
+            restaurantRating.setRating(formatRating(ratingValue).floatValue());
+        } else {
+            restaurantRating.setVisibility(View.GONE);
         }
         // Set Opening hours
         if (place.getOpeningHours() != null) {
-            final Calendar currentDate = Calendar.getInstance(Locale.getDefault());
-            int today = currentDate.get(Calendar.DAY_OF_WEEK);
-            List<Period> periodList = place.getOpeningHours().getPeriods();
-            int openHour = Objects.requireNonNull(periodList.get(today - 1).getOpen()).getTime().getHours();
-            int closeHour = Objects.requireNonNull(periodList.get(today - 1).getClose()).getTime().getHours();
-            String openMinutes = String.valueOf(Objects.requireNonNull(periodList.get(today - 1).getOpen()).getTime().getMinutes());
-            String closeMinutes = String.valueOf(Objects.requireNonNull(periodList.get(today - 1).getClose()).getTime().getMinutes());
+            try {
+                final Calendar currentDate = Calendar.getInstance(Locale.getDefault());
+                int today = currentDate.get(Calendar.DAY_OF_WEEK);
+                List<Period> periodList = place.getOpeningHours().getPeriods();
+                int openHour = Objects.requireNonNull(periodList.get(today - 1).getOpen()).getTime().getHours();
+                int closeHour = Objects.requireNonNull(periodList.get(today - 1).getClose()).getTime().getHours();
+                String openMinutes = String.valueOf(Objects.requireNonNull(periodList.get(today - 1).getOpen()).getTime().getMinutes());
+                String closeMinutes = String.valueOf(Objects.requireNonNull(periodList.get(today - 1).getClose()).getTime().getMinutes());
 
-            // Format opening hours of the day according to user language
-            StringBuilder openingHours = new StringBuilder();
-            if (Locale.getDefault().getLanguage().equals("fr")) {
-                openingHours.append("Ouvert aujourd'hui de ").append(openHour).append("h").append(formatMinutes(openMinutes))
-                        .append(" jusqu'à ").append(closeHour).append("h").append(formatMinutes(closeMinutes)).append("  -");
-            } else {
-                openingHours.append("Open today from ").append(openHour).append(":").append(formatMinutes(openMinutes)).append(" am")
-                        .append(" to ").append(closeHour).append(":").append(formatMinutes(closeMinutes)).append(" pm").append("  -");
+                // Format opening hours of the day according to user language
+                StringBuilder openingHours = new StringBuilder();
+                if (Locale.getDefault().getLanguage().equals("fr")) {
+                    openingHours.append("Ouvert aujourd'hui de ").append(openHour).append("h").append(formatMinutes(openMinutes))
+                            .append(" jusqu'à ").append(closeHour).append("h").append(formatMinutes(closeMinutes)).append("  -");
+                } else {
+                    openingHours.append("Open today from ").append(openHour).append(":").append(formatMinutes(openMinutes)).append(" am")
+                            .append(" to ").append(closeHour).append(":").append(formatMinutes(closeMinutes)).append(" pm").append("  -");
+                }
+                restaurantHours.setText(openingHours.toString());
+            } catch (Exception e) {
+                Log.e("Error hours formatting", e.getMessage());
             }
-            restaurantHours.setText(openingHours.toString());
+            
+
+        } else {
+            // If no opening hours, delete distance marginStart
+            restaurantHours.setVisibility(View.GONE);
+            setMargin(restaurantDistance, 24,0,40,0);
         }
         // Phone number
         restaurantPhoneNumber = place.getPhoneNumber();
@@ -436,6 +456,7 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
                 .load(R.mipmap.no_photo)
                 .centerInside()
                 .into(restaurantPicture);
+            restaurantPicture.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
         }
     }
 
@@ -539,5 +560,31 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
     private void showSnackBar(View view, String message) {
         Snackbar.make(view, message, Snackbar.LENGTH_SHORT)
                 .setAction("Action", null).show();
+    }
+
+    public static void setMargin(View view, int left, int right, int top, int bottom) {
+        ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams)
+                view.getLayoutParams();
+        params.setMargins(left, top, right, bottom);
+        view.setLayoutParams(params);
+    }
+
+    // Format number of rating stars (between 0.5 and 3) as asked from client
+    private Double formatRating(Double rating) {
+        Double formattedRating = null;
+        if (rating >= 0 && rating <= 0.8) {
+            formattedRating = 0.5;
+        } else if (rating > 0.8 && rating <= 1.6) {
+            formattedRating = 1.0;
+        } else if (rating > 1.6 && rating <= 2.5) {
+            formattedRating = 1.5;
+        } else if (rating > 2.5 && rating <= 3.4) {
+            formattedRating = 2.0;
+        } else if (rating > 3.4 && rating <= 4.3) {
+            formattedRating = 2.5;
+        } else if (rating > 4.3 && rating <= 5.0) {
+            formattedRating = 3.0;
+        }
+        return formattedRating;
     }
 }

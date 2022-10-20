@@ -51,84 +51,49 @@ public class InfoWindowForMapAdapter implements GoogleMap.InfoWindowAdapter {
         View view = inflater.inflate(R.layout.info_window_map, null);
 
         // Get reference to the TextView to set place-id
-        TextView restaurantId = (TextView) view.findViewById(R.id.place_id);
+        TextView restaurantId = view.findViewById(R.id.place_id);
         // Getting the restaurant's position from marker
         LatLng latLng = marker.getPosition();
         // Get reference to the TextView to set restaurant's name
-        TextView restaurantName = (TextView) view.findViewById(R.id.title);
+        TextView restaurantName = view.findViewById(R.id.title);
         // Get reference to the TextView to set street & street number
-        TextView restaurantStreet = (TextView) view.findViewById(R.id.street);
+        TextView restaurantStreet = view.findViewById(R.id.street);
         // Get reference to the TextView to set postal code & city
-        TextView restaurantCity = (TextView) view.findViewById(R.id.postalCodeAndCity);
+        TextView restaurantCity = view.findViewById(R.id.postalCodeAndCity);
         // Get reference to the Rating bar to set rating value
-        RatingBar ratingBar = (RatingBar) view.findViewById(R.id.rating);
+        RatingBar ratingBar = view.findViewById(R.id.rating);
         // Get reference to the info window button
-        Button seeDetailsButton = (Button) view.findViewById(R.id.seeDetailsButton);
+        Button seeDetailsButton = view.findViewById(R.id.seeDetailsButton);
 
-        // Getting restaurant's data to set rating & place_id
-        if (marker.getTag() != null) {
-            getRestaurantInfo(marker.getTag().toString());
-            restaurantId.setText(marker.getTag().toString());
+        // Getting & setting restaurant's rating
+        if (marker.getSnippet() != null) {
+            try {
+                String ratingString = marker.getSnippet();
+                Double ratingDouble = Double.parseDouble(ratingString);
+                float ratingFloat = formatRating(ratingDouble).floatValue();
+                ratingBar.setRating(ratingFloat);
+            } catch (Exception e) {
+                Log.e("Error format rating", e.getMessage());
+            }
         } else {
-            seeDetailsButton.setVisibility(View.GONE);
             ratingBar.setVisibility(View.GONE);
+        }
+
+        // Disable details button if place doesn't get id
+        if (marker.getTag() == null) {
+            seeDetailsButton.setVisibility(View.GONE);
         }
 
         // Set restaurant's name
         restaurantName.setText(Objects.requireNonNull(marker.getTitle()).toUpperCase(Locale.ROOT));
         // Set restaurant's formatted address
         setAddressFromLatLng(latLng, restaurantStreet, restaurantCity);
-        // Set restaurant's rating
-        setRestaurantRating(ratingBar);
 
         // Returning the view containing InfoWindow contents
         return view;
 
     }
 
-    // Retrieve place details
-    private void getRestaurantInfo(String placeId) {
-
-        // Specify the fields to return from request
-        final List<Place.Field> placeFields = Arrays.asList(
-                Place.Field.ID,
-                Place.Field.RATING
-        );
-
-        // Construct a request object, passing the place ID and fields array.
-        final FetchPlaceRequest request = FetchPlaceRequest.newInstance(placeId, placeFields);
-
-        // Initialize Places API
-        Places.initialize(context, BuildConfig.PLACE_API_KEY);
-
-        // Initialize Places Client
-        PlacesClient placesClient = Places.createClient(context);
-
-        // Fetch place to get restaurants details
-        placesClient.fetchPlace(request).addOnSuccessListener((response) -> {
-            Place place = response.getPlace();
-
-            // if result is successful, set restaurants details in textview
-            if (place.getRating() != null) {
-                this.ratingFloat = place.getRating().floatValue();
-            }
-
-        }).addOnFailureListener((exception) -> {
-            if (exception instanceof ApiException) {
-                final ApiException apiException = (ApiException) exception;
-                Log.e(TAG, "Place not found: " + exception.getMessage());
-            }
-        });
-    }
-
-    // Set restaurant's rating in text view, according to rating result
-    private void setRestaurantRating(RatingBar ratingBar) {
-        if (this.ratingFloat != null) {
-            ratingBar.setRating(ratingFloat);
-        } else {
-            ratingBar.setVisibility(View.GONE);
-        }
-    }
 
     // Return address according to Latitude & longitude params
     public void setAddressFromLatLng(LatLng latLng, TextView restaurantStreet, TextView restaurantCity) {
@@ -163,5 +128,24 @@ public class InfoWindowForMapAdapter implements GoogleMap.InfoWindowAdapter {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    // Format number of rating stars (between 0.5 and 3) as asked from client
+    private Double formatRating(Double rating) {
+        Double formattedRating = null;
+        if (rating >= 0 && rating <= 0.8) {
+            formattedRating = 0.5;
+        } else if (rating > 0.8 && rating <= 1.6) {
+            formattedRating = 1.0;
+        } else if (rating > 1.6 && rating <= 2.5) {
+            formattedRating = 1.5;
+        } else if (rating > 2.5 && rating <= 3.4) {
+            formattedRating = 2.0;
+        } else if (rating > 3.4 && rating <= 4.3) {
+            formattedRating = 2.5;
+        } else if (rating > 4.3 && rating <= 5.0) {
+            formattedRating = 3.0;
+        }
+        return formattedRating;
     }
 }

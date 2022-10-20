@@ -5,6 +5,7 @@ import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -19,6 +20,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.maps.android.SphericalUtil;
 
@@ -91,6 +93,9 @@ public class FetchPlacesData extends AsyncTask<Object, String, String> {
                     // Get place id (used to retrieve place info in details activity)
                     String placeId = getInfo.getString("place_id");
 
+                    // Get place rating & store data to snippet
+                    Double rating = restaurantInfo.getDouble("rating");
+
                     // Set marker color according to booked restaurants of day
                     getBookingsOfToday().addOnCompleteListener(new OnCompleteListener<List<Booking>>() {
                         @Override
@@ -110,6 +115,7 @@ public class FetchPlacesData extends AsyncTask<Object, String, String> {
                             // Define marker options (restaurant's name, address, position, icon)
                             MarkerOptions markerOptions = new MarkerOptions()
                                     .title(name)
+                                    .snippet(rating.toString())
                                     .position(latLng)
                                     .icon(BitmapDescriptorFactory.fromResource(restaurantMarker));
 
@@ -271,7 +277,12 @@ public class FetchPlacesData extends AsyncTask<Object, String, String> {
                         Date dateOfBooking = dateFormat.parse(booking.getBookingDate());
                         assert dateOfBooking != null;
                         if (dateOfBooking.before(dateOfToday)) {
-                            bookingManager.deleteBooking(localContext, booking);
+                            bookingManager.deleteBookingById(booking.getBookingId()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void unused) {
+                                    Log.d("DELETE OLD BOOKING", "old bookings deleted with success" );
+                                }
+                            });
                         }
                     } catch (ParseException e) {
                         e.printStackTrace();

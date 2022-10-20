@@ -1,37 +1,16 @@
 package com.benlinux.go4lunch.data.bookingRepository;
 
-import android.content.Context;
-import android.net.Uri;
 import android.util.Log;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
-import com.benlinux.go4lunch.R;
-import com.benlinux.go4lunch.data.userRepository.UserRepository;
 import com.benlinux.go4lunch.ui.models.Booking;
-import com.benlinux.go4lunch.ui.models.User;
-import com.firebase.ui.auth.AuthUI;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.UserInfo;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FieldValue;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import com.google.android.gms.tasks.Task;
+
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
+
 
 public class BookingRepository {
 
@@ -41,9 +20,8 @@ public class BookingRepository {
     private static final String RESTAURANT_NAME_FIELD = "restaurantName";
     private static final String USER_ID_FIELD = "userId";
     private static final String DATE_FIELD = "bookingDate";
-
-    private Boolean bookingExists = false;
-
+    private static final String ID_FIELD = "bookingId";
+    private static final String ADDRESS_FIELD = "fullAddress";
 
     private static volatile BookingRepository instance;
 
@@ -69,43 +47,44 @@ public class BookingRepository {
     }
 
     // Create User in Firestore
-    public void createBooking(Booking booking) {
+    public Task<QuerySnapshot> createBooking(Booking booking) {
 
-        long bookingId = booking.getBookingId();
+        // Define booking data
+        String bookingId = booking.getBookingId();
         String restaurantId = booking.getRestaurantId();
+        String restaurantPicture = booking.getRestaurantPicture();
+        String fullAddress = booking.getFullAddress();
         String restaurantName = booking.getRestaurantName();
         String userId = booking.getUserId();
         String date = booking.getBookingDate();
 
-
-        Booking bookingToCreate = new Booking(bookingId, restaurantId, restaurantName, userId, date);
+        // Define booking object
+        Booking bookingToCreate = new Booking(bookingId, restaurantId, restaurantName, fullAddress, restaurantPicture, userId, date);
 
         Task<QuerySnapshot> bookingsData = getAllBookingsData();
-        // TODO : Check if booking exists in database
-        bookingsData.addOnSuccessListener(queryDocumentSnapshots -> {
+        // Check if booking exists in database
+        return bookingsData.addOnSuccessListener(queryDocumentSnapshots -> {
             // if booking exists in database, continue
             if (queryDocumentSnapshots.getDocuments().contains(date) && queryDocumentSnapshots.getDocuments().contains(restaurantId) && queryDocumentSnapshots.getDocuments().contains(userId)) {
                 Log.d("BOOKING CREATION INFO", "booking already exists");
-                // if user doesn't exists in database, create it
+                // if booking doesn't exists in database, create it
             } else {
-                this.getBookingsCollection().document().set(bookingToCreate);
+                // Create booking in database with custom id (user to delete it later)
+                this.getBookingsCollection().document(bookingId).set(bookingToCreate);
             }
         });
-
     }
 
 
-    // Get all users from Firestore
+    // Get all bookings from Firestore
     public Task<QuerySnapshot> getAllBookingsData() {
-        return this.getBookingsCollection().get();
+        return this.getBookingsCollection().orderBy(DATE_FIELD, Query.Direction.ASCENDING).get();
     }
 
 
-    // Delete the User from Firestore
-    // if result ok, delete from firebase & logout
-    public Task<Void> deleteBooking(Context context, Booking booking) {
-        String uid = Long.toString(booking.getBookingId());
-        return this.getBookingsCollection().document(uid).delete();
+    // Delete the Booking from Firestore, according to its id
+    public Task<Void> deleteBookingById(String bookingId) {
+        return this.getBookingsCollection().document(bookingId).delete();
     }
 
 }

@@ -1,12 +1,14 @@
 package com.benlinux.go4lunch.ui.models;
 
-import java.util.Date;
 
 public class Booking {
 
-    private long bookingId;
+    private String bookingId;
     private String restaurantId;
     private String restaurantName;
+    private String restaurantPicture;
+
+    private String fullAddress;
     // user who booked
     private String userId;
     private String bookingDate;
@@ -14,18 +16,20 @@ public class Booking {
     public Booking(){}
 
 
-    public Booking(long bookingId, String restaurantId, String restaurantName, String userId, String bookingDate) {
+    public Booking(String bookingId, String restaurantId, String restaurantName, String fullAddress, String restaurantPicture, String userId, String bookingDate) {
         this.bookingId = bookingId;
         this.restaurantId = restaurantId;
         this.restaurantName = restaurantName;
+        this.fullAddress = fullAddress;
+        this.restaurantPicture = restaurantPicture;
         this.userId = userId;
         this.bookingDate = bookingDate;
     }
 
-    public long getBookingId() {
+    public String getBookingId() {
         return bookingId;
     }
-    public void setBookingId(long bookingId) {
+    public void setBookingId(String bookingId) {
         this.bookingId = bookingId;
     }
 
@@ -41,6 +45,20 @@ public class Booking {
     }
     public void setRestaurantName(String restaurantName) {
         this.restaurantName = restaurantName;
+    }
+
+    public String getFullAddress() {
+        return fullAddress;
+    }
+    public void setFullAddress(String fullAddress) {
+        this.fullAddress = fullAddress;
+    }
+
+    public String getRestaurantPicture() {
+        return restaurantPicture;
+    }
+    public void setRestaurantPicture(String restaurantPicture) {
+        this.restaurantPicture = restaurantPicture;
     }
 
     public String getUserId() {

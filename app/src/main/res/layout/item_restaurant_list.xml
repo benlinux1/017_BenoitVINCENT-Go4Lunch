@@ -132,6 +132,7 @@
                 android:id="@+id/item_restaurant_rating"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                style="@style/Widget.AppCompat.RatingBar.Small"
                 android:theme="@style/RatingBar"
                 android:layout_marginEnd="@dimen/small_plus_margin"
                 android:numStars="3"

@@ -19,11 +19,12 @@
         android:text="@string/restaurant_name"
         android:textStyle="bold" />
 
-    <androidx.appcompat.widget.AppCompatRatingBar
+    <RatingBar
         android:id="@+id/rating"
-        style="@style/RatingBar"
+        style="@style/Widget.AppCompat.RatingBar.Small"
         android:theme="@style/RatingBar"
         android:elevation="10dp"
+        android:numStars="3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/very_small_margin" />

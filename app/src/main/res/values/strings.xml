@@ -113,6 +113,12 @@
     <string name="booking_button_description">make booking in the restaurant</string>
     <string name="user_avatar_description">user avatar picture</string>
     <string name="user_avatar_update">update avatar picture</string>
+    <string name="no_booking_for_user">You didn\'t make any booking yet</string>
+
+    // BOOKING ADAPTER
+    <string name="dialog_title">Do you really want to delete this booking ?</string>
+    <string name="dialog_yes">Yes</string>
+    <string name="dialog_no">No</string>
 
 
 </resources>

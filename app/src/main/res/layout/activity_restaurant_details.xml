@@ -40,7 +40,7 @@
         android:id="@+id/restaurantDetailsPhoto"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:scaleType="centerInside"
+        android:scaleType="fitXY"
         app:layout_constraintBottom_toTopOf="@id/restaurantDetailsInformation"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -62,26 +62,24 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/restaurantDetailsInformation"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:cardBackgroundColor="@color/colorPrimary"
         app:layout_constraintBottom_toTopOf="@+id/guideline4"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        android:foregroundGravity="center_vertical">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="@dimen/default_margin"
-            android:layout_marginBottom="@dimen/default_margin"
-            android:layout_gravity="center">
+            android:paddingVertical="@dimen/small_margin">
 
             <TextView
                 android:id="@+id/restaurantDetailsName"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/default_margin"
-                android:layout_marginEnd="@dimen/small_margin"
                 android:textColor="@color/white"
                 android:textSize="@dimen/default_title_size"
                 app:layout_constraintStart_toStartOf="parent"
@@ -97,7 +95,9 @@
                 android:theme="@style/RatingBar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/default_margin"
+                android:numStars="3"
+                android:layout_marginStart="@dimen/small_plus_margin"
+                android:layout_marginEnd="@dimen/small_margin"
                 android:paddingTop="@dimen/very_small_margin"
                 app:layout_constraintTop_toTopOf="@+id/restaurantDetailsName"
                 app:layout_constraintStart_toEndOf="@+id/restaurantDetailsName"
@@ -124,6 +124,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/default_margin"
+                android:layout_marginBottom="@dimen/small_margin"
                 android:textColor="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/guideline5"
@@ -132,16 +133,24 @@
                 app:layout_constraintTop_toBottomOf="@+id/restaurantDetailsAddress"
                 tools:text="@string/opening_hours" />
 
-            <TextView
-                android:id="@+id/restaurantDetailsDistance"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/small_margin"
-                android:textColor="@color/white"
                 app:layout_constraintBottom_toBottomOf="@+id/restaurantDetailsOpening"
                 app:layout_constraintStart_toEndOf="@+id/restaurantDetailsOpening"
-                app:layout_constraintTop_toTopOf="@+id/restaurantDetailsOpening"
-                tools:text="@string/distance" />
+                app:layout_constraintTop_toTopOf="@+id/restaurantDetailsOpening">
+
+                <TextView
+                    android:id="@+id/restaurantDetailsDistance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    tools:text="@string/distance" />
+
+            </LinearLayout>
+
+
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline5"
