@@ -1,153 +1,159 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_setting_layout"
+    android:id="@+id/restaurant_page"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".activities.SettingsActivity">
 
-    <LinearLayout
-        android:id="@+id/layout_toolbar"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/activity_setting_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="wrap_content">
 
-        <!-- Toolbar -->
-        <include
-            layout="@layout/toolbar_main"
-            android:id="@+id/main_toolbar"
-            style="@style/DrawerArrowStyle"/>
-
-    </LinearLayout>
-
-    <ImageView
-        android:id="@+id/settings_user_avatar"
-        android:layout_width="@dimen/user_avatar_size"
-        android:layout_height="@dimen/user_avatar_size"
-        android:layout_margin="@dimen/default_large_margin"
-        app:layout_constraintTop_toBottomOf="@id/layout_toolbar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:srcCompat="@tools:sample/avatars"
-        android:contentDescription="@string/user_avatar_description" />
-
-    <ImageView
-        android:id="@+id/settings_user_avatar_update"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
-        android:src="@drawable/ic_add_photo"
-        app:layout_constraintBottom_toBottomOf="@id/settings_user_avatar"
-        app:layout_constraintEnd_toEndOf="@id/settings_user_avatar"
-        android:contentDescription="@string/user_avatar_update" />
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/settings_user_name_input"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/small_margin"
-        android:layout_marginTop="@dimen/default_large_margin"
-        app:layout_constraintTop_toBottomOf="@+id/settings_user_avatar"
-        android:hint="@string/settings_user_name_title">
-
-        <EditText
-            android:id="@+id/settings_user_name_field"
+        <LinearLayout
+            android:id="@+id/layout_toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/settings_user_name"
-            android:text="@string/settings_user_name"
-            android:inputType="text"
-            android:imeOptions="actionDone"
-            android:autofillHints="" />
-    </com.google.android.material.textfield.TextInputLayout>
+            app:layout_constraintTop_toTopOf="parent">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/settings_user_email_input"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/small_margin"
-        app:layout_constraintTop_toBottomOf="@id/settings_user_name_input"
-        android:hint="@string/settings_user_email_title" >
+            <!-- Toolbar -->
+            <include
+                layout="@layout/toolbar_main"
+                android:id="@+id/main_toolbar"
+                style="@style/DrawerArrowStyle"/>
 
-        <EditText
-            android:id="@+id/settings_user_email_field"
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/settings_user_avatar"
+            android:layout_width="@dimen/user_avatar_size"
+            android:layout_height="@dimen/user_avatar_size"
+            android:layout_margin="@dimen/default_large_margin"
+            app:layout_constraintTop_toBottomOf="@id/layout_toolbar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:srcCompat="@tools:sample/avatars"
+            android:contentDescription="@string/user_avatar_description" />
+
+        <ImageView
+            android:id="@+id/settings_user_avatar_update"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:src="@drawable/ic_add_photo"
+            app:layout_constraintBottom_toBottomOf="@id/settings_user_avatar"
+            app:layout_constraintEnd_toEndOf="@id/settings_user_avatar"
+            android:contentDescription="@string/user_avatar_update" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/settings_user_name_input"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/settings_user_email"
-            android:hint="@string/settings_user_email"
-            android:inputType="textEmailAddress"
-            android:enabled="false"
-            android:clickable="false"
-            android:focusable="false"
-            android:cursorVisible="false"
-            android:autofillHints="" />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:layout_marginHorizontal="@dimen/small_margin"
+            android:layout_marginTop="@dimen/default_large_margin"
+            app:layout_constraintTop_toBottomOf="@+id/settings_user_avatar"
+            android:hint="@string/settings_user_name_title">
 
-    <LinearLayout
-        android:id="@+id/settings_notifications_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/settings_user_email_input"
-        android:orientation="horizontal"
-        android:layout_marginTop="@dimen/default_medium_margin"
-        android:layout_marginHorizontal="@dimen/small_margin">
+            <EditText
+                android:id="@+id/settings_user_name_field"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/settings_user_name"
+                android:text="@string/settings_user_name"
+                android:inputType="text"
+                android:imeOptions="actionDone"
+                android:autofillHints="" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <TextView
-            android:id="@+id/settings_notifications_text"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/settings_user_email_input"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/small_margin"
+            app:layout_constraintTop_toBottomOf="@id/settings_user_name_input"
+            android:hint="@string/settings_user_email_title" >
+
+            <EditText
+                android:id="@+id/settings_user_email_field"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/settings_user_email"
+                android:hint="@string/settings_user_email"
+                android:inputType="textEmailAddress"
+                android:enabled="false"
+                android:clickable="false"
+                android:focusable="false"
+                android:cursorVisible="false"
+                android:autofillHints="" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <LinearLayout
+            android:id="@+id/settings_notifications_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/settings_user_email_input"
+            android:orientation="horizontal"
+            android:layout_marginTop="@dimen/default_medium_margin"
+            android:layout_marginHorizontal="@dimen/small_margin">
+
+            <TextView
+                android:id="@+id/settings_notifications_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/small_margin"
+                android:text="@string/settings_enable_notifications"
+                android:textSize="@dimen/high_text_size"/>
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/settings_notification_switch"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:checked="true"/>
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/settings_update_button"
+            style="@style/Widget.Material3.Button.ElevatedButton.Icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/small_margin"
-            android:text="@string/settings_enable_notifications"
-            android:textSize="@dimen/high_text_size"/>
+            android:minWidth="270dp"
+            android:layout_marginBottom="@dimen/default_large_margin"
+            android:backgroundTint="@color/colorAccent"
+            android:textSize="@dimen/high_text_size"
+            android:textColor="@color/white"
+            app:iconTint="@color/white"
+            app:icon="@drawable/ic_save_profile"
+            android:text="@string/update_button_text"
+            android:textStyle="bold"
+            android:paddingHorizontal="@dimen/default_margin"
+            app:layout_constraintTop_toBottomOf="@id/settings_notifications_layout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="@dimen/default_medium_margin"
+            android:layout_marginHorizontal="@dimen/small_margin" />
 
-        <androidx.appcompat.widget.SwitchCompat
-            android:id="@+id/settings_notification_switch"
-            android:layout_width="0dp"
+        <Button
+            android:id="@+id/settings_delete_button"
+            style="@style/Widget.Material3.Button.ElevatedButton.Icon"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:checked="true"/>
-    </LinearLayout>
+            android:minWidth="270dp"
+            android:layout_marginBottom="@dimen/default_large_margin"
+            android:backgroundTint="@android:color/holo_red_dark"
+            android:text="@string/delete_button_text"
+            android:textSize="@dimen/high_text_size"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            app:iconTint="@color/white"
+            app:icon="@drawable/ic_delete_account"
+            android:layout_marginTop="@dimen/small_margin"
+            app:layout_constraintTop_toBottomOf="@+id/settings_update_button"
+            app:layout_constraintStart_toStartOf="@id/settings_update_button"
+            app:layout_constraintEnd_toEndOf="@id/settings_update_button" />
 
-    <Button
-        android:id="@+id/settings_update_button"
-        style="@style/Widget.Material3.Button.ElevatedButton.Icon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:minWidth="270dp"
-        android:layout_marginBottom="@dimen/default_large_margin"
-        android:backgroundTint="@color/colorAccent"
-        android:textSize="@dimen/high_text_size"
-        android:textColor="@color/white"
-        app:iconTint="@color/white"
-        app:icon="@drawable/ic_save_profile"
-        android:text="@string/update_button_text"
-        android:textStyle="bold"
-        android:paddingHorizontal="@dimen/default_margin"
-        app:layout_constraintTop_toBottomOf="@id/settings_notifications_layout"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="@dimen/default_medium_margin"
-        android:layout_marginHorizontal="@dimen/small_margin" />
-
-    <Button
-        android:id="@+id/settings_delete_button"
-        style="@style/Widget.Material3.Button.ElevatedButton.Icon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:minWidth="270dp"
-        android:layout_marginBottom="@dimen/default_large_margin"
-        android:backgroundTint="@android:color/holo_red_dark"
-        android:text="@string/delete_button_text"
-        android:textSize="@dimen/high_text_size"
-        android:textColor="@color/white"
-        android:textStyle="bold"
-        app:iconTint="@color/white"
-        app:icon="@drawable/ic_delete_account"
-        android:layout_marginTop="@dimen/small_margin"
-        app:layout_constraintTop_toBottomOf="@+id/settings_update_button"
-        app:layout_constraintStart_toStartOf="@id/settings_update_button"
-        app:layout_constraintEnd_toEndOf="@id/settings_update_button" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
