@@ -27,7 +27,7 @@
     <string name="call">APPELER</string>
     <string name="like">LIKER</string>
     <string name="unlike">NE PLUS LIKER</string>
-    <string name="website">SITE INTERNET</string>
+    <string name="website">SITE WEB</string>
     <string name="no_website_notification">Aucun site internet trouvé pour ce restaurant</string>
     <string name="no_secured_website">Ce lien n\'est pas sécurisé</string>
     <string name="no_phoneNumber_notification">"Aucun numéro de téléphone trouvé pour ce restaurant "</string>
@@ -40,7 +40,7 @@
     <string name="popup_message_choice_no">NON</string>
     <string name="popup_message_confirmation_delete_account">Voulez-vous vraiment supprimer votre compte ?</string>
     <string name="delete_account_succeed">Compte supprimé avec succès !</string>
-    <string name="delete_account_failed">Erreur pendant la suppression... réessayez SVP</string>
+    <string name="delete_account_failed">Erreur pendant la suppression… réessayez SVP</string>
     <string name="delete_button_text">Supprimer le compte</string>
     <string name="update_button_text">Enregistrer les changements</string>
     <string name="settings_enable_notifications">Autoriser les notifications</string>
