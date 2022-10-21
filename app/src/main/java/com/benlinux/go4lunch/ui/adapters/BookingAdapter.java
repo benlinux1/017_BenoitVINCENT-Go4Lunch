@@ -280,6 +280,7 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.ViewHold
             @Override
             public void onSuccess(Void unused) {
                 mBookings.remove(booking);
+                Toast.makeText(localContext, R.string.booking_delete_success, Toast.LENGTH_LONG).show();
                 notifyDataSetChanged();
                 UserLunchActivity.showTextIfNoBooking();
             }

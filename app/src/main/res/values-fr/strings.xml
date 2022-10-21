@@ -64,4 +64,5 @@
     <string name="allow_photo_access">Autorisez l\'accès à vos photos s\'il vous plaît</string>
     <string name="picture_enabled">Choisissez une photo</string>
     <string name="no_image_chosen">Aucune photo sélectionnée</string>
+    <string name="booking_delete_success">Réservation supprimée avec succès !</string>
 </resources>

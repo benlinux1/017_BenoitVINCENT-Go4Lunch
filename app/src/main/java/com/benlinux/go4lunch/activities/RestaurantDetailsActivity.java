@@ -19,6 +19,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -297,12 +298,14 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
                         }
                         // If booking already exists, show toast to user
                         if (bookingExists) {
-                            showSnackBar(getString(R.string.booking_error) + " " + formattedDate + " at " + bookedRestaurant);
+                            Toast.makeText(RestaurantDetailsActivity.this, getString(R.string.booking_error) + " " + formattedDate + " at " + bookedRestaurant, Toast.LENGTH_SHORT).show();
+
                         } else {
                             // If not, create booking in database
                             bookingManager.createBooking(booking).addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                                 @Override
                                 public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                    Toast.makeText(RestaurantDetailsActivity.this, getString(R.string.booking_success) + " " + formattedDate, Toast.LENGTH_SHORT).show();
                                     checkIfUserBookedForToday();
                                 }
                             });
@@ -546,7 +549,7 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
 
     // Show snackBar on activity
     private void showSnackBar(View view, String message) {
-        Snackbar.make(view, message, Snackbar.LENGTH_SHORT)
+        Snackbar.make(view, message, Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show();
     }
 

@@ -16,12 +16,7 @@ public class BookingRepository {
 
     // FIRESTORE DATA
     private static final String COLLECTION_NAME = "bookings";
-    private static final String RESTAURANT_ID_FIELD = "restaurantId";
-    private static final String RESTAURANT_NAME_FIELD = "restaurantName";
-    private static final String USER_ID_FIELD = "userId";
     private static final String DATE_FIELD = "bookingDate";
-    private static final String ID_FIELD = "bookingId";
-    private static final String ADDRESS_FIELD = "fullAddress";
 
     private static volatile BookingRepository instance;
 

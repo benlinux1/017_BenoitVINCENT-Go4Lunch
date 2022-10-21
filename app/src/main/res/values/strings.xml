@@ -82,6 +82,7 @@
     <string name="booking_error">You already booked for the</string>
     <string name="nobody_booked_today">Nobody booked for today in this restaurant</string>
     <string name="nobody_booked_today_except_you">Except you, nobody booked here for today</string>
+    <string name="booking_delete_success">Booking deleted successfully !</string>
 
 
 

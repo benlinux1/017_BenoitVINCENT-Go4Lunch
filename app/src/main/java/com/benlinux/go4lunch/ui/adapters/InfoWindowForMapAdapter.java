@@ -1,7 +1,6 @@
 package com.benlinux.go4lunch.ui.adapters;
 
-import static android.content.ContentValues.TAG;
-
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
@@ -15,7 +14,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 
 import com.benlinux.go4lunch.R;
-
 
 import com.benlinux.go4lunch.modules.FormatRatingModule;
 import com.google.android.gms.maps.GoogleMap;
@@ -42,7 +40,7 @@ public class InfoWindowForMapAdapter implements GoogleMap.InfoWindowAdapter {
     public View getInfoWindow(Marker marker) {
 
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View view = inflater.inflate(R.layout.info_window_map, null);
+        @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.info_window_map, null);
 
         // Get reference to the TextView to set place-id
         TextView restaurantId = view.findViewById(R.id.place_id);
@@ -92,6 +90,7 @@ public class InfoWindowForMapAdapter implements GoogleMap.InfoWindowAdapter {
 
 
     // Return address according to Latitude & longitude params
+    @SuppressLint("SetTextI18n")
     public void setAddressFromLatLng(LatLng latLng, TextView restaurantStreet, TextView restaurantCity) {
         Geocoder geocoder;
         List<Address> addresses;
@@ -100,7 +99,7 @@ public class InfoWindowForMapAdapter implements GoogleMap.InfoWindowAdapter {
         try {
             addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
             Address returnedAddress = addresses.get(0);
-            StringBuilder strReturnedAddress = new StringBuilder("");
+            StringBuilder strReturnedAddress = new StringBuilder();
 
             for (int i = 0; i < returnedAddress.getMaxAddressLineIndex(); i++) {
                 strReturnedAddress.append(returnedAddress.getAddressLine(i)).append("\n");
