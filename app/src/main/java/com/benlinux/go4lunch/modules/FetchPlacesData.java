@@ -32,8 +32,6 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -49,10 +47,8 @@ public class FetchPlacesData extends AsyncTask<Object, String, String> {
 
     private List<Restaurant> restaurantsList;
     private ListAdapter adapter;
-    private LatLng userLocation;
     private List<Booking> bookingsOfToday;
-
-    int restaurantMarker;
+    private int restaurantMarker;
 
 
     public FetchPlacesData(Context context, String data) {
@@ -61,7 +57,7 @@ public class FetchPlacesData extends AsyncTask<Object, String, String> {
         dataType = data;
     }
 
-    @SuppressLint("NotifyDataSetChanged")
+    // After getting nearby places response (String s), set Data into fragments
     @Override
     protected void onPostExecute(String s) {
 
@@ -75,26 +71,24 @@ public class FetchPlacesData extends AsyncTask<Object, String, String> {
 
                 // Loop to get restaurants details from each result of the Place request
                 for (int i = 0; i < jsonArray.length(); i++) {
+
+                    // Get restaurant's data
                     JSONObject restaurantInfo = jsonArray.getJSONObject(i);
-                    JSONObject getLocation = restaurantInfo.getJSONObject("geometry")
-                            .getJSONObject("location");
 
                     // Get restaurant's latitude & longitude
+                    JSONObject getLocation = restaurantInfo.getJSONObject("geometry")
+                            .getJSONObject("location");
                     String lat = getLocation.getString("lat");
                     String lng = getLocation.getString("lng");
 
                     // Get restaurant's name
-                    JSONObject getInfo = jsonArray.getJSONObject(i);
-                    String name = getInfo.getString("name");
+                    String name = restaurantInfo.getString("name");
 
                     // Define restaurant LatLng for marker
                     LatLng latLng = new LatLng(Double.parseDouble(lat), Double.parseDouble(lng));
 
                     // Get place id (used to retrieve place info in details activity)
-                    String placeId = getInfo.getString("place_id");
-
-                    // Get place rating & store data to snippet
-                    Double rating = restaurantInfo.getDouble("rating");
+                    String placeId = restaurantInfo.getString("place_id");
 
                     // Set marker color according to booked restaurants of day
                     getBookingsOfToday().addOnCompleteListener(new OnCompleteListener<List<Booking>>() {
@@ -112,12 +106,19 @@ public class FetchPlacesData extends AsyncTask<Object, String, String> {
                                 restaurantMarker = R.drawable.ic_marker_48;
                             }
 
-                            // Define marker options (restaurant's name, address, position, icon)
+                            // Then, define marker options (restaurant's name, address, position, icon)
                             MarkerOptions markerOptions = new MarkerOptions()
                                     .title(name)
-                                    .snippet(rating.toString())
                                     .position(latLng)
                                     .icon(BitmapDescriptorFactory.fromResource(restaurantMarker));
+
+                            // Set rating into marker snippet
+                            try {
+                                String rating = restaurantInfo.getString("rating");
+                                markerOptions.snippet(rating);
+                            } catch (Exception e) {
+                                Log.e("No rating", e.getMessage());
+                            }
 
                             // Set place id in tag (used to retrieve place info in details activity)
                             Objects.requireNonNull(googleMap.addMarker(markerOptions)).setTag(placeId);
@@ -133,9 +134,10 @@ public class FetchPlacesData extends AsyncTask<Object, String, String> {
                     try {
                         JSONObject restaurantInfo = jsonArray.getJSONObject(i);
 
+                        // Get place id
                         String placeId = restaurantInfo.getString("place_id");
+                        // Get restaurant's name
                         String name = restaurantInfo.getString("name");
-                        Double rating = restaurantInfo.getDouble("rating");
 
                         // Get restaurant's full Location
                         JSONObject getLocation = restaurantInfo.getJSONObject("geometry")
@@ -145,7 +147,8 @@ public class FetchPlacesData extends AsyncTask<Object, String, String> {
                         String lat = getLocation.getString("lat");
                         String lng = getLocation.getString("lng");
 
-                        userLocation = MainActivity.userLocation;
+                        // Retrieve user location (used to calculate distance from restaurant)
+                        LatLng userLocation = MainActivity.userLocation;
 
                         // Define restaurant's LatLng
                         LatLng restaurantLocation = new LatLng(Double.parseDouble(lat), Double.parseDouble(lng));
@@ -170,19 +173,26 @@ public class FetchPlacesData extends AsyncTask<Object, String, String> {
                            }
                        });
 
-                        // Create new restaurant for each result of Nearby Places API
-                        Restaurant restaurant = new Restaurant(placeId, name, formattedAddress, rating, null, distance, restaurantLocation, numberOfBookings);
-
-                        // Add each restaurant in the list
-                        restaurantsList.add(restaurant);
+                        // If place get rating, add it with rating to the restaurant list
+                        try {
+                            String ratingStr = restaurantInfo.getString("rating");
+                            Double rating = Double.parseDouble(ratingStr);
+                            Restaurant restaurant = new Restaurant(placeId, name, formattedAddress, rating, null, distance, restaurantLocation, numberOfBookings);
+                            // Add restaurant to list
+                            restaurantsList.add(restaurant);
+                        // If place doesn't get rating, set rating to null value & add restaurant to list
+                        } catch (Exception e) {
+                            Log.e("No rating", e.getMessage());
+                            Restaurant restaurant = new Restaurant(placeId, name, formattedAddress, null, null, distance, restaurantLocation, numberOfBookings);
+                            // Add restaurant in the list
+                            restaurantsList.add(restaurant);
+                        }
 
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
 
-                    // Pass user's location data to calculate distance from restaurant
-                    adapter.setUserLocation(userLocation);
-                    // Set restaurants list to adapter
+                    // Set restaurants list into adapter
                     adapter.initList(restaurantsList);
                 }
             }
@@ -191,7 +201,7 @@ public class FetchPlacesData extends AsyncTask<Object, String, String> {
         }
     }
 
-
+    // Get Nearby places (returned to string)
     @Override
     protected String doInBackground (Object... objects) {
         // if request come from mapFragment
@@ -202,8 +212,6 @@ public class FetchPlacesData extends AsyncTask<Object, String, String> {
                 url = (String) objects[1];
                 PlaceDownloadUrl downloadUrl = new PlaceDownloadUrl();
                 googleNearByPlacesData = downloadUrl.downloadUrl(url);
-
-
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -257,6 +265,7 @@ public class FetchPlacesData extends AsyncTask<Object, String, String> {
         return String.format("%d m", Math.round(distance));
     }
 
+    // Get bookings of day & automatically delete old bookings
     private Task<List<Booking>> getBookingsOfToday() {
         final BookingManager bookingManager = BookingManager.getInstance();
         return bookingManager.getAllBookingsData().addOnCompleteListener(new OnCompleteListener<List<Booking>>() {
@@ -291,5 +300,4 @@ public class FetchPlacesData extends AsyncTask<Object, String, String> {
             }
         });
     }
-
 }

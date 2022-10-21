@@ -14,26 +14,19 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
-import com.benlinux.go4lunch.BuildConfig;
 import com.benlinux.go4lunch.R;
 
-import com.google.android.gms.common.api.ApiException;
+
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
-import com.google.android.libraries.places.api.Places;
-import com.google.android.libraries.places.api.model.Place;
-import com.google.android.libraries.places.api.net.FetchPlaceRequest;
-import com.google.android.libraries.places.api.net.PlacesClient;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
 public class InfoWindowForMapAdapter implements GoogleMap.InfoWindowAdapter {
     Context context;
-    Float ratingFloat;
 
     public InfoWindowForMapAdapter(Context context) {
         this.context = context;
@@ -82,6 +75,8 @@ public class InfoWindowForMapAdapter implements GoogleMap.InfoWindowAdapter {
         // Disable details button if place doesn't get id
         if (marker.getTag() == null) {
             seeDetailsButton.setVisibility(View.GONE);
+        } else {
+            restaurantId.setText(marker.getTag().toString());
         }
 
         // Set restaurant's name

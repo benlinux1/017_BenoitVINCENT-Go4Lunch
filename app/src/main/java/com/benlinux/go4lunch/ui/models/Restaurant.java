@@ -18,16 +18,19 @@ public class Restaurant {
     private String name;
     private String address;
     private String style;
+    @Nullable
     private Double rating;
     private Boolean open;
     private String distance;
     private LatLng latLng;
+    @Nullable
     private String pictureUrl;
+    @Nullable
     private String hours;
     @Nullable
     private List<Booking> bookings;
 
-    public Restaurant(String id, String name, String address, Double rating, String hours, String distance, LatLng latLng, @Nullable List<Booking> bookings) {
+    public Restaurant(String id, String name, String address, @Nullable Double rating, @Nullable String hours, String distance, LatLng latLng, @Nullable List<Booking> bookings) {
         this.id = id;
         this.name = name;
         this.address = address;

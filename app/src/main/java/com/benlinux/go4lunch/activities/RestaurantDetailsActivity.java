@@ -425,7 +425,9 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
                 }
                 restaurantHours.setText(openingHours.toString());
             } catch (Exception e) {
-                Log.e("Error hours formatting", e.getMessage());
+                Log.e("Error formatting hours", e.getMessage());
+                restaurantHours.setVisibility(View.GONE);
+                setMargin(restaurantDistance, 24,0,40,0);
             }
             
 

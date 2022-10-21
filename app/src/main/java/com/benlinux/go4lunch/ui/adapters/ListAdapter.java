@@ -193,7 +193,12 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
             id.setText(restaurant.getId());
             // Set formatted rating
             Double rating = restaurant.getRating();
-            ratingBar.setRating(formatRating(rating).floatValue());
+            if (rating != null) {
+                ratingBar.setRating(formatRating(rating).floatValue());
+            } else {
+                ratingBar.setVisibility(View.GONE);
+            }
+
             // Set address to text view
             styleAndAddress.setText(restaurant.getAddress());
             // Set distance into text view
