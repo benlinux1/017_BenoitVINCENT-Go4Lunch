@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Go4lunch</string>
+
+    <string name="app_name" translatable="false">Go4lunch</string>
     <string name="navigation_map_view">Map View</string>
     <string name="navigation_list_view">List View</string>
     <string name="navigation_workmates">Workmates</string>
@@ -14,7 +15,7 @@
     <string name="workmates_activity_label">Available workmates</string>
 
     // Authentication
-    <string name="login">Connexion</string>
+    <string name="login" translatable="false">Connexion</string>
     <string name="error_not_connected">User must be logged !</string>
     <string name="error_authentication_canceled">Authentification canceled&#8230;</string>
     <string name="error_no_internet">No internet connexion !</string>
@@ -31,37 +32,37 @@
 
 
     // NAVIGATION DRAWER
-    <string name="user_name">John SMITH</string>
-    <string name="user_email">jsmith.1337@gmail.com</string>
+    <string name="user_name" translatable="false">John SMITH</string>
+    <string name="user_email" translatable="false">jsmith.1337@gmail.com</string>
     <string name="drawer_title_1">YOUR LUNCH</string>
     <string name="drawer_title_2">SETTINGS</string>
     <string name="drawer_title_3">LOGOUT</string>
     <string name="info_no_email_found">Email not found</string>
     <string name="info_no_username_found">Username not found</string>
-    <string name="logo">Go4Lunch logo</string>
+    <string name="logo" translatable="false">Go4Lunch logo</string>
 
     // Used in NavigationDrawer
-    <string name="navigation_drawer_open">Start</string>
-    <string name="navigation_drawer_close">Close</string>
+    <string name="navigation_drawer_open" translatable="false">Start</string>
+    <string name="navigation_drawer_close" translatable="false">Close</string>
 
-    <string name="button_login_text_logged">Go for lunch !</string>
-    <string name="button_login_text_not_logged">Connexion</string>
+    <string name="button_login_text_logged" translatable="false">Go for lunch !</string>
+    <string name="button_login_text_not_logged" translatable="false">Connexion</string>
 
     // RESTAURANT MAP ITEM
     <string name="details_button">See details</string>
 
     // RESTAURANT LIST ITEM
-    <string name="restaurant_id">ID SDK PLACES</string>
-    <string name="restaurant_name">Le Zinc</string>
-    <string name="restaurant_style_and_address">French - 12 rue du Faubourg Poissonnière</string>
-    <string name="restaurant_style_and_address_separator"> - </string>
-    <string name="opening_hours">Open until 7pm</string>
-    <string name="distance">120m</string>
-    <string name="restaurant_users">(2)</string>
+    <string name="restaurant_id" translatable="false">ID SDK PLACES</string>
+    <string name="restaurant_name" translatable="false">Le Zinc</string>
+    <string name="restaurant_style_and_address" translatable="false">French - 12 rue du Faubourg Poissonnière</string>
+    <string name="restaurant_style_and_address_separator" translatable="false"> - </string>
+    <string name="opening_hours" translatable="false">Open until 7pm</string>
+    <string name="distance" translatable="false">120m</string>
+    <string name="restaurant_users" translatable="false">(2)</string>
     <string name="guest_picture">picture_of_a_guest</string>
     <string name="restaurant_picture">picture_of_the_restaurant</string>
-    <string name="pick_place">Find a place</string>
-    <string name="option_get_place">Get place</string>
+    <string name="pick_place" translatable="false">Find a place</string>
+    <string name="option_get_place" translatable="false">Get place</string>
     <string name="no_address_found">Address not found</string>
 
     // RESTAURANT DETAILS
@@ -71,7 +72,7 @@
     <string name="website">WEBSITE</string>
     <string name="no_website_notification">This restaurant doesn\'t have website…</string>
     <string name="no_secured_website">This website\'s link is not safe…</string>
-    <string name="no_phoneNumber_notification">This restaurant doesn\'t phone number…</string>
+    <string name="no_phoneNumber_notification">This restaurant doesn\'t get phone number…</string>
     <string name="distance_in_meters_end" translatable="false">%d m</string>
     <string name="restaurant_location" translatable="false">Restaurant location</string>
     <string name="restaurant_address" translatable="false">12 rue du Faubourg Poissonnière</string>
@@ -81,6 +82,7 @@
     <string name="booking_error">You already booked for the</string>
     <string name="nobody_booked_today">Nobody booked for today in this restaurant</string>
     <string name="nobody_booked_today_except_you">Except you, nobody booked here for today</string>
+
 
 
     // SETTINGS ACTIVITY
@@ -94,16 +96,20 @@
     <string name="settings_enable_notifications">Enable notifications</string>
     <dimen name="settings_progressbar_size">80dip</dimen>
     <string name="settings_user_name_title">Full name</string>
-    <string name="settings_user_name">John Doe</string>
+    <string name="settings_user_name" translatable="false">John Doe</string>
     <string name="settings_user_email_title">Email (not editable)</string>
-    <string name="settings_user_email">johndoe@test.com</string>
+    <string name="settings_user_email" translatable="false">johndoe@test.com</string>
+    <string name="account_update_success">Account update successful !</string>
+    <string name="allow_photo_access">Please allow pictures access</string>
+    <string name="picture_enabled">You can choose a picture !</string>
+    <string name="no_image_chosen">No image chosen</string>
 
     // SEARCH BAR
     <string name="search_bar_title">Search</string>
     <string name="search_bar_hint">Search restaurants</string>
 
     // WORKMATES FRAGMENT
-    <string name="workmates_text_eating">Scarlett is eating french (Le Zinc)</string>
+    <string name="workmates_text_eating" translatable="false">Scarlett is eating french (Le Zinc)</string>
 
     // WORKMATES ADAPTER
     <string name="no_restaurant">No restaurant found for this workmate</string>
@@ -119,6 +125,8 @@
     <string name="dialog_title">Do you really want to delete this booking ?</string>
     <string name="dialog_yes">Yes</string>
     <string name="dialog_no">No</string>
+
+
 
 
 </resources>

@@ -25,7 +25,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.ActivityCompat;
 
 import com.benlinux.go4lunch.R;
 import com.benlinux.go4lunch.data.userManager.UserManager;
@@ -35,8 +34,6 @@ import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Objects;
 
@@ -52,7 +49,6 @@ public class SettingsActivity extends AppCompatActivity {
     private TextView userEmail;
     private Button deleteButton;
     private Button updateButton;
-    private Toolbar mToolbar;
     private SwitchCompat switchNotifications;
     private ImageView updateAvatarButton;
 
@@ -79,7 +75,7 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     private void setToolbar() {
-        mToolbar = (Toolbar) findViewById(R.id.main_toolbar);
+        Toolbar mToolbar = (Toolbar) findViewById(R.id.main_toolbar);
         setSupportActionBar(mToolbar);
         Objects.requireNonNull(getSupportActionBar()).setTitle("Settings");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -174,7 +170,7 @@ public class SettingsActivity extends AppCompatActivity {
             if (uriImageSelected != null) {
                 userManager.updateUserAvatarUrl(uriImageSelected);
             }
-            Toast.makeText(this, "Account update successful !", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.account_update_success, Toast.LENGTH_SHORT).show();
         });
     }
 
@@ -196,10 +192,10 @@ public class SettingsActivity extends AppCompatActivity {
     @AfterPermissionGranted(RC_IMAGE_PERMS)
     private void updateAvatarPicture() {
         if (!EasyPermissions.hasPermissions(this, PERMS)) {
-            EasyPermissions.requestPermissions(this, "Please allow pictures access", RC_IMAGE_PERMS, PERMS);
+            EasyPermissions.requestPermissions(this, getString(R.string.allow_photo_access), RC_IMAGE_PERMS, PERMS);
             return;
         }
-        Toast.makeText(this, "You can choose a picture !", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getString(R.string.picture_enabled), Toast.LENGTH_SHORT).show();
         Intent pickPhotoIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         actionPick.launch(pickPhotoIntent);
     }
@@ -226,7 +222,7 @@ public class SettingsActivity extends AppCompatActivity {
                 .apply(RequestOptions.circleCropTransform())
                 .into(userAvatar);
         } else {
-            Toast.makeText(this, "No image chosen", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.no_image_chosen), Toast.LENGTH_SHORT).show();
         }
     }
 

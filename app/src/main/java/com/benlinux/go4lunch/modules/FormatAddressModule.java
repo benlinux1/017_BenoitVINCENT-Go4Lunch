@@ -1,6 +1,5 @@
 package com.benlinux.go4lunch.modules;
 
-import android.app.Application;
 import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
@@ -12,18 +11,11 @@ import java.util.Locale;
 
 public class FormatAddressModule {
 
-    private static Context localContext;
-
-    public FormatAddressModule(Application context) {
-        super();
-        localContext = context.getApplicationContext();
-    }
-
     // Return address according to Latitude & longitude params
-    public static String getFormattedAddressFromLatLng(LatLng latLng) {
+    public static String getFormattedAddressFromLatLng(LatLng latLng, Context context) {
         Geocoder geocoder;
         List<Address> addresses;
-        geocoder = new Geocoder(localContext, Locale.getDefault());
+        geocoder = new Geocoder(context, Locale.getDefault());
         String strAdd = "";
         try {
             addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);

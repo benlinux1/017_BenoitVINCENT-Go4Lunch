@@ -53,6 +53,8 @@
         <item name="colorControlNormal">@color/dark_grey</item>
         <item name="color">@color/grey</item>
         <item name="colorControlActivated">@color/gold</item>
+        <item name="android:textSize">16sp</item>
+
     </style>
 
 

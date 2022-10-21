@@ -113,8 +113,9 @@
     <Button
         android:id="@+id/settings_update_button"
         style="@style/Widget.Material3.Button.ElevatedButton.Icon"
-        android:layout_width="@dimen/profile_button_width"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:minWidth="270dp"
         android:layout_marginBottom="@dimen/default_large_margin"
         android:backgroundTint="@color/colorAccent"
         android:textSize="@dimen/high_text_size"
@@ -123,6 +124,7 @@
         app:icon="@drawable/ic_save_profile"
         android:text="@string/update_button_text"
         android:textStyle="bold"
+        android:paddingHorizontal="@dimen/default_margin"
         app:layout_constraintTop_toBottomOf="@id/settings_notifications_layout"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -132,8 +134,9 @@
     <Button
         android:id="@+id/settings_delete_button"
         style="@style/Widget.Material3.Button.ElevatedButton.Icon"
-        android:layout_width="@dimen/profile_button_width"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:minWidth="270dp"
         android:layout_marginBottom="@dimen/default_large_margin"
         android:backgroundTint="@android:color/holo_red_dark"
         android:text="@string/delete_button_text"
@@ -144,7 +147,7 @@
         app:icon="@drawable/ic_delete_account"
         android:layout_marginTop="@dimen/small_margin"
         app:layout_constraintTop_toBottomOf="@+id/settings_update_button"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintStart_toStartOf="@id/settings_update_button"
+        app:layout_constraintEnd_toEndOf="@id/settings_update_button" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

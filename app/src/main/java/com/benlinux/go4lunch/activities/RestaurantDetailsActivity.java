@@ -4,11 +4,8 @@ import static android.content.ContentValues.TAG;
 
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
-import android.app.TimePickerDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,23 +14,16 @@ import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
 import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RatingBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.TimePicker;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatCheckBox;
 import androidx.appcompat.widget.Toolbar;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -43,8 +33,8 @@ import com.benlinux.go4lunch.data.bookingManager.BookingManager;
 import com.benlinux.go4lunch.data.userManager.UserManager;
 import com.benlinux.go4lunch.databinding.ActivityRestaurantDetailsBinding;
 import com.benlinux.go4lunch.modules.FormatAddressModule;
+import com.benlinux.go4lunch.modules.FormatRatingModule;
 import com.benlinux.go4lunch.ui.adapters.GuestAdapter;
-import com.benlinux.go4lunch.ui.adapters.WorkmateAdapter;
 import com.benlinux.go4lunch.ui.models.Booking;
 import com.benlinux.go4lunch.ui.models.User;
 import com.bumptech.glide.Glide;
@@ -60,12 +50,10 @@ import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.net.FetchPhotoRequest;
 import com.google.android.libraries.places.api.net.FetchPlaceRequest;
 import com.google.android.libraries.places.api.net.PlacesClient;
-import com.google.android.material.divider.MaterialDividerItemDecoration;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.maps.android.SphericalUtil;
-
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -93,11 +81,9 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
     private ImageButton webSiteButton;
 
     private String restaurantId;
-    private String restaurantPictureUrl;
     private FloatingActionButton bookingButton;
 
     private RecyclerView mRecyclerView;
-    private GuestAdapter adapter;
     private List<String> mGuests;
 
     // FOR DATA
@@ -198,7 +184,7 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
      * Init the recyclerView that contains workmates who booked in this restaurant
      */
     private void configRecyclerView() {
-        adapter = new GuestAdapter(getGuestsList(), this);
+        GuestAdapter adapter = new GuestAdapter(getGuestsList(), this);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setAdapter(adapter);
         adapter.notifyItemRangeInserted(-1, mGuests.size());
@@ -386,8 +372,7 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
     // Set restaurant's details in text views, according to place result
     private void setRestaurantsInfo(Place place) {
         // Format restaurant Address
-        FormatAddressModule addressFormatter = new FormatAddressModule(getApplication());
-        String address = FormatAddressModule.getFormattedAddressFromLatLng(place.getLatLng());
+        String address = FormatAddressModule.getFormattedAddressFromLatLng(place.getLatLng(), getApplicationContext());
         // Set Name
         if (place.getName() != null) {
             restaurantName.setText(place.getName());
@@ -399,7 +384,8 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
         // Set Rating
         if (place.getRating() != null) {
             Double ratingValue = place.getRating();
-            restaurantRating.setRating(formatRating(ratingValue).floatValue());
+            // Formatted rating
+            restaurantRating.setRating(FormatRatingModule.formatRating(ratingValue).floatValue());
         } else {
             restaurantRating.setVisibility(View.GONE);
         }
@@ -569,24 +555,5 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
                 view.getLayoutParams();
         params.setMargins(left, top, right, bottom);
         view.setLayoutParams(params);
-    }
-
-    // Format number of rating stars (between 0.5 and 3) as asked from client
-    private Double formatRating(Double rating) {
-        Double formattedRating = null;
-        if (rating >= 0 && rating <= 0.8) {
-            formattedRating = 0.5;
-        } else if (rating > 0.8 && rating <= 1.6) {
-            formattedRating = 1.0;
-        } else if (rating > 1.6 && rating <= 2.5) {
-            formattedRating = 1.5;
-        } else if (rating > 2.5 && rating <= 3.4) {
-            formattedRating = 2.0;
-        } else if (rating > 3.4 && rating <= 4.3) {
-            formattedRating = 2.5;
-        } else if (rating > 4.3 && rating <= 5.0) {
-            formattedRating = 3.0;
-        }
-        return formattedRating;
     }
 }
