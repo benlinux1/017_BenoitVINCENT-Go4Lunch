@@ -148,11 +148,6 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         private final TextView distance;
 
         /**
-         * The drawable that represents users who booked
-         */
-        private final ImageView userPicture;
-
-        /**
          * The TextView displaying the number of workmates who booked a lunch in the restaurant
          */
         private final TextView numberOfBookings;
@@ -176,7 +171,6 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
             styleAndAddress = itemView.findViewById(R.id.item_restaurant_style_and_address);
             hours = itemView.findViewById(R.id.item_restaurant_hours);
             distance = itemView.findViewById(R.id.item_restaurant_distance);
-            userPicture = itemView.findViewById(R.id.item_restaurant_user);
             numberOfBookings = itemView.findViewById(R.id.item_restaurant_guests);
             ratingBar = itemView.findViewById(R.id.item_restaurant_rating);
         }
@@ -209,14 +203,12 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
 
             // Get and set number of users who booked in the restaurant
             if (restaurant.getBookings().size() == 0 || restaurant.getBookings() == null) {
-                userPicture.setVisibility(View.GONE);
                 numberOfBookings.setVisibility(View.GONE);
             } else {
                 String bookingsNumber = String.valueOf(restaurant.getBookings().size());
                 StringBuilder sb = new StringBuilder();
                 sb.append("(").append(bookingsNumber).append(")");
                 numberOfBookings.setText(sb.toString());
-                userPicture.setVisibility(View.VISIBLE);
                 numberOfBookings.setVisibility(View.VISIBLE);
             }
         }

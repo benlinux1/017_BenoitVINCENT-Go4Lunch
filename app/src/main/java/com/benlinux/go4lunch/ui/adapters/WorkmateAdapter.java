@@ -25,13 +25,11 @@ import com.bumptech.glide.Glide;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Random;
 
 public class WorkmateAdapter extends RecyclerView.Adapter<WorkmateAdapter.ViewHolder> {
 
     private List<User> mWorkmates;
     private final Context localContext;
-
 
     /**
      * Instantiates a new ListAdapter.
@@ -41,7 +39,6 @@ public class WorkmateAdapter extends RecyclerView.Adapter<WorkmateAdapter.ViewHo
         mWorkmates = workmates;
         localContext = context;
     }
-
 
 
     @NonNull
@@ -81,8 +78,6 @@ public class WorkmateAdapter extends RecyclerView.Adapter<WorkmateAdapter.ViewHo
                 }
             });
         }
-
-
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -144,9 +139,9 @@ public class WorkmateAdapter extends RecyclerView.Adapter<WorkmateAdapter.ViewHo
         void bind(User workmate) {
             StringBuilder booking = new StringBuilder();
             if (!Objects.equals(workmate.getRestaurantName(), "")) {
-                booking.append(workmate.getName()).append(" is eating to ").append(workmate.getRestaurantName());
+                booking.append(workmate.getName()).append(localContext.getString(R.string.user_is_eating_to)).append(workmate.getRestaurantName());
             } else {
-                booking.append(workmate.getName()).append(" didn't select a restaurant yet...");
+                booking.append(workmate.getName()).append(localContext.getString(R.string.not_decided));
                 name.setTextColor(Color.parseColor("#808080"));
             }
 
@@ -166,9 +161,7 @@ public class WorkmateAdapter extends RecyclerView.Adapter<WorkmateAdapter.ViewHo
                     .circleCrop()
                     .into(avatar);
             }
-
         }
-
     }
 
 }

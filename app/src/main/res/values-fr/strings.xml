@@ -32,8 +32,8 @@
     <string name="no_secured_website">Ce lien n\'est pas sécurisé</string>
     <string name="no_phoneNumber_notification">"Aucun numéro de téléphone trouvé pour ce restaurant "</string>
     <string name="booking_date_dialog_title">Choisissez une date de réservation</string>
-    <string name="booking_success">Réservation créée avec succès pour le</string>
-    <string name="booking_error">Vous avez déjà une réservation pour le</string>
+    <string name="booking_success">Réservation créée avec succès pour le&#160;</string>
+    <string name="booking_error">Vous avez déjà une réservation pour le&#160;</string>
     <string name="nobody_booked_today">Personne n\'a réservé ici pour aujourd\'hui</string>
     <string name="nobody_booked_today_except_you">À part vous, personne n\'a réservé ici pour aujourd\'hui</string>
     <string name="popup_message_choice_yes">OUI</string>
@@ -65,4 +65,8 @@
     <string name="picture_enabled">Choisissez une photo</string>
     <string name="no_image_chosen">Aucune photo sélectionnée</string>
     <string name="booking_delete_success">Réservation supprimée avec succès !</string>
+    <string name="user_is_eating_to">&#160;déjeune chez&#160;</string>
+    <string name="not_decided">&#160;n\'a pas encore fait son choix aujoud\'hui…</string>
+    <string name="at">&#160;chez&#160;</string>
+
 </resources>

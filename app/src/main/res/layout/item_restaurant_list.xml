@@ -103,30 +103,19 @@
                 app:layout_constraintStart_toStartOf="@+id/guideline1"
                 tools:text="@string/distance" />
 
-            <ImageView
-                android:id="@+id/item_restaurant_user"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/small_margin"
-                android:contentDescription="@string/guest_picture"
-                app:layout_constraintTop_toTopOf="@id/item_restaurant_style_and_address"
-                app:layout_constraintBottom_toBottomOf="@id/item_restaurant_style_and_address"
-                app:layout_constraintStart_toStartOf="@+id/guideline1"
-                app:layout_constraintEnd_toStartOf="@+id/guideline2"
-                app:srcCompat="@drawable/ic_restaurant_user" />
-
             <TextView
                 android:id="@+id/item_restaurant_guests"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/small_margin"
                 android:textSize="@dimen/smaller_text_size"
                 android:textStyle="bold"
-                app:layout_constraintTop_toTopOf="@+id/item_restaurant_user"
-                app:layout_constraintBottom_toBottomOf="@+id/item_restaurant_user"
+                android:gravity="center_vertical"
+                app:layout_constraintTop_toTopOf="@id/item_restaurant_style_and_address"
+                app:layout_constraintBottom_toBottomOf="@id/item_restaurant_style_and_address"
+                app:layout_constraintStart_toStartOf="@+id/guideline1"
                 app:layout_constraintEnd_toStartOf="@+id/guideline2"
-                app:layout_constraintStart_toEndOf="@+id/item_restaurant_user"
-                tools:text="@string/restaurant_users" />
+                tools:text="@string/restaurant_users"
+                app:drawableStartCompat="@drawable/ic_restaurant_user" />
 
             <RatingBar
                 android:id="@+id/item_restaurant_rating"
@@ -134,8 +123,8 @@
                 android:layout_height="wrap_content"
                 style="@style/Widget.AppCompat.RatingBar.Small"
                 android:theme="@style/RatingBar"
-                android:layout_marginEnd="@dimen/small_plus_margin"
                 android:numStars="3"
+                app:layout_constraintStart_toStartOf="@+id/guideline1"
                 app:layout_constraintBottom_toBottomOf="@id/item_restaurant_hours"
                 app:layout_constraintEnd_toStartOf="@+id/guideline2"
                 app:layout_constraintTop_toTopOf="@id/item_restaurant_hours"

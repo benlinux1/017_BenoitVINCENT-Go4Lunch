@@ -110,7 +110,7 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
     }
 
     private void setToolbar() {
-        Toolbar mToolbar = (Toolbar) findViewById(R.id.main_toolbar);
+        Toolbar mToolbar = findViewById(R.id.main_toolbar);
         setSupportActionBar(mToolbar);
         Objects.requireNonNull(getSupportActionBar()).setTitle("Restaurant Details");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -249,12 +249,6 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
         });
     }
 
-    // Show Snack Bar with a message
-    private void showSnackBar(String message){
-        View container = findViewById(R.id.restaurant_details_main_container);
-        Snackbar.make(container, message, Snackbar.LENGTH_SHORT).show();
-    }
-
     private void launchDateDialog() {
         final Calendar currentDate = Calendar.getInstance(Locale.FRANCE);
         String userId = userManager.getCurrentUser().getUid();
@@ -272,15 +266,12 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
                 @SuppressLint("SimpleDateFormat") SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
                 String formattedDate = dateFormat.format(date.getTime());
 
-                // Define today formatted date
-                String today = dateFormat.format(currentDate.getTime());
-
                 // Define booking id
                 String bookingId = Long.toString(System.currentTimeMillis());
 
                 // Create booking object
                 Booking booking = new Booking(bookingId, restaurantId, restaurantName.getText().toString(),
-                        restaurantAddress.getText().toString(), restaurantPicture.getTransitionName(),  userId, formattedDate);
+                        restaurantAddress.getText().toString(), null,  userId, formattedDate);
 
                 // Check if booking exists in database
                 bookingManager.getAllBookingsData().addOnCompleteListener(new OnCompleteListener<List<Booking>>() {
@@ -298,7 +289,7 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
                         }
                         // If booking already exists, show toast to user
                         if (bookingExists) {
-                            Toast.makeText(RestaurantDetailsActivity.this, getString(R.string.booking_error) + " " + formattedDate + " at " + bookedRestaurant, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(RestaurantDetailsActivity.this, getString(R.string.booking_error) + formattedDate + getString(R.string.at) + bookedRestaurant, Toast.LENGTH_SHORT).show();
 
                         } else {
                             // If not, create booking in database
@@ -398,15 +389,15 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
                 final Calendar currentDate = Calendar.getInstance(Locale.getDefault());
                 int today = currentDate.get(Calendar.DAY_OF_WEEK);
                 List<Period> periodList = place.getOpeningHours().getPeriods();
+                StringBuilder openingHours = new StringBuilder();
                 if (periodList.get(today-1).getOpen() != null) {
-                    int openHour = periodList.get(today - 1).getOpen().getTime().getHours();
+                    int openHour = Objects.requireNonNull(periodList.get(today - 1).getOpen()).getTime().getHours();
                     String openMinutes = String.valueOf(Objects.requireNonNull(periodList.get(today - 1).getOpen()).getTime().getMinutes());
                     if (periodList.get(today-1).getClose() != null) {
                         int closeHour = Objects.requireNonNull(periodList.get(today - 1).getClose()).getTime().getHours();
                         String closeMinutes = String.valueOf(Objects.requireNonNull(periodList.get(today - 1).getClose()).getTime().getMinutes());
 
                         // Format opening hours of the day according to user language
-                        StringBuilder openingHours = new StringBuilder();
                         if (Locale.getDefault().getLanguage().equals("fr")) {
                             openingHours.append("Ouvert aujourd'hui de ").append(openHour).append("h").append(formatMinutes(openMinutes))
                                     .append(" jusqu'à ").append(closeHour).append("h").append(formatMinutes(closeMinutes)).append("  -");
@@ -458,7 +449,7 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
     // Format 0 minutes to 00 for best user XP
     private String formatMinutes(String string) {
         StringBuilder formattedString = new StringBuilder();
-        if (string.equals("0") || string == null) {
+        if (string.equals("0") || string.equals("null")) {
             formattedString.append("00");
             return formattedString.toString();
         }

@@ -76,11 +76,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        redirectUserIfNotLogged();
+
         this.configureToolBar();
         this.configureNavigation();
         this.configureDrawerLayout();
         this.setDrawerViews();
-        redirectUserIfNotLogged();
         this.updateUIWithUserData();
     }
 

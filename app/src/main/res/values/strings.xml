@@ -78,12 +78,12 @@
     <string name="restaurant_address" translatable="false">12 rue du Faubourg Poissonnière</string>
     <string name="restaurant_postal_code_and_city" translatable="false">75000 PARIS</string>
     <string name="booking_date_dialog_title">Select a booking date</string>
-    <string name="booking_success">Booking created successfully for the</string>
-    <string name="booking_error">You already booked for the</string>
+    <string name="booking_success">Booking created successfully for the&#160;</string>
+    <string name="booking_error">You already booked for the&#160;</string>
     <string name="nobody_booked_today">Nobody booked for today in this restaurant</string>
     <string name="nobody_booked_today_except_you">Except you, nobody booked here for today</string>
     <string name="booking_delete_success">Booking deleted successfully !</string>
-
+    <string name="at">&#160;at&#160;</string>
 
 
     // SETTINGS ACTIVITY
@@ -121,12 +121,13 @@
     <string name="user_avatar_description">user avatar picture</string>
     <string name="user_avatar_update">update avatar picture</string>
     <string name="no_booking_for_user">You didn\'t make any booking yet</string>
+    <string name="user_is_eating_to">&#160;is eating to&#160;</string>
+    <string name="not_decided">&#160;hasn\'t decided yet</string>
 
     // BOOKING ADAPTER
     <string name="dialog_title">Do you really want to delete this booking ?</string>
     <string name="dialog_yes">Yes</string>
     <string name="dialog_no">No</string>
-
 
 
 
