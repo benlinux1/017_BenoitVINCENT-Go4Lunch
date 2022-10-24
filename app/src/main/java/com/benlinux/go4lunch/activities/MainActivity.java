@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -234,6 +235,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         userName = headerContainer.findViewById(R.id.user_name);
         userEmail = headerContainer.findViewById(R.id.user_email);
         userAvatar = headerContainer.findViewById(R.id.user_avatar);
+
+        // Hide logo in landScape
+        int orientation = getResources().getConfiguration().orientation;
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            findViewById(R.id.activity_main_nav_view_logo).setVisibility(View.GONE);
+        }
     }
 
     // Set user data in drawer views

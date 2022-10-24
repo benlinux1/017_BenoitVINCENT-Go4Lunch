@@ -398,21 +398,25 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
                 final Calendar currentDate = Calendar.getInstance(Locale.getDefault());
                 int today = currentDate.get(Calendar.DAY_OF_WEEK);
                 List<Period> periodList = place.getOpeningHours().getPeriods();
-                int openHour = Objects.requireNonNull(periodList.get(today - 1).getOpen()).getTime().getHours();
-                int closeHour = Objects.requireNonNull(periodList.get(today - 1).getClose()).getTime().getHours();
-                String openMinutes = String.valueOf(Objects.requireNonNull(periodList.get(today - 1).getOpen()).getTime().getMinutes());
-                String closeMinutes = String.valueOf(Objects.requireNonNull(periodList.get(today - 1).getClose()).getTime().getMinutes());
+                if (periodList.get(today-1).getOpen() != null) {
+                    int openHour = periodList.get(today - 1).getOpen().getTime().getHours();
+                    String openMinutes = String.valueOf(Objects.requireNonNull(periodList.get(today - 1).getOpen()).getTime().getMinutes());
+                    if (periodList.get(today-1).getClose() != null) {
+                        int closeHour = Objects.requireNonNull(periodList.get(today - 1).getClose()).getTime().getHours();
+                        String closeMinutes = String.valueOf(Objects.requireNonNull(periodList.get(today - 1).getClose()).getTime().getMinutes());
 
-                // Format opening hours of the day according to user language
-                StringBuilder openingHours = new StringBuilder();
-                if (Locale.getDefault().getLanguage().equals("fr")) {
-                    openingHours.append("Ouvert aujourd'hui de ").append(openHour).append("h").append(formatMinutes(openMinutes))
-                            .append(" jusqu'à ").append(closeHour).append("h").append(formatMinutes(closeMinutes)).append("  -");
-                } else {
-                    openingHours.append("Open today from ").append(openHour).append(":").append(formatMinutes(openMinutes)).append(" am")
-                            .append(" to ").append(closeHour).append(":").append(formatMinutes(closeMinutes)).append(" pm").append("  -");
+                        // Format opening hours of the day according to user language
+                        StringBuilder openingHours = new StringBuilder();
+                        if (Locale.getDefault().getLanguage().equals("fr")) {
+                            openingHours.append("Ouvert aujourd'hui de ").append(openHour).append("h").append(formatMinutes(openMinutes))
+                                    .append(" jusqu'à ").append(closeHour).append("h").append(formatMinutes(closeMinutes)).append("  -");
+                        } else {
+                            openingHours.append("Open today from ").append(openHour).append(":").append(formatMinutes(openMinutes)).append(" am")
+                                    .append(" to ").append(closeHour).append(":").append(formatMinutes(closeMinutes)).append(" pm").append("  -");
+                        }
+                        restaurantHours.setText(openingHours.toString());
+                    }
                 }
-                restaurantHours.setText(openingHours.toString());
             } catch (Exception e) {
                 Log.e("Error formatting hours", e.getMessage());
                 restaurantHours.setVisibility(View.GONE);

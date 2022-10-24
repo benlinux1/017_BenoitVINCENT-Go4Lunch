@@ -16,20 +16,24 @@ public class FormatAddressModule {
         Geocoder geocoder;
         List<Address> addresses;
         geocoder = new Geocoder(context, Locale.getDefault());
-        String strAdd = "";
+        String strAdd;
         try {
             addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
             Address returnedAddress = addresses.get(0);
-            StringBuilder strReturnedAddress = new StringBuilder("");
+            StringBuilder strReturnedAddress = new StringBuilder();
 
-            for (int i = 0; i < returnedAddress.getMaxAddressLineIndex(); i++) {
-                strReturnedAddress.append(returnedAddress.getAddressLine(i)).append("\n");
-            }
             String mStreetNumber = returnedAddress.getSubThoroughfare();
             String mStreet = returnedAddress.getThoroughfare();
             String mPostalCode = returnedAddress.getPostalCode();
             String mCity = returnedAddress.getLocality();
-            strReturnedAddress.append(mStreetNumber).append(" ").append(mStreet).append(" - ").append(mPostalCode).append(" ").append(mCity);
+
+            // If no street, display only postal code & city
+            if (mStreet == null ) {
+                strReturnedAddress.append(mPostalCode).append(" ").append(mCity);
+            // Else, display full formatted address
+            } else {
+                strReturnedAddress.append(mStreetNumber).append(" ").append(mStreet).append(" - ").append(mPostalCode).append(" ").append(mCity);
+            }
             strAdd = strReturnedAddress.toString();
 
         } catch (Exception e) {
