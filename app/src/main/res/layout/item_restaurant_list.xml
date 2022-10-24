@@ -12,6 +12,7 @@
         style="@style/Widget.Material3.CardView.Elevated"
         android:layout_width="@dimen/zero"
         android:layout_height="@dimen/zero"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -55,6 +56,7 @@
                 android:id="@+id/item_restaurant_name"
                 android:layout_width="@dimen/zero"
                 android:layout_height="wrap_content"
+                android:textSize="@dimen/higher_text_size"
                 android:layout_marginStart="@dimen/small_margin"
                 android:layout_marginEnd="@dimen/small_margin"
                 android:textColor="@color/black"
@@ -132,8 +134,8 @@
 
             <ImageView
                 android:id="@+id/item_restaurant_picture"
-                android:layout_width="72dp"
-                android:layout_height="72dp"
+                android:layout_width="@dimen/list_restaurant_picture"
+                android:layout_height="@dimen/list_restaurant_picture"
                 android:scaleType="fitXY"
                 android:layout_marginEnd="@dimen/small_margin"
                 android:contentDescription="@string/restaurant_picture"

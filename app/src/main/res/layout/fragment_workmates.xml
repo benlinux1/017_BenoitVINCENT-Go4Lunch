@@ -30,6 +30,7 @@
             android:id="@+id/list_workmates"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/recycler_view_margin_top"
             tools:listitem="@layout/item_workmates_list"
             app:layoutManager="LinearLayoutManager"/>
 

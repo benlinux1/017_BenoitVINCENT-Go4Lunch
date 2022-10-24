@@ -5,14 +5,14 @@
     android:id="@+id/workmate_item"
     android:layout_width="match_parent"
     android:background="@color/white"
-    android:layout_height="wrap_content"
-    android:layout_marginVertical="@dimen/small_margin"
-    android:layout_marginHorizontal="@dimen/small_margin">
+    android:layout_height="@dimen/workmate_item_height"
+    android:layout_marginVertical="@dimen/very_small_margin"
+    android:layout_marginHorizontal="@dimen/restaurant_details_workmates_margin_horizontal">
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/workmate_avatar"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="@dimen/workmate_item_avatar_size"
+                android:layout_height="@dimen/workmate_item_avatar_size"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"

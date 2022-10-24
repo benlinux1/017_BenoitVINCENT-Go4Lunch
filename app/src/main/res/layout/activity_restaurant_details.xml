@@ -43,7 +43,7 @@
         <ImageView
             android:id="@+id/restaurantDetailsPhoto"
             android:layout_width="0dp"
-            android:layout_height="220dp"
+            android:layout_height="@dimen/restaurant_details_picture_height"
             android:scaleType="fitXY"
             app:layout_constraintBottom_toTopOf="@id/restaurantDetailsInformation"
             app:layout_constraintEnd_toEndOf="parent"
@@ -283,6 +283,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="top"
+                android:layout_marginHorizontal="@dimen/restaurant_details_workmates_margin_horizontal"
                 tools:listitem="@layout/item_workmates_list"
                 app:layoutManager="LinearLayoutManager"/>
 

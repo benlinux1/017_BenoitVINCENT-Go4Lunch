@@ -70,4 +70,14 @@
         <item name="colorControlActivated">@color/colorGreenSwitch</item>
     </style>
 
+    <style name="BottomNavigationView" parent="@style/TextAppearance.AppCompat.Caption">
+        <item name="android:textSize">@dimen/design_bottom_navigation_text_size_inactive</item>
+
+    </style>
+
+    <style name="BottomNavigationView.Active" parent="@style/TextAppearance.AppCompat.Caption">
+        <item name="android:textSize">@dimen/design_bottom_navigation_text_size_active</item>
+    </style>
+
+
 </resources>

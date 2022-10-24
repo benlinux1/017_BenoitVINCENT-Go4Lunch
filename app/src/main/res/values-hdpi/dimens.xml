@@ -34,7 +34,6 @@
     <dimen name="user_avatar_size">120dp</dimen>
     <dimen name="profile_button_width">180dp</dimen>
 
-    <!-- Recycler view -->
     <dimen name="list_restaurant_picture">72dp</dimen>
     <dimen name="recycler_view_margin_top">0dp</dimen>
 
@@ -46,12 +45,7 @@
 
     <!-- Restaurant Details -->
     <dimen name="restaurant_details_picture_height" >220dp</dimen>
-    <dimen name="restaurant_details_workmates_margin_horizontal">8dp</dimen>
-
-    <dimen name="workmate_item_height">50dp</dimen>
     <dimen name="workmate_item_avatar_size">48dp</dimen>
-
-
 
 
 </resources>
