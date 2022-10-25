@@ -15,6 +15,7 @@ import com.benlinux.go4lunch.data.bookingManager.BookingManager;
 import com.benlinux.go4lunch.ui.adapters.ListAdapter;
 import com.benlinux.go4lunch.ui.models.Booking;
 import com.benlinux.go4lunch.ui.models.Restaurant;
+
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
@@ -127,7 +128,7 @@ public class FetchPlacesData extends AsyncTask<Object, String, String> {
                     });
                 }
 
-            // else, request come from list fragment, so set elements into recyclerview adapter
+                // else, request come from list fragment, so set elements into recyclerview adapter
             } else {
 
                 for (int i = 0; i < jsonArray.length(); i++) {
@@ -163,15 +164,15 @@ public class FetchPlacesData extends AsyncTask<Object, String, String> {
 
                         // Set number of bookings according to bookings of day
                         getBookingsOfToday().addOnCompleteListener(new OnCompleteListener<List<Booking>>() {
-                           @Override
-                           public void onComplete(@NonNull Task<List<Booking>> task) {
-                               for (Booking booking : task.getResult()) {
-                                   if (booking.getRestaurantId().equals(placeId)) {
-                                       numberOfBookings.add(booking);
-                                   }
-                               }
-                           }
-                       });
+                            @Override
+                            public void onComplete(@NonNull Task<List<Booking>> task) {
+                                for (Booking booking : task.getResult()) {
+                                    if (booking.getRestaurantId().equals(placeId)) {
+                                        numberOfBookings.add(booking);
+                                    }
+                                }
+                            }
+                        });
 
                         // If place get rating, add it with rating to the restaurant list
                         try {
@@ -180,7 +181,7 @@ public class FetchPlacesData extends AsyncTask<Object, String, String> {
                             Restaurant restaurant = new Restaurant(placeId, name, formattedAddress, rating, null, distance, restaurantLocation, numberOfBookings);
                             // Add restaurant to list
                             restaurantsList.add(restaurant);
-                        // If place doesn't get rating, set rating to null value & add restaurant to list
+                            // If place doesn't get rating, set rating to null value & add restaurant to list
                         } catch (Exception e) {
                             Log.e("No rating", e.getMessage());
                             Restaurant restaurant = new Restaurant(placeId, name, formattedAddress, null, null, distance, restaurantLocation, numberOfBookings);
@@ -216,7 +217,7 @@ public class FetchPlacesData extends AsyncTask<Object, String, String> {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        // else, if request come from listFragment
+            // else, if request come from listFragment
         } else {
             try {
                 restaurantsList = (List<Restaurant>) objects[0];

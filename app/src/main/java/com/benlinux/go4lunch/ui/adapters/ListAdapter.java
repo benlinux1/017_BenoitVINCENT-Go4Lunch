@@ -58,14 +58,6 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         localContext = context;
     }
 
-    /**
-     * Updates the list of restaurants the adapter deals with.
-     * @param restaurants the list of tasks the adapter deals with to set
-     */
-    void updateRestaurants(@NonNull final List<Restaurant> restaurants) {
-        this.mRestaurants = restaurants;
-        notifyItemRangeChanged(- 1, mRestaurants.size());
-    }
 
     @NonNull
     @Override
@@ -99,9 +91,6 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         notifyItemRangeChanged(- 1, mRestaurants.size());
     }
 
-    public void setUserLocation(LatLng location) {
-        this.actualLocation = location;
-    }
 
     public LatLng getUserLocation() {
         return this.actualLocation;
@@ -246,7 +235,6 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
 
         }).addOnFailureListener((exception) -> {
             if (exception instanceof ApiException) {
-                final ApiException apiException = (ApiException) exception;
                 Log.e(TAG, "Place not found: " + exception.getMessage());
             }
         });
@@ -269,30 +257,20 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
                 String closeMinutes = String.valueOf(Objects.requireNonNull(periodList.get(today).getClose()).getTime().getMinutes());
 
                 // Format opening hours of the day according to user language
-                if (Locale.getDefault().getLanguage().equals("fr")) {
-                    openingHours.append("Ouvert aujourd'hui de ").append(openHour).append("h").append(formatMinutes(openMinutes))
-                            .append(" jusqu'à ").append(closeHour).append("h").append(formatMinutes(closeMinutes));
-                } else {
-                    openingHours.append("Open today from ").append(openHour).append(":").append(formatMinutes(openMinutes)).append(" am")
-                            .append(" to ").append(closeHour).append(":").append(formatMinutes(closeMinutes)).append(" pm");
-                }
+                openingHours.append(localContext.getString(R.string.open_from)).append(openHour)
+                    .append(localContext.getString(R.string.us_hours_separator)).append(formatMinutes(openMinutes)).append(localContext.getString(R.string.am))
+                    .append(localContext.getString(R.string.open_to)).append(closeHour).append(localContext.getString(R.string.us_hours_separator))
+                    .append(formatMinutes(closeMinutes)).append(localContext.getString(R.string.pm)
+                );
+
             }
             catch(Exception e){
                 Log.d("exception:", e.getMessage());
-                if (Locale.getDefault().getLanguage().equals("fr")) {
-                    openingHours.append("Fermé aujourd'hui");
-                } else {
-                    openingHours.append("Closed today");
-                }
+                openingHours.append(localContext.getString(R.string.closed_today));
             }
 
         } else {
-            if (Locale.getDefault().getLanguage().equals("fr")) {
-                openingHours.append("Horaires non communiqués");
-            } else {
-                openingHours.append("Opening hours not registered yet");
-            }
-
+            openingHours.append(localContext.getString(R.string.no_opening_hours));
         }
         // Set formatted opening hours into destination TextView
         hoursDestination.setText(openingHours.toString());

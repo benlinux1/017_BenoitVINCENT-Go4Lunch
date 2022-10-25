@@ -68,5 +68,13 @@
     <string name="user_is_eating_to">&#160;déjeune chez&#160;</string>
     <string name="not_decided">&#160;n\'a pas encore fait son choix aujoud\'hui…</string>
     <string name="at">&#160;chez&#160;</string>
+    <string name="no_opening_hours">Horaires non communiqués</string>
+    <string name="closed_today">Fermé aujourd\'hui</string>
+    <string name="open_from">Ouvert aujourd\'hui de&#160;</string>
+    <string name="us_hours_separator">h</string>
+    <string name="am" />
+    <string name="open_to">&#160;jusqu\'à&#160;</string>
+    <string name="pm" />
+    <string name="no_available_workmates">Aucun collègue disponible pour le moment</string>
 
 </resources>

@@ -1,24 +1,19 @@
 package com.benlinux.go4lunch.ui.adapters;
 
 import static android.content.ContentValues.TAG;
-import static com.benlinux.go4lunch.activities.MainActivity.userLocation;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.os.Build;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,11 +27,11 @@ import com.benlinux.go4lunch.activities.RestaurantDetailsActivity;
 import com.benlinux.go4lunch.activities.UserLunchActivity;
 import com.benlinux.go4lunch.data.bookingManager.BookingManager;
 import com.benlinux.go4lunch.ui.models.Booking;
+
 import com.bumptech.glide.Glide;
+
 import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.PhotoMetadata;
 import com.google.android.libraries.places.api.model.Place;
@@ -50,7 +45,7 @@ import java.util.List;
 
 public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.ViewHolder> {
 
-    private List<Booking> mBookings;
+    private final List<Booking> mBookings;
     private final Context localContext;
 
     private final BookingManager bookingManager = BookingManager.getInstance();

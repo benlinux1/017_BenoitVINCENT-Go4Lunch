@@ -128,7 +128,14 @@
     <string name="dialog_title">Do you really want to delete this booking ?</string>
     <string name="dialog_yes">Yes</string>
     <string name="dialog_no">No</string>
-
+    <string name="no_opening_hours">Opening hours not registered yet</string>
+    <string name="closed_today">Closed today</string>
+    <string name="open_from">Open today from&#160;</string>
+    <string name="us_hours_separator">:</string>
+    <string name="am">&#160;am</string>
+    <string name="open_to">&#160;to&#160;</string>
+    <string name="pm">&#160;pm</string>
+    <string name="no_available_workmates">No available workmates</string>
 
 
 </resources>

@@ -4,8 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/restaurant_item"
     android:layout_width="match_parent"
-    android:layout_marginLeft="@dimen/default_margin"
-    android:layout_marginRight="@dimen/default_margin"
     android:background="@color/white"
     android:layout_height="@dimen/restaurant_item_height">
 
@@ -22,7 +20,9 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/very_small_margin"
+            android:layout_marginRight="@dimen/very_small_margin">
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline1"
@@ -57,6 +57,8 @@
                 android:layout_width="@dimen/zero"
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/higher_text_size"
+                android:layout_marginStart="@dimen/small_margin"
+                android:layout_marginEnd="@dimen/small_margin"
                 android:textColor="@color/black"
                 app:layout_constraintBottom_toTopOf="@+id/item_restaurant_style_and_address"
                 app:layout_constraintEnd_toStartOf="@+id/guideline1"
@@ -135,6 +137,7 @@
                 android:layout_width="@dimen/list_restaurant_picture"
                 android:layout_height="@dimen/list_restaurant_picture"
                 android:scaleType="fitXY"
+                android:layout_marginEnd="@dimen/small_margin"
                 android:contentDescription="@string/restaurant_picture"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

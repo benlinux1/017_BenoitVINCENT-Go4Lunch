@@ -2,7 +2,6 @@ package com.benlinux.go4lunch.ui.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,7 +27,6 @@ import java.util.Objects;
 public class GuestAdapter extends RecyclerView.Adapter<GuestAdapter.ViewHolder> {
 
     private List<String> mGuests;
-    private final Context localContext;
 
     // FOR DATA
     private final UserManager userManager = UserManager.getInstance();
@@ -37,9 +35,8 @@ public class GuestAdapter extends RecyclerView.Adapter<GuestAdapter.ViewHolder> 
      * Instantiates a new ListAdapter.
      * @param guests the list of restaurants the adapter deals with to set
      */
-    public GuestAdapter(List<String> guests, Context context) {
+    public GuestAdapter(List<String> guests) {
         mGuests = guests;
-        localContext = context;
     }
 
 
@@ -136,21 +133,19 @@ public class GuestAdapter extends RecyclerView.Adapter<GuestAdapter.ViewHolder> 
                             name.setText(sb.toString());
                             if (user.getAvatar() != null) {
                                 Glide.with(avatar.getContext())
-                                        .load(user.getAvatar())
-                                        .circleCrop()
-                                        .into(avatar);
+                                    .load(user.getAvatar())
+                                    .circleCrop()
+                                    .into(avatar);
                             } else {
                                 Glide.with(avatar.getContext())
-                                        .load(R.mipmap.no_photo)
-                                        .circleCrop()
-                                        .into(avatar);
+                                    .load(R.mipmap.no_photo)
+                                    .circleCrop()
+                                    .into(avatar);
                             }
                         }
                     }
                 }
             });
         }
-
-
     }
 }

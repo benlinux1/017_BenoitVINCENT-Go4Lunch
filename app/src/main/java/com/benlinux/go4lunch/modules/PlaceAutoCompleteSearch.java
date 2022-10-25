@@ -42,14 +42,9 @@ public class PlaceAutoCompleteSearch {
             }
 
             Log.d("JSon",jsonResult.toString());
-        }
-        catch (MalformedURLException e){
+        } catch (IOException e){
             e.printStackTrace();
-        }
-        catch (IOException e){
-            e.printStackTrace();
-        }
-        finally {
+        } finally {
             if(connection != null){
                 connection.disconnect();
             }
@@ -63,7 +58,7 @@ public class PlaceAutoCompleteSearch {
 
                 String description = prediction.getJSONObject(i).getString("description");
                 String id = prediction.getJSONObject(i).getString("place_id");
-                Restaurant restaurant = new Restaurant(id, description, null, null, null, null, null, new ArrayList<Booking>());
+                Restaurant restaurant = new Restaurant(id, description, null, null, null, null, null, new ArrayList<>());
 
                 restaurantsList.add(restaurant);
             }

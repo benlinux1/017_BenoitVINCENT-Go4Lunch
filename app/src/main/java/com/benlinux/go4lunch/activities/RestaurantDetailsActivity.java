@@ -185,7 +185,7 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
      * Init the recyclerView that contains workmates who booked in this restaurant
      */
     private void configRecyclerView() {
-        GuestAdapter adapter = new GuestAdapter(getGuestsList(), this);
+        GuestAdapter adapter = new GuestAdapter(getGuestsList());
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setAdapter(adapter);
         adapter.notifyItemRangeInserted(-1, mGuests.size());

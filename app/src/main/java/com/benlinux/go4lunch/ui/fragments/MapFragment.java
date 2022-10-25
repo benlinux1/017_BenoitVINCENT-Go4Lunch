@@ -51,7 +51,6 @@ import com.google.android.gms.tasks.Task;
 @RequiresApi(api = Build.VERSION_CODES.N) // Required for getOrDefault method in location permissions
 public class MapFragment extends Fragment implements OnMapReadyCallback {
 
-    private FragmentMapViewBinding binding;
     private GoogleMap mGoogleMap;
     private SupportMapFragment mapFragment;
     // The entry point to the Fused Location Provider.
@@ -77,7 +76,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        binding = FragmentMapViewBinding.inflate(inflater, container, false);
+        com.benlinux.go4lunch.databinding.FragmentMapViewBinding binding = FragmentMapViewBinding.inflate(inflater, container, false);
         mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         return binding.getRoot();
     }

@@ -17,16 +17,12 @@ import com.benlinux.go4lunch.data.bookingManager.BookingManager;
 import com.benlinux.go4lunch.data.userManager.UserManager;
 import com.benlinux.go4lunch.databinding.ActivityLunchBinding;
 import com.benlinux.go4lunch.ui.adapters.BookingAdapter;
-import com.benlinux.go4lunch.ui.adapters.GuestAdapter;
 import com.benlinux.go4lunch.ui.models.Booking;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 import java.util.Objects;
 
 public class UserLunchActivity extends AppCompatActivity {
@@ -102,25 +98,9 @@ public class UserLunchActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<List<Booking>> task) {
 
-                Calendar currentDate = Calendar.getInstance(Locale.FRANCE);
-
-                @SuppressLint("SimpleDateFormat") SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-                String today = dateFormat.format(currentDate.getTime());
-
                 String userId = userManager.getCurrentUser().getUid();
-
-                boolean userBookedToday = false;
-
                 userBookings = new ArrayList<>();
 
-                for (Booking existingBooking : task.getResult()) {
-                    // If current user booked for today
-                    if (Objects.equals(existingBooking.getUserId(), userId) &&
-                            Objects.equals(existingBooking.getBookingDate(), today)) {
-                        userBookedToday = true;
-                        break;
-                    }
-                }
                 for (Booking existingBooking : task.getResult()) {
                     // Add user bookings to list
                     if (Objects.equals(existingBooking.getUserId(), userId)) {
@@ -131,15 +111,9 @@ public class UserLunchActivity extends AppCompatActivity {
                 configureRecyclerView();
             }
         });
-
-
     }
 
     private void setUserBookingsList(List<Booking> bookings) {
-        this.userBookings = bookings;
-    }
-
-    private List<Booking> getUserBookingsList() {
-        return this.userBookings;
+        userBookings = bookings;
     }
 }

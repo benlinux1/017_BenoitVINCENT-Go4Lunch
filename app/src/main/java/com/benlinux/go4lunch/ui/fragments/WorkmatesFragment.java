@@ -1,9 +1,9 @@
 package com.benlinux.go4lunch.ui.fragments;
 
 import android.annotation.SuppressLint;
+import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,7 +32,6 @@ import com.google.android.material.divider.MaterialDividerItemDecoration;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -40,11 +39,8 @@ import java.util.Objects;
 public class WorkmatesFragment extends Fragment {
 
     private FragmentWorkmatesBinding binding;
-    private WorkmateAdapter adapter;
     private List<User> mWorkmates;
     private RecyclerView mRecyclerView;
-
-    private String currentUserId;
 
     // FOR DATA
     private final UserManager userManager = UserManager.getInstance();
@@ -56,7 +52,6 @@ public class WorkmatesFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        currentUserId = userManager.getCurrentUser().getUid();
         getBookingsOfToday().addOnCompleteListener(new OnCompleteListener<List<Booking>>() {
             @Override
             public void onComplete(@NonNull Task<List<Booking>> task) {
@@ -142,15 +137,6 @@ public class WorkmatesFragment extends Fragment {
                             workmates.add(user);
                         }
                     }
-                    /**
-                    if (workmates.isEmpty()) {
-                    // Populate workmates List if no user in Database, for testing
-                        List<String> favorites = Collections.emptyList();
-                        workmates.add(new User("1", "Scarlett", "scarlett@test.com", null, "Le Zinc", true, favorites));
-                        workmates.add(new User("2", "Hugh", "hugh@test.com", null, "Le Zinc", true, favorites));
-                        workmates.add(new User("3", "Nana", "nana@test.com", null, "Le Seoul", true, favorites));
-                    }
-                     */
                     setWorkmatesList(workmates);
                     configRecyclerView();
                 }
@@ -171,11 +157,16 @@ public class WorkmatesFragment extends Fragment {
      * Init the recyclerView that contains workmates
      */
     private void configRecyclerView() {
-        adapter = new WorkmateAdapter(getWorkmatesList(), getContext());
+        WorkmateAdapter adapter = new WorkmateAdapter(getWorkmatesList(), getContext());
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         MaterialDividerItemDecoration divider = new MaterialDividerItemDecoration(requireContext(), LinearLayoutManager.VERTICAL);
         divider.setDividerInsetStart(228);
+        // Hide logo in landScape
+        int orientation = getResources().getConfiguration().orientation;
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            divider.setDividerInsetEnd(180);
+        }
         mRecyclerView.addItemDecoration(divider);
 
         mRecyclerView.setAdapter(adapter);
@@ -183,7 +174,7 @@ public class WorkmatesFragment extends Fragment {
         // If workmates list is empty, show notification text instead of recyclerview
         adapter.notifyItemRangeInserted(-1, mWorkmates.size());
         if (mWorkmates.size() == 0) {
-           binding.textWorkmates.setText("No available workmates");
+           binding.textWorkmates.setText(R.string.no_available_workmates);
         }
     }
 

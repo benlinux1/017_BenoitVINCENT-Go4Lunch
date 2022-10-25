@@ -7,8 +7,6 @@ import com.benlinux.go4lunch.data.userRepository.UserRepository;
 import com.benlinux.go4lunch.ui.models.User;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.List;
@@ -76,10 +74,6 @@ public class UserManager {
                 userRepository.updateUserAvatar(uri.toString());
             });
         });
-    }
-
-    public Task<Void> updateUserEmail(String email){
-        return userRepository.updateUserEmail(email);
     }
 
     public void updateUserRestaurantOfTheDay(String userId, String restaurantName){

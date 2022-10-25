@@ -24,7 +24,6 @@ import com.google.firebase.storage.UploadTask;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 
 public final class UserRepository {
@@ -144,24 +143,13 @@ public final class UserRepository {
 
 
     // Update Username in FireStore
-    public Task<Void> updateUsername(String username) {
+    public void updateUsername(String username) {
         String uid = this.getCurrentUserUID();
         if(uid != null) {
-            return this.getUsersCollection().document(uid).update(USERNAME_FIELD, username);
-        } else {
-            return null;
+            this.getUsersCollection().document(uid).update(USERNAME_FIELD, username);
         }
     }
 
-    // Update User Email in FireStore
-    public Task<Void> updateUserEmail(String email) {
-        String uid = this.getCurrentUserUID();
-        if(uid != null) {
-            return this.getUsersCollection().document(uid).update(EMAIL_FIELD, email);
-        } else {
-            return null;
-        }
-    }
 
     // Update User Avatar in FireStore
     public void updateUserAvatar(String avatarUrl) {
@@ -200,12 +188,10 @@ public final class UserRepository {
     }
 
     // Remove restaurant from favorites in FireStore
-    public Task<Void> removeRestaurantFromFavorites(String restaurantId) {
+    public void removeRestaurantFromFavorites(String restaurantId) {
         String uid = this.getCurrentUserUID();
         if(uid != null) {
-            return this.getUsersCollection().document(uid).update(FAVORITES_FIELD, FieldValue.arrayRemove(restaurantId));
-        } else {
-            return null;
+            this.getUsersCollection().document(uid).update(FAVORITES_FIELD, FieldValue.arrayRemove(restaurantId));
         }
     }
 
@@ -220,6 +206,7 @@ public final class UserRepository {
     // if result ok, delete from firebase & logout
     public Task<Void> deleteUserFromFirestore(Context context) {
         String uid = this.getCurrentUserUID();
+        assert uid != null;
         return this.getUsersCollection().document(uid).delete();
     }
 

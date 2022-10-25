@@ -1,5 +1,6 @@
 package com.benlinux.go4lunch.ui.fragments;
 
+import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -11,17 +12,16 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.benlinux.go4lunch.BuildConfig;
-import com.benlinux.go4lunch.activities.MainActivity;
 import com.benlinux.go4lunch.databinding.FragmentListViewBinding;
 import com.benlinux.go4lunch.ui.adapters.ListAdapter;
 import com.benlinux.go4lunch.modules.FetchPlacesData;
 import com.benlinux.go4lunch.ui.models.Restaurant;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.material.divider.MaterialDividerItemDecoration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,7 +71,12 @@ public class ListFragment extends Fragment {
     private void configRecyclerView() {
         adapter = new ListAdapter(mRestaurants, getContext());
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL));
+        MaterialDividerItemDecoration divider = new MaterialDividerItemDecoration(requireContext(), LinearLayoutManager.VERTICAL);
+        int orientation = getResources().getConfiguration().orientation;
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            divider.setDividerInsetEnd(120);
+        }
+        mRecyclerView.addItemDecoration(divider);
         mRecyclerView.setAdapter(adapter);
         adapter.notifyItemRangeInserted(- 1, mRestaurants.size());
     }
