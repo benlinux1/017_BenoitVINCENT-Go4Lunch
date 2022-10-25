@@ -2,7 +2,6 @@ package com.benlinux.go4lunch.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultCallback;
@@ -22,8 +21,8 @@ import com.firebase.ui.auth.IdpResponse;
 import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult;
 
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.Arrays;
 import java.util.List;
@@ -32,6 +31,7 @@ public class LoginActivity extends AppCompatActivity {
 
     // FOR DATA
     private final UserManager userManager = UserManager.getInstance();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +58,7 @@ public class LoginActivity extends AppCompatActivity {
         // Choose authentication providers
         List<AuthUI.IdpConfig> providers = Arrays.asList(
                 new AuthUI.IdpConfig.GoogleBuilder().build(),
-                new AuthUI.IdpConfig.FacebookBuilder().build(),
+                new AuthUI.IdpConfig.FacebookBuilder().setPermissions(Arrays.asList("email", "public_profile")).build(),
                 new AuthUI.IdpConfig.EmailBuilder().build());
 
         // Create and launch sign-in intent
@@ -79,9 +79,9 @@ public class LoginActivity extends AppCompatActivity {
         IdpResponse response = result.getIdpResponse();
         if (result.getResultCode() == RESULT_OK) {
             // Successfully signed in
-            userManager.createUser().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            userManager.createUser().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                 @Override
-                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                public void onSuccess(QuerySnapshot documentSnapshot) {
                     startMainActivity();
                     finish();
                     Toast.makeText(getApplicationContext(), getString(R.string.connection_succeed), Toast.LENGTH_SHORT).show();
@@ -90,24 +90,19 @@ public class LoginActivity extends AppCompatActivity {
         } else {
             // ERRORS
             if (response == null) {
-                showSnackBar(getString(R.string.error_authentication_canceled));
+                Toast.makeText(getApplicationContext(), getString(R.string.error_authentication_canceled), Toast.LENGTH_SHORT).show();
             } else if (response.getError()!= null) {
                 if (response.getError().getErrorCode() == ErrorCodes.NO_NETWORK){
-                    showSnackBar(getString(R.string.error_no_internet));
+                    Toast.makeText(getApplicationContext(), getString(R.string.error_no_internet), Toast.LENGTH_SHORT).show();
                 } else if (response.getError().getErrorCode() == ErrorCodes.UNKNOWN_ERROR) {
-                    showSnackBar(getString(R.string.error_unknown_error));
+                    Toast.makeText(getApplicationContext(), getString(R.string.error_unknown_error), Toast.LENGTH_SHORT).show();
                 } else {
-                    showSnackBar(getString(R.string.error_unknown_error));
+                    Toast.makeText(getApplicationContext(), getString(R.string.error_unknown_error), Toast.LENGTH_SHORT).show();
                 }
             }
         }
     }
 
-    // Show Snack Bar with a message
-    private void showSnackBar( String message){
-        View container = findViewById(R.id.main_container);
-        Snackbar.make(container, message, Snackbar.LENGTH_SHORT).show();
-    }
 
     // Check user status & redirect to MainActivity if logged
     private void checkIfUserIsConnected(){

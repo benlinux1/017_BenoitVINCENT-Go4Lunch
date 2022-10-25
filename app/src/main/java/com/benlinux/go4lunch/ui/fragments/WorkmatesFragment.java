@@ -110,10 +110,15 @@ public class WorkmatesFragment extends Fragment {
                         if (bookingOfDay.getUserId().equals(user.getId())) {
                             userManager.updateUserRestaurantOfTheDay(user.getId(), bookingOfDay.getRestaurantName());
                             userManager.updateUserRestaurantIdOfTheDay(user.getId(), bookingOfDay.getRestaurantId());
+                            break;
                         } else {
                             userManager.updateUserRestaurantOfTheDay(user.getId(), "");
                             userManager.updateUserRestaurantIdOfTheDay(user.getId(), "");
                         }
+                    }
+                    if (bookingsOfToday.isEmpty()) {
+                        userManager.updateUserRestaurantOfTheDay(user.getId(), "");
+                        userManager.updateUserRestaurantIdOfTheDay(user.getId(), "");
                     }
                 }
             }
@@ -170,7 +175,7 @@ public class WorkmatesFragment extends Fragment {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         MaterialDividerItemDecoration divider = new MaterialDividerItemDecoration(requireContext(), LinearLayoutManager.VERTICAL);
-        divider.setDividerInsetStart(200);
+        divider.setDividerInsetStart(228);
         mRecyclerView.addItemDecoration(divider);
 
         mRecyclerView.setAdapter(adapter);

@@ -24,6 +24,7 @@ import com.google.firebase.storage.UploadTask;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 public final class UserRepository {
@@ -81,7 +82,7 @@ public final class UserRepository {
     }
 
     // Create User in Firestore
-    public Task<DocumentSnapshot> createUser() {
+    public Task<QuerySnapshot> createUser() {
         FirebaseUser user = getCurrentUser();
         if(user != null){
 
@@ -99,13 +100,23 @@ public final class UserRepository {
 
             User userToCreate = new User(uid, username, email, urlPicture, "", "", true, favorites);
 
-            Task<DocumentSnapshot> userData = getUserData();
             // Check if user exists in database
-            return userData.addOnSuccessListener(documentSnapshot -> {
-                // if user exists in database, continue
-                if (documentSnapshot.contains(uid)){
+            return getAllUsersData().addOnSuccessListener(querySnapshot -> {
+                // Get all users
+                List<User> users = querySnapshot.toObjects(User.class);
+                boolean userExists = false;
+                // Check if user id exists in database
+                for (int i=0; i<users.size(); i++) {
+                    if (users.get(i).getId().equals(uid)) {
+                        // If exists, set boolean to true
+                        userExists = true;
+                        break;
+                    }
+                }
+                // If user exists, don't do anything
+                if (userExists) {
                     Log.d("USER CREATION INFO", "user already exists");
-                // if user doesn't exists in database, create it
+                // If user doesn't exist, create it in FireStore
                 } else {
                     this.getUsersCollection().document(uid).set(userToCreate);
                 }

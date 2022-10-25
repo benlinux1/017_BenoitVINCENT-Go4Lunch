@@ -8,6 +8,8 @@ import com.benlinux.go4lunch.ui.models.User;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.List;
 import java.util.Objects;
@@ -51,7 +53,7 @@ public class UserManager {
         return userRepository.deleteUser(context);
     }
 
-    public Task<DocumentSnapshot> createUser(){
+    public Task<QuerySnapshot> createUser(){
         return userRepository.createUser();
     }
 

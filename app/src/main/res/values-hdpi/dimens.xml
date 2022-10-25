@@ -45,6 +45,9 @@
 
     <!-- Restaurant Details -->
     <dimen name="restaurant_details_picture_height" >220dp</dimen>
+    <dimen name="restaurant_details_workmates_margin_horizontal">8dp</dimen>
+
+    <dimen name="workmate_item_height">52dp</dimen>
     <dimen name="workmate_item_avatar_size">48dp</dimen>
 
 
