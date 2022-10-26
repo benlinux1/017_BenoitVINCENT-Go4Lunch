@@ -2,13 +2,15 @@ package com.benlinux.go4lunch.activities;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.benlinux.go4lunch.R;
+import com.benlinux.go4lunch.modules.NotificationService;
 import com.benlinux.go4lunch.ui.adapters.PlaceAutoCompleteAdapter;
 import com.benlinux.go4lunch.data.userManager.UserManager;
 
@@ -50,6 +53,7 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.navigation.NavigationView;
 
+import java.util.Calendar;
 import java.util.Objects;
 
 
@@ -76,6 +80,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            setNotificationService();
+        }
+
         redirectUserIfNotLogged();
 
         this.configureToolBar();
@@ -91,6 +99,29 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public static void setUserLocation(LatLng location) {
         userLocation = location;
+    }
+
+    @SuppressLint("ShortAlarm")
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    private void setNotificationService() {
+        // Define alarm manager
+        AlarmManager alarmManager = (AlarmManager)getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+
+        // Define receiver intent for pending intent
+        Intent intent = new Intent(this, NotificationService.class);
+
+        // Define alarm intent
+        PendingIntent alarmIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+
+        // Define exact hour of day for notifications
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.set(Calendar.HOUR_OF_DAY, 14);
+        calendar.set(Calendar.MINUTE, 4);
+
+        // Repeat alarm each day
+        alarmManager.setRepeating(AlarmManager.RTC, 0,
+                AlarmManager.INTERVAL_DAY, alarmIntent);
     }
 
 
@@ -237,11 +268,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         userEmail = headerContainer.findViewById(R.id.user_email);
         userAvatar = headerContainer.findViewById(R.id.user_avatar);
 
-        // Hide logo in landScape
-        int orientation = getResources().getConfiguration().orientation;
-        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+        // Hide drawer logo under 1081px screen height
+        if (getScreenHeight() < 1081) {
             findViewById(R.id.activity_main_nav_view_logo).setVisibility(View.GONE);
         }
+    }
+
+    private int getScreenHeight() {
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        return displayMetrics.heightPixels;
     }
 
     // Set user data in drawer views

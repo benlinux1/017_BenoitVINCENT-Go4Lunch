@@ -1,13 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    // NAVIGATION
+    <string name="navigation_map_view">Carte</string>
     <string name="navigation_list_view">Liste</string>
     <string name="navigation_workmates">Collègues</string>
     <string name="bottom_navigation_map_view">Carte</string>
     <string name="bottom_navigation_list_view">Liste</string>
     <string name="bottom_navigation_workmates">Collègues</string>
+
+
+    // FRAGMENTS LABELS
     <string name="map_activity_label">J\'ai faim !</string>
     <string name="list_activity_label">J\'ai faim !</string>
     <string name="workmates_activity_label">Collègues disponibles</string>
+
+
+    // AUTHENTICATION
     <string name="error_not_connected">Vous devez être authentifé(e)</string>
     <string name="error_authentication_canceled">Connexion annulée</string>
     <string name="error_no_internet">Aucune connexion internet !</string>
@@ -15,14 +24,26 @@
     <string name="connection_succeed">"Vous êtes désormais connecté(e) "</string>
     <string name="disconnection_succeed">Vous êtes désormais déconnecté(e)</string>
     <string name="disconnection_failed">Erreur pendant la déconnexion, réessayez svp</string>
+
+
+    // NAVIGATION DRAWER
     <string name="drawer_title_1">VOS RÉSERVATIONS</string>
     <string name="drawer_title_2">PRÉFÉRENCES</string>
     <string name="drawer_title_3">DÉCONNEXION</string>
     <string name="info_no_email_found">Adresse e-mail non trouvée</string>
     <string name="info_no_username_found">Nom d\'utilisation non trouvé</string>
+
+
+    // RESTAURANT MAP ITEM
     <string name="details_button">Voir la fiche</string>
+
+
+    // RESTAURANT LIST ITEM
     <string name="guest_picture">photo d\'un collègue</string>
     <string name="restaurant_picture">photo d\'un restaurant</string>
+
+
+    // RESTAURANT DETAILS
     <string name="no_address_found">Adresse non trouvée</string>
     <string name="call">APPELER</string>
     <string name="like">LIKER</string>
@@ -49,7 +70,10 @@
     <string name="settings_user_email_title">E-mail (non modifiable)</string>
     <string name="search_bar_hint">Trouvez un restaurant</string>
     <string name="no_restaurant">Aucun restaurant trouvé pour ce collègue</string>
-    <string name="navigation_map_view">Carte</string>
+
+
+
+    // SETTINGS ACTIVITY
     <string name="dialog_yes">OUI</string>
     <string name="dialog_no">NON</string>
     <string name="dialog_title">Voulez-vous vraiment supprimer cette réservation ?</string>
@@ -67,6 +91,9 @@
     <string name="booking_delete_success">Réservation supprimée avec succès !</string>
     <string name="user_is_eating_to">&#160;déjeune chez&#160;</string>
     <string name="not_decided">&#160;n\'a pas encore fait son choix aujoud\'hui…</string>
+
+
+    // BOOKING ADAPTER
     <string name="at">&#160;chez&#160;</string>
     <string name="no_opening_hours">Horaires non communiqués</string>
     <string name="closed_today">Fermé aujourd\'hui</string>
@@ -76,5 +103,10 @@
     <string name="open_to">&#160;jusqu\'à&#160;</string>
     <string name="pm" />
     <string name="no_available_workmates">Aucun collègue disponible pour le moment</string>
+
+
+    // NOTIFICATIONS
+    <string name="notification_title">Votre déjeûner du jour</string>
+    <string name="notification_message">Où mangez-vous aujourd\'hui ?</string>
 
 </resources>

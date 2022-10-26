@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+
     <string name="app_name" translatable="false">Go4lunch</string>
+
+    // NAVIGATION
     <string name="navigation_map_view">Map View</string>
     <string name="navigation_list_view">List View</string>
     <string name="navigation_workmates">Workmates</string>
@@ -10,14 +13,15 @@
     <string name="bottom_navigation_list_view">List View</string>
     <string name="bottom_navigation_workmates">Workmates</string>
 
+    // FRAGMENTS LABELS
     <string name="map_activity_label">I\'m Hungry !</string>
     <string name="list_activity_label">I\'m Hungry !</string>
     <string name="workmates_activity_label">Available workmates</string>
 
-    // Authentication
+    // AUTHENTICATION
     <string name="login" translatable="false">Connexion</string>
     <string name="error_not_connected">User must be logged !</string>
-    <string name="error_authentication_canceled">Authentification canceled&#8230;</string>
+    <string name="error_authentication_canceled">Authentication canceled&#8230;</string>
     <string name="error_no_internet">No internet connexion !</string>
     <string name="error_unknown_error">An unknown error occurred&#8230;</string>
     <string name="connection_succeed">Authentication completed !</string>
@@ -45,8 +49,6 @@
     <string name="navigation_drawer_open" translatable="false">Start</string>
     <string name="navigation_drawer_close" translatable="false">Close</string>
 
-    <string name="button_login_text_logged" translatable="false">Go for lunch !</string>
-    <string name="button_login_text_not_logged" translatable="false">Connexion</string>
 
     // RESTAURANT MAP ITEM
     <string name="details_button">See details</string>
@@ -136,6 +138,10 @@
     <string name="open_to">&#160;to&#160;</string>
     <string name="pm">&#160;pm</string>
     <string name="no_available_workmates">No available workmates</string>
+
+    // NOTIFICATIONS
+    <string name="notification_title">Your lunch</string>
+    <string name="notification_message">Where do you eat today ?</string>
 
 
 </resources>

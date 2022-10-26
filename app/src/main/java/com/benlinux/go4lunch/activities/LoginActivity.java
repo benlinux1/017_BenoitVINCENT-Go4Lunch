@@ -1,6 +1,7 @@
 package com.benlinux.go4lunch.activities;
 
 import android.content.Intent;
+
 import android.os.Bundle;
 import android.widget.Toast;
 
@@ -13,6 +14,9 @@ import androidx.core.app.ActivityCompat;
 import com.benlinux.go4lunch.R;
 import com.benlinux.go4lunch.databinding.ActivityLoginBinding;
 import com.benlinux.go4lunch.data.userManager.UserManager;
+
+import com.facebook.login.LoginBehavior;
+import com.facebook.login.LoginManager;
 
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.ErrorCodes;
@@ -37,6 +41,9 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         ActivityLoginBinding binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        // Avoid login conflict error when facebook app is installed on device
+        LoginManager.getInstance().setLoginBehavior(LoginBehavior.WEB_ONLY);
 
         checkIfUserIsConnected();
     }
@@ -67,8 +74,6 @@ public class LoginActivity extends AppCompatActivity {
                 .setTheme(R.style.LoginTheme)
                 .setLogo(R.drawable.logo_login)
                 .setIsSmartLockEnabled(false)
-                .setTosAndPrivacyPolicyUrls("https://www.privacypolicies.com/live/629a883b-14b9-4ee7-ade0-b6a2b6e9b2d1",
-                        "https://www.privacypolicies.com/live/629a883b-14b9-4ee7-ade0-b6a2b6e9b2d1")
                 .build();
         signInLauncher.launch(signInIntent);
     }
@@ -117,6 +122,7 @@ public class LoginActivity extends AppCompatActivity {
         Intent mainActivityIntent = new Intent(this, MainActivity.class);
         ActivityCompat.startActivity(this, mainActivityIntent, null);
     }
+
 
     @Override
     protected void onResume() {

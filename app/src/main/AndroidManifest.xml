@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.benlinux.go4lunch">
+    package="com.benlinux.go4lunch"
+    android:launchMode="singleInstance">
 
-    <queries> <provider android:authorities="com.facebook.katana.provider.PlatformProvider" />
+
+    <queries> <provider android:authorities="com.facebook.katana.provider.PlatformProvider"
+        android:exported="false" />
         <intent>
             <action android:name="android.speech.action.RECOGNIZE_SPEECH" />
         </intent>
@@ -92,6 +95,9 @@
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
+
+        <receiver android:name=".modules.NotificationService" >
+        </receiver>
 
     </application>
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools" xmlns:app="http://schemas.android.com/apk/res-auto" >
+<resources xmlns:tools="http://schemas.android.com/tools" >
 
     <!-- STYLE SIGN-IN ACTIVITY -->
     <style name="LoginTheme" parent="Theme.MyApplication">
@@ -21,6 +21,7 @@
         <item name="boxStrokeColor" tools:override="true">@color/white</item>
         <item name="hintTextColor" tools:override="true">@color/white</item>
         <item name="android:colorBackground">@color/white</item>
+        <item name="android:layout_gravity">center_vertical</item>
 
     </style>
 
