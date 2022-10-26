@@ -1,6 +1,7 @@
 package com.benlinux.go4lunch.activities;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -42,6 +44,8 @@ public class UserLunchActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityLunchBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
+
+        redirectUserIfNotLogged();
 
         setContentView(view);
         setToolbar();
@@ -111,6 +115,14 @@ public class UserLunchActivity extends AppCompatActivity {
                 configureRecyclerView();
             }
         });
+    }
+
+    // Close current activities & go to login if user is not logged
+    private void redirectUserIfNotLogged() {
+        if (!userManager.isCurrentUserLogged()) {
+            Intent loginActivityIntent = new Intent(this, LoginActivity.class);
+            ActivityCompat.startActivity(this, loginActivityIntent, null);
+        }
     }
 
     private void setUserBookingsList(List<Booking> bookings) {
