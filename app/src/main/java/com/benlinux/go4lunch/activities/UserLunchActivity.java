@@ -47,10 +47,12 @@ public class UserLunchActivity extends AppCompatActivity {
 
         redirectUserIfNotLogged();
 
-        setContentView(view);
-        setToolbar();
-        setViews();
-        checkUserBookings();
+        if (userManager.isCurrentUserLogged()) {
+            setContentView(view);
+            setToolbar();
+            setViews();
+            checkUserBookings();
+        }
 
     }
 

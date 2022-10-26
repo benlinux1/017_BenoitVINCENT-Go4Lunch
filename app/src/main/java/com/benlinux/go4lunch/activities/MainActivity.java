@@ -352,8 +352,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Define exact hour of day for notifications (12:00)
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set(Calendar.HOUR_OF_DAY, 17);
-        calendar.set(Calendar.MINUTE, 21);
+        calendar.set(Calendar.HOUR_OF_DAY, 12);
+        calendar.set(Calendar.MINUTE, 0);
 
         userManager.getUserData().addOnCompleteListener(new OnCompleteListener<User>() {
             @Override
