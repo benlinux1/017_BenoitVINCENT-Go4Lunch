@@ -8,11 +8,8 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Build;
-import android.os.Bundle;
 
-import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 
 import com.benlinux.go4lunch.R;
@@ -20,18 +17,21 @@ import com.benlinux.go4lunch.activities.UserLunchActivity;
 
 public class NotificationService extends BroadcastReceiver {
 
+    // When receive signal, show built notification
     @Override
     public void onReceive(Context context, Intent intent) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             showNotification(context);
         }
-
     }
 
+    // Define & build notification with all parameters
     @SuppressLint("UnspecifiedImmutableFlag")
     void showNotification(Context context) {
         String CHANNEL_ID = context.getResources().getString(R.string.app_name);
         CharSequence appName = context.getResources().getString(R.string.app_name);
+        CharSequence notificationTitle = context.getString(R.string.notification_title);
+        CharSequence notificationMessage = context.getString(R.string.notification_message);
 
         // Define notification builder
         NotificationCompat.Builder mBuilder;
@@ -52,25 +52,31 @@ public class NotificationService extends BroadcastReceiver {
         // Define notification manager
         NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
-        // Add notification channel if build version >= 26
+
+        // Set notification parameters & add notification channel if build version >= 26
         if (android.os.Build.VERSION.SDK_INT >= 26) {
             NotificationChannel mChannel = new NotificationChannel(CHANNEL_ID, appName, NotificationManager.IMPORTANCE_HIGH);
             mNotificationManager.createNotificationChannel(mChannel);
             mBuilder = new NotificationCompat.Builder(context, CHANNEL_ID)
-                    .setSmallIcon(R.mipmap.ic_launcher)
-                    .setLights(context.getResources().getColor(R.color.colorPrimary, context.getTheme()), 2000, 500)
-                    .setContentTitle(context.getString(R.string.notification_title));
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setLights(context.getResources().getColor(R.color.colorPrimary, context.getTheme()), 2000, 500)
+                .setContentTitle(notificationTitle);
         } else {
             mBuilder = new NotificationCompat.Builder(context, CHANNEL_ID)
-                    .setSmallIcon(R.mipmap.ic_launcher)
-                    .setPriority(Notification.PRIORITY_HIGH)
-                    .setContentTitle(context.getString(R.string.notification_title));
-
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setPriority(Notification.PRIORITY_HIGH)
+                .setContentTitle(notificationTitle);
         }
 
+        // Assert that user is notified once
+        mBuilder.setOnlyAlertOnce(true);
+        // Set notification intent
         mBuilder.setContentIntent(contentIntent);
-        mBuilder.setContentText(context.getString(R.string.notification_message));
+        // Set notification message
+        mBuilder.setContentText(notificationMessage);
+        // Auto-cancel notification
         mBuilder.setAutoCancel(true);
+        // Build notification
         mNotificationManager.notify(1, mBuilder.build());
     }
 }

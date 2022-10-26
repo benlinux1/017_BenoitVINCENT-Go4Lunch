@@ -32,7 +32,6 @@
     // FACEBOOK AUTHENTICATION
     <string name="facebook_application_id" translatable="false">1194505511151823</string>
     <string name="fb_login_protocol_scheme" translatable="false">fb1194505511151823</string>
-    <string name="fb_token" translatable="false">4cf699c9d44a43136bb2f87649e5ce1a</string>
 
 
     // NAVIGATION DRAWER

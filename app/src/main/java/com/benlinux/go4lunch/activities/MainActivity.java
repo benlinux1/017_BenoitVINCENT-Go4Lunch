@@ -80,17 +80,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        redirectUserIfNotLogged();
+
+        configureToolBar();
+        configureNavigation();
+        configureDrawerLayout();
+        setDrawerViews();
+        updateUIWithUserData();
+
+        // Set notifications if build >=23 (Marshmallow October 2015)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             setNotificationService();
         }
-
-        redirectUserIfNotLogged();
-
-        this.configureToolBar();
-        this.configureNavigation();
-        this.configureDrawerLayout();
-        this.setDrawerViews();
-        this.updateUIWithUserData();
     }
 
     private LatLng getUserLocation() {
@@ -101,38 +102,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         userLocation = location;
     }
 
-    @SuppressLint("ShortAlarm")
-    @RequiresApi(api = Build.VERSION_CODES.M)
-    private void setNotificationService() {
-        // Define alarm manager
-        AlarmManager alarmManager = (AlarmManager)getApplicationContext().getSystemService(Context.ALARM_SERVICE);
 
-        // Define receiver intent for pending intent
-        Intent intent = new Intent(this, NotificationService.class);
-
-        // Define alarm intent
-        PendingIntent alarmIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
-
-        // Define exact hour of day for notifications
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set(Calendar.HOUR_OF_DAY, 14);
-        calendar.set(Calendar.MINUTE, 4);
-
-        // Repeat alarm each day
-        alarmManager.setRepeating(AlarmManager.RTC, 0,
-                AlarmManager.INTERVAL_DAY, alarmIntent);
-    }
-
-
+    /**
+     * Catch intent type. Used for voice search.
+     * @param intent is caught intent
+     */
     @Override
-    // Catch intent type. Used for voice search
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         handleIntent(intent);
     }
 
-    // Handle voice search intent  & set query in autoComplete textview
+
+    /**
+     * Handle voice search intent & set query in autoComplete textview
+     * @param intent is handled intent
+     */
     private void handleIntent(Intent intent) {
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
@@ -191,9 +176,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return NavigationUI.navigateUp(navController, appBarConfiguration) || super.onSupportNavigateUp();
     }
 
+    // Handle Navigation Item Click
     @SuppressLint("NonConstantResourceId")
     @Override
-    // Handle Navigation Item Click
     public boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
 
@@ -217,7 +202,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     // Set custom Toolbar
-    @SuppressLint("ResourceAsColor")
     private void configureToolBar(){
         //FOR DESIGN
         Toolbar toolbar = findViewById(R.id.main_toolbar);
@@ -300,7 +284,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                      String email = TextUtils.isEmpty(user.getEmail()) ? getString(R.string.info_no_email_found) : user.getEmail();
                      userEmail.setText(email);
                      // Set avatar
-                     setProfileAvatar(user.getAvatar());
+                     setUserAvatar(user.getAvatar());
                  }
              });
 
@@ -313,8 +297,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    // Set user avatar according to avatar url
-    private void setProfileAvatar(@Nullable String profilePictureUrl){
+
+    /**
+     * Set user avatar into imageView
+     * @param profilePictureUrl is url of the avatar
+     */
+    private void setUserAvatar(@Nullable String profilePictureUrl){
         if (profilePictureUrl != null) {
             Glide.with(this)
                 .load(profilePictureUrl)
@@ -346,6 +334,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Intent loginActivityIntent = new Intent(this, LoginActivity.class);
             ActivityCompat.startActivity(this, loginActivityIntent, null);
         }
+    }
+
+    // Set user notification, each day, at 12:00
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    @SuppressLint("ShortAlarm")
+    private void setNotificationService() {
+        // Define alarm manager
+        AlarmManager alarmManager = (AlarmManager)getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+
+        // Define receiver intent for pending intent
+        Intent intent = new Intent(this, NotificationService.class);
+
+        // Define alarm intent
+        PendingIntent alarmIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+
+        // Define exact hour of day for notifications (12:00)
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.set(Calendar.HOUR_OF_DAY, 12);
+        calendar.set(Calendar.MINUTE, 0);
+
+        // Repeat alarm each day
+        alarmManager.setRepeating(AlarmManager.RTC, 0,
+                AlarmManager.INTERVAL_DAY, alarmIntent);
     }
 
 
