@@ -35,8 +35,8 @@
 
 
     // TWITTER AUTHENTICATION
-    <string name="twitter_consumer_key" translatable="false">mvx10G99eUWN3OmeceaccUshM</string>
-    <string name="twitter_consumer_secret" translatable="false">XpvYoh3FnTq8jx4BYdM2PQuwDUW32QQbIaJyidpH653eHGo9qr</string>
+    <string name="twitter_consumer_key" translatable="false">VhGh3QXKQtmIqxsYByuTPzPIZ</string>
+    <string name="twitter_consumer_secret" translatable="false">CZgYHTUSZczmyO4dCLpQteNwX6KtogVSQGHuVyqTq7tUTg8CRn</string>
 
 
     // NAVIGATION DRAWER

@@ -355,9 +355,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         calendar.set(Calendar.HOUR_OF_DAY, 12);
         calendar.set(Calendar.MINUTE, 0);
 
-        // Repeat alarm each day
-        alarmManager.setRepeating(AlarmManager.RTC, 0,
-                AlarmManager.INTERVAL_DAY, alarmIntent);
+        userManager.getUserData().addOnCompleteListener(new OnCompleteListener<User>() {
+            @Override
+            public void onComplete(@NonNull Task<User> task) {
+                User user = task.getResult();
+                if (Boolean.TRUE.equals(user.isNotified())) {
+                    // Repeat alarm each day
+                    alarmManager.setRepeating(AlarmManager.RTC, 0,
+                            AlarmManager.INTERVAL_DAY, alarmIntent);
+                }
+            }
+        });
     }
 
 

@@ -1,3 +1,4 @@
+
 plugins {
     id 'com.android.application'
     id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
@@ -20,6 +21,9 @@ android {
         Properties properties = new Properties()
         properties.load(project.rootProject.file('local.properties').newDataInputStream())
         buildConfigField "String", "MAPS_API_KEY", "\"${properties.getProperty('MAPS_API_KEY')}\""
+        buildConfigField("String", "twitter_consumer_key", "\"${properties.getProperty('TWITTER_CONSUMER_KEY')}\"")
+        buildConfigField("String", "twitter_consumer_secret", "\"${properties.getProperty('TWITTER_CONSUMER_SECRET')}\"")
+
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -39,6 +43,7 @@ android {
         buildConfig = true
     }
     namespace 'com.benlinux.go4lunch'
+
 }
 
 dependencies {
