@@ -34,6 +34,11 @@
     <string name="fb_login_protocol_scheme" translatable="false">fb1194505511151823</string>
 
 
+    // TWITTER AUTHENTICATION
+    <string name="twitter_consumer_key" translatable="false">mvx10G99eUWN3OmeceaccUshM</string>
+    <string name="twitter_consumer_secret" translatable="false">XpvYoh3FnTq8jx4BYdM2PQuwDUW32QQbIaJyidpH653eHGo9qr</string>
+
+
     // NAVIGATION DRAWER
     <string name="user_name" translatable="false">John SMITH</string>
     <string name="user_email" translatable="false">jsmith.1337@gmail.com</string>
