@@ -350,25 +350,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         PendingIntent alarmIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
 
         // Define exact hour of day for notifications (12:00)
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(System.currentTimeMillis());
+        Calendar now = Calendar.getInstance();
+        now.setTimeInMillis(System.currentTimeMillis());
         Calendar alarmMoment = Calendar.getInstance();
         alarmMoment.setTimeInMillis(System.currentTimeMillis());
         alarmMoment.set(Calendar.HOUR_OF_DAY, 12);
         alarmMoment.set(Calendar.MINUTE, 0);
 
         // if alarm moment is past today, set alarm for tomorrow
-        if (alarmMoment.before(calendar)) {
+        if (alarmMoment.before(now)) {
            alarmMoment.add(Calendar.DAY_OF_YEAR, 1);
         }
 
-        Log.d("ACTUAL HOUR", calendar.getTime().toString());
+        Log.d("ACTUAL HOUR", now.getTime().toString());
         Log.d("NEXT ALARM", alarmMoment.getTime().toString());
 
+        // Check user notifications parameters in application account
         userManager.getUserData().addOnCompleteListener(new OnCompleteListener<User>() {
             @Override
             public void onComplete(@NonNull Task<User> task) {
                 User user = task.getResult();
+                // If user accepts notifications, set notification time
                 if (Boolean.TRUE.equals(user.isNotified())) {
                     // Set calendar exact time & repeat alarm each day
                     alarmManager.setRepeating(AlarmManager.RTC, alarmMoment.getTimeInMillis(),
