@@ -34,6 +34,7 @@ public final class UserRepository {
     private static final String EMAIL_FIELD = "email";
     private static final String AVATAR_FIELD = "avatar";
     private static final String RESTAURANT_FIELD = "restaurantName";
+    private static final String ADDRESS_FIELD = "restaurantAddress";
     private static final String BOOKINGID_FIELD = "restaurantId";
     private static final String NOTIFIED_FIELD = "notified";
     private static final String FAVORITES_FIELD = "favoriteRestaurants";
@@ -97,7 +98,7 @@ public final class UserRepository {
 
             List<String> favorites = Collections.emptyList();
 
-            User userToCreate = new User(uid, username, email, urlPicture, "", "", true, favorites);
+            User userToCreate = new User(uid, username, email, urlPicture, "", "", "", true, favorites);
 
             // Check if user exists in database
             return getAllUsersData().addOnSuccessListener(querySnapshot -> {
@@ -168,6 +169,12 @@ public final class UserRepository {
     // Update User Restaurant Id of the Day in FireStore
     public void updateUserRestaurantIdOfTheDay(String userId, String restaurantId) {
         this.getUsersCollection().document(userId).update(BOOKINGID_FIELD, restaurantId);
+
+    }
+
+    // Update User Restaurant Id of the Day in FireStore
+    public void updateUserRestaurantAddressOfTheDay(String userId, String restaurantAddress) {
+        this.getUsersCollection().document(userId).update(ADDRESS_FIELD, restaurantAddress);
 
     }
 

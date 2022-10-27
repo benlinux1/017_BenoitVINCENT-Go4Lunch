@@ -104,10 +104,16 @@
     <string name="pm" />
     <string name="no_available_workmates">Aucun collègue disponible pour le moment</string>
 
+    // GUEST ADAPTER
+    <string name="is_joining">&#160;se joint à vous !</string>
+    <string name="are_joining">&#160;se joignent à vous !</string>
+
 
     // NOTIFICATIONS
     <string name="notification_title">Votre déjeûner du jour</string>
     <string name="notification_message">Où mangez-vous aujourd\'hui ?</string>
     <string name="notification_message_restaurant">Aujourd\'hui vous déjeunez chez&#160;</string>
+    <string name="notification_you_are_eating_alone">Vous déjeunez seul aujourd\'hui…</string>
+    <string name="eats_here">&#160;déjeune ici aujourd\'hui !</string>
 
 </resources>

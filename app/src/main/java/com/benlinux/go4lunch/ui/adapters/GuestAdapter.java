@@ -14,19 +14,30 @@ import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.benlinux.go4lunch.R;
+import com.benlinux.go4lunch.data.bookingManager.BookingManager;
 import com.benlinux.go4lunch.data.userManager.UserManager;
+import com.benlinux.go4lunch.ui.models.Booking;
 import com.benlinux.go4lunch.ui.models.User;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 
 public class GuestAdapter extends RecyclerView.Adapter<GuestAdapter.ViewHolder> {
 
     private List<String> mGuests;
+    private final Context localContext;
+
+    private final BookingManager bookingManager = BookingManager.getInstance();
+    private List<Booking> bookingsOfDay;
+    private boolean userBookedHere;
 
     // FOR DATA
     private final UserManager userManager = UserManager.getInstance();
@@ -35,8 +46,28 @@ public class GuestAdapter extends RecyclerView.Adapter<GuestAdapter.ViewHolder> 
      * Instantiates a new ListAdapter.
      * @param guests the list of restaurants the adapter deals with to set
      */
-    public GuestAdapter(List<String> guests) {
+    public GuestAdapter(List<String> guests, Context context, boolean userBookedHere) {
         mGuests = guests;
+        localContext = context;
+        userBookedHere = userBookedHere;
+    }
+
+    private Task<List<Booking>> getBookingsOfToday() {
+        return bookingManager.getAllBookingsData().addOnCompleteListener(new OnCompleteListener<List<Booking>>() {
+            @Override
+            public void onComplete(@NonNull Task<List<Booking>> bookingTask) {
+                bookingsOfDay = new ArrayList<>();
+                final Calendar currentDate = Calendar.getInstance(Locale.FRANCE);
+                // Define today formatted date
+                @SuppressLint("SimpleDateFormat") SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+                String today = dateFormat.format(currentDate.getTime());
+                for (Booking booking : bookingTask.getResult()) {
+                    if (booking.getBookingDate().equals(today)) {
+                        bookingsOfDay.add(booking);
+                    }
+                }
+            }
+        });
     }
 
 
@@ -51,18 +82,8 @@ public class GuestAdapter extends RecyclerView.Adapter<GuestAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(final GuestAdapter.ViewHolder holder, int position) {
-        // bind restaurant according to position in the list
+        // bind guest according to position in the list
         holder.bind(mGuests.get(position));
-
-        // Launch Restaurant Details according to the Restaurant Id
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.N)
-            @Override
-            public void onClick(View restaurantItem) {
-                // On workmate item click, display restaurant details
-
-            }
-        });
 
     }
 
@@ -94,14 +115,12 @@ public class GuestAdapter extends RecyclerView.Adapter<GuestAdapter.ViewHolder> 
         private final ImageView avatar;
 
         /**
-         * The TextView displaying the id of the workmate
-         */
-        private final TextView restaurantId;
-
-        /**
          * The TextView displaying the name of the restaurant of the day
          */
         private final TextView name;
+
+
+
 
 
 
@@ -114,7 +133,7 @@ public class GuestAdapter extends RecyclerView.Adapter<GuestAdapter.ViewHolder> 
 
             avatar = itemView.findViewById(R.id.workmate_avatar);
             name = itemView.findViewById(R.id.workmate_name);
-            restaurantId = itemView.findViewById(R.id.restaurant_id);
+
         }
 
 
@@ -123,13 +142,19 @@ public class GuestAdapter extends RecyclerView.Adapter<GuestAdapter.ViewHolder> 
          * @param userId the restaurant to bind in the item view
          */
         void bind(String userId) {
+
             userManager.getAllUsersData().addOnCompleteListener(new OnCompleteListener<List<User>>() {
                 @Override
                 public void onComplete(@NonNull Task<List<User>> task) {
                     for (User user : task.getResult()) {
                         StringBuilder sb = new StringBuilder();
+
                         if (user.getId().equals(userId) && !Objects.equals(user.getId(), userManager.getCurrentUser().getUid())) {
-                            sb.append(user.getName()).append(" is joining !");
+                            if (userBookedHere) {
+                                sb.append(user.getName()).append(localContext.getResources().getString(R.string.is_joining));
+                            } else {
+                                sb.append(user.getName()).append(localContext.getResources().getString(R.string.eats_here));
+                            }
                             name.setText(sb.toString());
                             if (user.getAvatar() != null) {
                                 Glide.with(avatar.getContext())

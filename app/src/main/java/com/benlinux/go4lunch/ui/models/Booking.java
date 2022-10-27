@@ -75,5 +75,4 @@ public class Booking {
         this.bookingDate = bookingDate;
     }
 
-
 }

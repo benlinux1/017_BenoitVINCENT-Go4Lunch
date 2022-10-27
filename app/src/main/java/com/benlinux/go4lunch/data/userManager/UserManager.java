@@ -80,6 +80,10 @@ public class UserManager {
         userRepository.updateUserRestaurantOfTheDay(userId, restaurantName);
     }
 
+    public void updateUserRestaurantAddressOfTheDay(String userId, String restaurantAddress){
+        userRepository.updateUserRestaurantAddressOfTheDay(userId, restaurantAddress);
+    }
+
     public void updateUserRestaurantIdOfTheDay(String userId, String restaurantId){
         userRepository.updateUserRestaurantIdOfTheDay(userId, restaurantId);
     }

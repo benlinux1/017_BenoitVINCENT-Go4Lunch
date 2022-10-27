@@ -86,6 +86,7 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
 
     private RecyclerView mRecyclerView;
     private List<String> mGuests;
+    private boolean userBookedHereToday;
 
     // FOR DATA
     private final UserManager userManager = UserManager.getInstance();
@@ -143,13 +144,14 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
                 Calendar currentDate = Calendar.getInstance(Locale.FRANCE);
                 @SuppressLint("SimpleDateFormat") SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
                 String today = dateFormat.format(currentDate.getTime());
-                String userId = userManager.getCurrentUser().getUid();
+                String currentUserId = userManager.getCurrentUser().getUid();
                 boolean userBookedToday = false;
+                userBookedHereToday = false;
                 mGuests = new ArrayList<>();
 
                 for (Booking existingBooking : task.getResult()) {
                     // If current user booked for today
-                    if (Objects.equals(existingBooking.getUserId(), userId) &&
+                    if (Objects.equals(existingBooking.getUserId(), currentUserId) &&
                             Objects.equals(existingBooking.getBookingDate(), today)) {
                         userBookedToday = true;
                         break;
@@ -163,8 +165,13 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
                 for (Booking existingBooking : task.getResult()) {
                     // Add guests to list for this restaurant at date of today
                     if (Objects.equals(existingBooking.getRestaurantId(), restaurantId) &&
-                            Objects.equals(existingBooking.getBookingDate(), today)) {
+                            Objects.equals(existingBooking.getBookingDate(), today)
+                    && !existingBooking.getUserId().equals(currentUserId)) {
                         mGuests.add(existingBooking.getUserId());
+                    }
+                    if (existingBooking.getRestaurantId().equals(restaurantId)
+                        && existingBooking.getUserId().equals(currentUserId)) {
+                        userBookedHereToday = true;
                     }
                 }
                 setGuestsList(mGuests);
@@ -185,19 +192,18 @@ public class RestaurantDetailsActivity extends AppCompatActivity {
      * Init the recyclerView that contains workmates who booked in this restaurant
      */
     private void configRecyclerView() {
-        GuestAdapter adapter = new GuestAdapter(getGuestsList());
+        GuestAdapter adapter = new GuestAdapter(getGuestsList(), getApplicationContext(), userBookedHereToday);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setAdapter(adapter);
         adapter.notifyItemRangeInserted(-1, mGuests.size());
 
         // If current user is alone to eat in this restaurant
-        String userId = userManager.getCurrentUser().getUid();
-        if (mGuests.contains(userId) && mGuests.size() == 1) {
+        if (mGuests.size() == 0 && userBookedHereToday) {
             binding.textNoWorkmates.setText(getString(R.string.nobody_booked_today_except_you));
-            mRecyclerView.setVisibility(View.GONE);
         }
+
         // If workmates list is empty, show notification text instead of recyclerview
-        if (mGuests.size() == 0) {
+        if (mGuests.size() == 0 && !userBookedHereToday) {
             binding.textNoWorkmates.setText(getString(R.string.nobody_booked_today));
         }
     }

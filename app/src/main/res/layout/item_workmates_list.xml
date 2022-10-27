@@ -36,7 +36,7 @@
                 tools:text="@string/workmates_text_eating" />
 
             <TextView
-                android:id="@+id/restaurant_id"
+                android:id="@+id/item_id"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintStart_toEndOf="@id/workmate_name"

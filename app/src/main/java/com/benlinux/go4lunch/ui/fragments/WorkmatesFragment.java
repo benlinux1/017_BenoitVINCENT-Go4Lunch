@@ -104,15 +104,18 @@ public class WorkmatesFragment extends Fragment {
                     for (Booking bookingOfDay : bookingsOfToday) {
                         if (bookingOfDay.getUserId().equals(user.getId())) {
                             userManager.updateUserRestaurantOfTheDay(user.getId(), bookingOfDay.getRestaurantName());
+                            userManager.updateUserRestaurantAddressOfTheDay(user.getId(), bookingOfDay.getFullAddress());
                             userManager.updateUserRestaurantIdOfTheDay(user.getId(), bookingOfDay.getRestaurantId());
                             break;
                         } else {
                             userManager.updateUserRestaurantOfTheDay(user.getId(), "");
+                            userManager.updateUserRestaurantAddressOfTheDay(user.getId(), "");
                             userManager.updateUserRestaurantIdOfTheDay(user.getId(), "");
                         }
                     }
                     if (bookingsOfToday.isEmpty()) {
                         userManager.updateUserRestaurantOfTheDay(user.getId(), "");
+                        userManager.updateUserRestaurantAddressOfTheDay(user.getId(), "");
                         userManager.updateUserRestaurantIdOfTheDay(user.getId(), "");
                     }
                 }

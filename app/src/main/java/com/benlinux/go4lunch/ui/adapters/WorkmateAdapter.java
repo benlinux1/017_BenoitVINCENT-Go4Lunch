@@ -128,7 +128,7 @@ public class WorkmateAdapter extends RecyclerView.Adapter<WorkmateAdapter.ViewHo
 
             avatar = itemView.findViewById(R.id.workmate_avatar);
             name = itemView.findViewById(R.id.workmate_name);
-            restaurantId = itemView.findViewById(R.id.restaurant_id);
+            restaurantId = itemView.findViewById(R.id.item_id);
         }
 
 

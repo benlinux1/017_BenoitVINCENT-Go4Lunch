@@ -16,7 +16,7 @@ Cette applcation vous permet de/d' :
 
 - Créer un compte utilisateur via votre compte Google, Facebook, Twitter, ou à partir de votre adresse e-mail
 - Afficher les restaurants situés autour de vous sur une carte, ou sous forme de liste
-- Rechercher
+- Rechercher un restaurant dans la barre de recherche, via son nom et/ou son adresse
 - Consulter la fiche détaillée d'un restaurant (adresse, note, n° de téléphone, site web...)
 - Contacter un restaurant par téléphone, et/ou visiter son site internet
 - Modifier votre nom d'utilisateur et/ou votre avatar
@@ -85,12 +85,18 @@ This repository contains a mini app for the **DA Android** 7th projet, untitled 
 
 This app allow you to :
 
-- Display global meetings list
-- Consult each meeting's profile clicking on his name or avatar
-- Add a meeting to global list
-- Delete a meeting from global list
-- Update an existing meeting
-- Filter meetings in global list, by date, ou according a selected meeting room.
+- Create user account from Google, Facebook, Twitter login, or your own email address
+- Display restaurants around you on a Google Map, or as a list
+- Rechercher
+- Consulter la fiche détaillée d'un restaurant (adresse, note, n° de téléphone, site web...)
+- Contacter un restaurant par téléphone, et/ou visiter son site internet
+- Modifier votre nom d'utilisateur et/ou votre avatar
+- Effectuer une "réservation" virtuelle dans le restaurant de votre choix, à la date de votre choix
+- Indiquer aux utilisateurs de l'application dans quel restaurant vous déjeunez aujourd'hui
+- Consulter la liste des utilisateurs de l'application et voir dans quel restaurant ils déjeunent aujourd'hui
+- Visualiser la liste de toutes vos réservations virtuelles
+- Supprimer une réservation de votre liste générale
+- Recevoir une notification tous les jours à 12:00, vous rappelant dans quel restaurant vous déjeunez
 
 ![Fonctionnalités GB](https://user-images.githubusercontent.com/78255467/170277679-27b594b3-14e9-4507-9609-08f1dfa39dcc.png)
 

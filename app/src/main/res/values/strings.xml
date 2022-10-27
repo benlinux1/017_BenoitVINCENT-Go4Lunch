@@ -138,10 +138,16 @@
     <string name="pm">&#160;pm</string>
     <string name="no_available_workmates">No available workmates</string>
 
+    // GUEST ADAPTER
+    <string name="is_joining">&#160;is joining !</string>
+    <string name="are_joining">&#160;are joining !</string>
+
     // NOTIFICATIONS
     <string name="notification_title">Your lunch</string>
     <string name="notification_message">Where do you eat today ?</string>
     <string name="notification_message_restaurant">Today you eat to&#160;</string>
+    <string name="notification_you_are_eating_alone">You eat alone today…</string>
+    <string name="eats_here">&#160;eats here today !</string>
 
 
 </resources>

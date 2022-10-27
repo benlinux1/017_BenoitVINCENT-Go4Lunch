@@ -19,18 +19,20 @@ public class User {
     private List<String> favoriteRestaurants;
 
     private String restaurantName;
+    private String restaurantAddress;
     private String restaurantId;
 
     public User(){}
 
 
     public User(String uid, String name, String email, String avatar,
-                String restaurantName, String restaurantId, boolean notified, List<String> favoriteRestaurants) {
+                String restaurantName, String restaurantAddress, String restaurantId, boolean notified, List<String> favoriteRestaurants) {
         this.uid = uid;
         this.name = name;
         this.email = email;
         this.avatar = avatar;
         this.restaurantName = restaurantName;
+        this.restaurantAddress = restaurantAddress;
         this.restaurantId = restaurantId;
         this.notified = notified;
         this.favoriteRestaurants = favoriteRestaurants;
@@ -69,6 +71,10 @@ public class User {
         return restaurantName;
     }
 
+    public String getRestaurantAddress() {
+        return restaurantAddress;
+    }
+
     public void setRestaurantName(String restaurantName) {
         this.restaurantName = restaurantName;
     }
@@ -96,4 +102,5 @@ public class User {
     public void setIsNotified(Boolean isNotified) {
         this.notified = isNotified;
     }
+
 }
