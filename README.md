@@ -1,5 +1,5 @@
 ![da-android-go-4-lunch](https://user-images.githubusercontent.com/78255467/198226824-1ee217fa-4e17-47ba-9f41-7ebdc88a5054.svg)
-<img width="139" alt="android" src="https://user-images.githubusercontent.com/78255467/198245608-9633ca21-4093-4bbe-b19d-4e68c6c441a2.png">
+[<img width="139" alt="android" src="https://user-images.githubusercontent.com/78255467/198245608-9633ca21-4093-4bbe-b19d-4e68c6c441a2.png">](https://forthebadge.com/images/badges/built-for-android.svg)
 
 # VERSION FRANCAISE
 (English translation in the 2nd part of the documentation below)
