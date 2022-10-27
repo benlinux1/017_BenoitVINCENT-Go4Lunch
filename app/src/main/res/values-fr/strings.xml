@@ -108,5 +108,6 @@
     // NOTIFICATIONS
     <string name="notification_title">Votre déjeûner du jour</string>
     <string name="notification_message">Où mangez-vous aujourd\'hui ?</string>
+    <string name="notification_message_restaurant">Aujourd\'hui vous déjeunez chez&#160;</string>
 
 </resources>

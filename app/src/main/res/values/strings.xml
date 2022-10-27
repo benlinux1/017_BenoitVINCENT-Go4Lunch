@@ -141,6 +141,7 @@
     // NOTIFICATIONS
     <string name="notification_title">Your lunch</string>
     <string name="notification_message">Where do you eat today ?</string>
+    <string name="notification_message_restaurant">Today you eat to&#160;</string>
 
 
 </resources>

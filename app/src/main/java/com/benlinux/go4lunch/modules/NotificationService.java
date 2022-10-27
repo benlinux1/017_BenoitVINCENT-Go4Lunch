@@ -9,13 +9,22 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.text.SpannableStringBuilder;
 
+import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 
 import com.benlinux.go4lunch.R;
 import com.benlinux.go4lunch.activities.UserLunchActivity;
+import com.benlinux.go4lunch.data.userManager.UserManager;
+import com.benlinux.go4lunch.ui.models.User;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 
 public class NotificationService extends BroadcastReceiver {
+
+    // FOR DATA
+    private final UserManager userManager = UserManager.getInstance();
 
     // When receive signal, show built notification
     @Override
@@ -58,14 +67,14 @@ public class NotificationService extends BroadcastReceiver {
             NotificationChannel mChannel = new NotificationChannel(CHANNEL_ID, appName, NotificationManager.IMPORTANCE_HIGH);
             mNotificationManager.createNotificationChannel(mChannel);
             mBuilder = new NotificationCompat.Builder(context, CHANNEL_ID)
-                .setSmallIcon(R.mipmap.ic_launcher)
-                .setLights(context.getResources().getColor(R.color.colorPrimary, context.getTheme()), 2000, 500)
-                .setContentTitle(notificationTitle);
+                    .setSmallIcon(R.mipmap.ic_launcher)
+                    .setLights(context.getResources().getColor(R.color.colorPrimary, context.getTheme()), 2000, 500)
+                    .setContentTitle(notificationTitle);
         } else {
             mBuilder = new NotificationCompat.Builder(context, CHANNEL_ID)
-                .setSmallIcon(R.mipmap.ic_launcher)
-                .setPriority(Notification.PRIORITY_HIGH)
-                .setContentTitle(notificationTitle);
+                    .setSmallIcon(R.mipmap.ic_launcher)
+                    .setPriority(Notification.PRIORITY_HIGH)
+                    .setContentTitle(notificationTitle);
         }
 
         // Assert that user is notified once
