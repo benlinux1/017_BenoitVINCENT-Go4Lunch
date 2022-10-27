@@ -352,8 +352,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Define exact hour of day for notifications (12:00)
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set(Calendar.HOUR_OF_DAY, 12);
-        calendar.set(Calendar.MINUTE, 0);
+        Calendar alarmMoment = Calendar.getInstance();
+        alarmMoment.setTimeInMillis(System.currentTimeMillis());
+        alarmMoment.set(Calendar.HOUR_OF_DAY, 12);
+        alarmMoment.set(Calendar.MINUTE, 0);
+
+        // if alarm moment is past today, set alarm for tomorrow
+        if (alarmMoment.before(calendar)) {
+           alarmMoment.add(Calendar.DAY_OF_YEAR, 1);
+        }
+
+        Log.d("ACTUAL HOUR", calendar.getTime().toString());
+        Log.d("NEXT ALARM", alarmMoment.getTime().toString());
 
         userManager.getUserData().addOnCompleteListener(new OnCompleteListener<User>() {
             @Override
@@ -361,7 +371,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 User user = task.getResult();
                 if (Boolean.TRUE.equals(user.isNotified())) {
                     // Set calendar exact time & repeat alarm each day
-                    alarmManager.setRepeating(AlarmManager.RTC, calendar.getTimeInMillis(),
+                    alarmManager.setRepeating(AlarmManager.RTC, alarmMoment.getTimeInMillis(),
                             AlarmManager.INTERVAL_DAY, alarmIntent);
                 }
             }
