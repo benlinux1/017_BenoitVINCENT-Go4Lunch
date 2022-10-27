@@ -68,39 +68,18 @@ Notre équipe : BenLinux & FranckBlack
 
 ============================================================================================
 
-![da-android-maréu](https://user-images.githubusercontent.com/78255467/170271248-7bdd2842-0cda-49c6-b7db-439d372d3ee0.svg)
-![#p4-openclassrooms](https://user-images.githubusercontent.com/78255467/170271275-7d88b19f-a1f9-43a6-9445-bfd863aae503.svg)
+![da-android-go-4-lunch](https://user-images.githubusercontent.com/78255467/198226824-1ee217fa-4e17-47ba-9f41-7ebdc88a5054.svg)
+[![forthebadge](https://forthebadge.com/images/badges/built-for-android.svg)](https://forthebadge.com)
 
 # ENGLISH VERSION
 (version française en 1ère partie de la documentation)
 
-# Maréu
+# Go4Lunch
 
-This repository contains a mini app for the **DA Android** 4th projet, untitled **MaRéu**.
+This repository contains a mini app for the **DA Android** 7th projet, untitled **Go4Lunch**.
 
 ## Technologies
 - 100% JAVA, this project was made with Android Studio IDE.
-
-## Install
-- Open your favorite IDE (here Android Studio)
-- Open a new project and choose "Get From Version Control" option
-- Clone the app by copying / pasting this repository link : https://github.com/benlinux1/DA_ANDROID_MAREU.git
-- Specify a destination folder name on your computer and click "clone"
-- Here are the steps to illustrate in pictures :
-
-![Sans titre-1](https://user-images.githubusercontent.com/78255467/170271169-7485e9fd-6986-4aca-82a2-237066fd9940.png)
-
-Next the app will compile in Android Studio
-
-## Use / How to launch app
-
-You can use this app with an emulator, for a choosen mobile simulation.
-To do that, go to the tools ribbon in the right part of the window and click "create device". Then, follow the instructions on screen.
-
-You can also use this app with your own smartphone, choosing "physical" option in device manager, 
-Then, launch app clicking on the green triangle button "Run", like in this example :
-
-![Sans titre-2](https://user-images.githubusercontent.com/78255467/163193524-89842086-ca39-475c-afc2-e39e3e586f68.png)
 
 ## Features
 
@@ -124,6 +103,27 @@ This app has been tested on following devices :
 - Nexus S (API 30)
 
 It was also tested in real conditions, on a physical device Samsung Galaxy S20.
+
+## Install
+- Open your favorite IDE (here Android Studio)
+- Open a new project and choose "Get From Version Control" option
+- Clone the app by copying / pasting this repository link : https://github.com/benlinux1/DA_ANDROID_MAREU.git
+- Specify a destination folder name on your computer and click "clone"
+- Here are the steps to illustrate in pictures :
+
+![GIT](https://user-images.githubusercontent.com/78255467/198230597-028f6051-8cff-4e73-9787-f6aff219503e.png)
+
+Next the app will compile in Android Studio
+
+## Use / How to launch app
+
+You can use this app with an emulator, for a chosen mobile simulation.
+To do that, go to the tools ribbon in the right part of the window and click "create device". Then, follow the instructions on screen.
+
+You can also use this app with your own smartphone, choosing "physical" option in device manager,
+Then, launch app clicking on the green triangle button "Run", like in this example :
+
+![Sans titre-2](https://user-images.githubusercontent.com/78255467/163193524-89842086-ca39-475c-afc2-e39e3e586f68.png)
 
 ## Contribute to the project
 
