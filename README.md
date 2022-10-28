@@ -33,6 +33,8 @@ Cette applcation vous permet de/d' :
 
 ![Fonctionnalités FR](https://user-images.githubusercontent.com/78255467/198533983-fc5c6015-c1d5-428c-885e-1191edf1f661.png)
 
+![Fonctionnalités FR 2](https://user-images.githubusercontent.com/78255467/198538501-33d6b6df-a202-45c6-88fb-e0a864bd81ac.png)
+
 
 ## Tests
 
@@ -120,6 +122,8 @@ This app allow you to :
 - Receive a notification, each day at 12am, that remember you your restaurant of the day
 
 ![Fonctionnalités GB](https://user-images.githubusercontent.com/78255467/198534046-c6080be6-f68c-4166-989c-aa66214b9f6f.png)
+
+![Fonctionnalités GB 2](https://user-images.githubusercontent.com/78255467/198538573-c51c5752-ff77-4289-8936-4bda45a4f207.png)
 
 
 ## Tests
