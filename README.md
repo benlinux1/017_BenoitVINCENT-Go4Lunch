@@ -36,8 +36,9 @@ Cette applcation vous permet de/d' :
 
 ## Tests
 
-L'application a été testée par émulation sur l'appareil suivant :
+L'application a été testée par émulation sur les appareils suivants :
 - Pixel 4 (API 30)
+- Pixel 5X (API 30)
 
 Elle a également été testée dans des conditions réelles, sur un smartphone physique Samsung Galaxy S20 et sur une tablette Galaxy A7.
 
@@ -125,6 +126,7 @@ This app allow you to :
 
 This app has been tested on following devices :
 - Pixel 4 (API 30) with Google Play services
+- - Pixel 5X (API 30) with Google Play services
 
 It was also tested in real conditions, on a physical phone Samsung Galaxy S20 and Galaxy Tab A7.
 
