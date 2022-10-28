@@ -45,6 +45,8 @@
             android:id="@+id/list_bookings"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/recycler_view_margin_top"
+            android:layout_marginHorizontal="@dimen/recycler_view_margin_horizontal"
             tools:listitem="@layout/item_booking_list"
             app:layoutManager="LinearLayoutManager"/>
 

@@ -38,6 +38,7 @@
     <dimen name="list_restaurant_picture">72dp</dimen>
     <dimen name="recycler_view_margin_top">0dp</dimen>
     <dimen name="recycler_view_margin_bottom">0dp</dimen>
+    <dimen name="recycler_view_margin_horizontal">0dp</dimen>
 
     <!-- Bottom navigation icons & text -->
     <dimen name="design_bottom_navigation_text_size_active" >15sp</dimen>
@@ -51,6 +52,9 @@
 
     <dimen name="workmate_item_height">52dp</dimen>
     <dimen name="workmate_item_avatar_size">48dp</dimen>
+
+    <dimen name="booking_item_height">60dp</dimen>
+    <dimen name="booking_item_avatar_size">56dp</dimen>
 
 
 
