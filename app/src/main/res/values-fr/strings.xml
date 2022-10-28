@@ -44,6 +44,7 @@
 
 
     // RESTAURANT DETAILS
+    <string name="restaurant_details_title_toolbar">Fiche détaillée</string>
     <string name="no_address_found">Adresse non trouvée</string>
     <string name="call">APPELER</string>
     <string name="like">LIKER</string>
@@ -74,6 +75,7 @@
 
 
     // SETTINGS ACTIVITY
+    <string name="settings_title_toolbar">Profil utilisateur</string>
     <string name="dialog_yes">OUI</string>
     <string name="dialog_no">NON</string>
     <string name="dialog_title">Voulez-vous vraiment supprimer cette réservation ?</string>
@@ -91,6 +93,10 @@
     <string name="booking_delete_success">Réservation supprimée avec succès !</string>
     <string name="user_is_eating_to">&#160;déjeune chez&#160;</string>
     <string name="not_decided">&#160;n\'a pas encore fait son choix aujoud\'hui…</string>
+
+
+    // USER LUNCH ACTIVITY
+    <string name="user_lunch_title_toolbar">Vos réservations</string>
 
 
     // BOOKING ADAPTER

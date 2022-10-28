@@ -59,7 +59,7 @@ public class UserLunchActivity extends AppCompatActivity {
     private void setToolbar() {
         Toolbar mToolbar = (Toolbar) findViewById(R.id.main_toolbar);
         setSupportActionBar(mToolbar);
-        Objects.requireNonNull(getSupportActionBar()).setTitle("Your lunch");
+        Objects.requireNonNull(getSupportActionBar()).setTitle(getResources().getString(R.string.user_lunch_title_toolbar));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 

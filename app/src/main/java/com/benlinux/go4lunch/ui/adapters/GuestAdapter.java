@@ -49,7 +49,7 @@ public class GuestAdapter extends RecyclerView.Adapter<GuestAdapter.ViewHolder> 
     public GuestAdapter(List<String> guests, Context context, boolean userBookedHere) {
         mGuests = guests;
         localContext = context;
-        userBookedHere = userBookedHere;
+        this.userBookedHere = userBookedHere;
     }
 
     private Task<List<Booking>> getBookingsOfToday() {

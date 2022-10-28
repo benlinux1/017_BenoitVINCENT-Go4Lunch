@@ -4,22 +4,26 @@
 # VERSION FRANCAISE
 (English translation in the 2nd part of the documentation below)
 
+
 # DA_ANDROID_GO4LUNCH
 Ce dépôt contient une application pour le P7 du parcours **DA ANDROID**, intitulée **Go4Lunch**.
 
+
 ## Technologies
-- 100% JAVA, ce projet a été réalisé à partir de l'IDE Android Studio.
+100% JAVA, ce projet a été réalisé à partir de l'IDE Android Studio.
+
 
 ## Fonctionnalités
 
 Cette applcation vous permet de/d' :
 
-- Créer un compte utilisateur via votre compte Google, Facebook, Twitter, ou à partir de votre adresse e-mail
+- Créer votre compte utilisateur via votre compte Google, Facebook, Twitter, ou à partir de votre adresse e-mail
 - Afficher les restaurants situés autour de vous sur une carte, ou sous forme de liste
 - Rechercher un restaurant dans la barre de recherche, via son nom et/ou son adresse
 - Consulter la fiche détaillée d'un restaurant (adresse, note, n° de téléphone, site web...)
 - Contacter un restaurant par téléphone, et/ou visiter son site internet
-- Modifier votre nom d'utilisateur et/ou votre avatar
+- Modifier votre compte (nom d'utilisateur, avatar...)
+- Supprimer votre compte utilisateur
 - Effectuer une "réservation" virtuelle dans le restaurant de votre choix, à la date de votre choix
 - Indiquer aux utilisateurs de l'application dans quel restaurant vous déjeunez aujourd'hui
 - Consulter la liste des utilisateurs de l'application et voir dans quel restaurant ils déjeunent aujourd'hui
@@ -27,7 +31,8 @@ Cette applcation vous permet de/d' :
 - Supprimer une réservation de votre liste générale
 - Recevoir une notification tous les jours à 12:00, vous rappelant dans quel restaurant vous déjeunez
 
-![Fonctionnalités FR](https://user-images.githubusercontent.com/78255467/170277591-a668bcb3-74d9-4531-94c0-267d8e36e8e7.png)
+![](../PROJET 7 - GO4LUNCH/READ ME/Fonctionnalités FR.png)
+
 
 ## Tests
 
@@ -36,7 +41,14 @@ L'application a été testée par émulation sur l'appareil suivant :
 
 Elle a également été testée dans des conditions réelles, sur un smartphone physique Samsung Galaxy S20 et sur une tablette Galaxy A7.
 
+
+## Langues
+
+L'application est entièrement traduite en Anglais et en Français, selon la langue de l'appareil que vous utilisez.
+
+
 ## Installation
+
 - Ouvrez votre IDE préféré (ici Android Studio)
 - Ouvrez un nouveau projet et choississez "Get From Version Control"
 - Clonez l'application en copiant / collant ce lien : https://github.com/benlinux1/DA_ANDROID_GO4LUNCH.git
@@ -46,6 +58,7 @@ Elle a également été testée dans des conditions réelles, sur un smartphone 
 ![GIT](https://user-images.githubusercontent.com/78255467/198230597-028f6051-8cff-4e73-9787-f6aff219503e.png)
 
 L'application va ensuite se compiler dans Android Studio
+
 
 ## Utilisation / Lancement de l'application
 
@@ -57,9 +70,11 @@ Ensuite, lancez l'application en cliquant sur le bouton triangulaire "Run", comm
 
 ![Sans titre-2](https://user-images.githubusercontent.com/78255467/163193524-89842086-ca39-475c-afc2-e39e3e586f68.png)
 
+
 ## Contribuez au projet
 
 Go4lunch est un projet open source. Vous pouvez donc en utiliser le code source à votre guise pour développer vos propres fonctionnalités.
+
 
 ## Auteurs
 
@@ -74,41 +89,51 @@ Notre équipe : BenLinux & FranckBlack
 # ENGLISH VERSION
 (version française en 1ère partie de la documentation)
 
+
 # Go4Lunch
 
 This repository contains a mini app for the **DA Android** 7th projet, untitled **Go4Lunch**.
 
+
 ## Technologies
-- 100% JAVA, this project was made with Android Studio IDE.
+
+100% JAVA, this project was made with Android Studio IDE.
+
 
 ## Features
 
 This app allow you to :
 
-- Create user account from Google, Facebook, Twitter login, or your own email address
+- Create your user account from Google, Facebook, Twitter login, or with your own email address
 - Display restaurants around you on a Google Map, or as a list
-- Rechercher
-- Consulter la fiche détaillée d'un restaurant (adresse, note, n° de téléphone, site web...)
-- Contacter un restaurant par téléphone, et/ou visiter son site internet
-- Modifier votre nom d'utilisateur et/ou votre avatar
-- Effectuer une "réservation" virtuelle dans le restaurant de votre choix, à la date de votre choix
-- Indiquer aux utilisateurs de l'application dans quel restaurant vous déjeunez aujourd'hui
-- Consulter la liste des utilisateurs de l'application et voir dans quel restaurant ils déjeunent aujourd'hui
-- Visualiser la liste de toutes vos réservations virtuelles
-- Supprimer une réservation de votre liste générale
-- Recevoir une notification tous les jours à 12:00, vous rappelant dans quel restaurant vous déjeunez
+- Search restaurants in the search bar, by name or by address
+- Consult detailed sheet of restaurants (address, rating, phone number, website)
+- Contact a restaurant by phone, and/or visit its website
+- Update your account (username, avatar...)
+- Delete your account
+- Make virtual booking in a chosen restaurant, at a chosen date
+- Show to app's users in which restaurant you take a lunch today
+- Display app's users list and see in which restaurant each of them take a lunch today
+- Visualize your bookings list, sorted by date
+- Delete chosen bookings from your bookings list
+- Receive a notification, each day at 12am, that remember you your restaurant of the day
 
-![Fonctionnalités GB](https://user-images.githubusercontent.com/78255467/170277679-27b594b3-14e9-4507-9609-08f1dfa39dcc.png)
+
+![](../PROJET 7 - GO4LUNCH/READ ME/Fonctionnalités GB.png)
+
 
 ## Tests
 
 This app has been tested on following devices :
-- Pixel 3XL (API 30)
-- Pixel 5 (API 30)
-- Nexus 6 (API 30)
-- Nexus S (API 30)
+- Pixel 4 (API 30) with Google Play services
 
-It was also tested in real conditions, on a physical device Samsung Galaxy S20.
+It was also tested in real conditions, on a physical phone Samsung Galaxy S20 and Galaxy Tab A7.
+
+
+## Languages
+
+Go4lunch is fully available in English and in French languages, automatically set according to your device's general language.
+
 
 ## Install
 - Open your favorite IDE (here Android Studio)
@@ -121,6 +146,7 @@ It was also tested in real conditions, on a physical device Samsung Galaxy S20.
 
 Next the app will compile in Android Studio
 
+
 ## Use / How to launch app
 
 You can use this app with an emulator, for a chosen mobile simulation.
@@ -131,9 +157,11 @@ Then, launch app clicking on the green triangle button "Run", like in this examp
 
 ![Sans titre-2](https://user-images.githubusercontent.com/78255467/163193524-89842086-ca39-475c-afc2-e39e3e586f68.png)
 
+
 ## Contribute to the project
 
-Maréu is an open source project. Feel free to fork the source and contribute with your own features.
+Go4lunch is an open source project. Feel free to fork the source and contribute with your own features.
+
 
 ## Authors
 

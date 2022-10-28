@@ -67,6 +67,7 @@
     <string name="no_address_found">Address not found</string>
 
     // RESTAURANT DETAILS
+    <string name="restaurant_details_title_toolbar">Restaurant details</string>
     <string name="call">CALL</string>
     <string name="like">LIKE</string>
     <string name="unlike">UNLIKE</string>
@@ -88,6 +89,7 @@
 
 
     // SETTINGS ACTIVITY
+    <string name="settings_title_toolbar">Settings</string>
     <string name="popup_message_choice_yes">YES</string>
     <string name="popup_message_choice_no">NO</string>
     <string name="popup_message_confirmation_delete_account">Do you really want to delete your account ?</string>
@@ -105,6 +107,10 @@
     <string name="allow_photo_access">Please allow pictures access</string>
     <string name="picture_enabled">You can choose a picture !</string>
     <string name="no_image_chosen">No image chosen</string>
+
+
+    // USER LUNCH ACTIVITY
+    <string name="user_lunch_title_toolbar">Your lunch</string>
 
     // SEARCH BAR
     <string name="search_bar_title">Search</string>
