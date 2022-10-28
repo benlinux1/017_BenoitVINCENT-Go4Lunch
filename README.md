@@ -85,7 +85,7 @@ Notre équipe : BenLinux & FranckBlack
 
 
 ===========================================================================================
-===========================================================================================
+==========================================================================================
 
 ![da-android-go-4-lunch](https://user-images.githubusercontent.com/78255467/198226824-1ee217fa-4e17-47ba-9f41-7ebdc88a5054.svg)
 [![forthebadge](https://forthebadge.com/images/badges/built-for-android.svg)](https://forthebadge.com)
