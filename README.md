@@ -10,7 +10,7 @@ Ce dépôt contient une application pour le P7 du parcours **DA ANDROID**, intit
 
 
 ## Technologies
-100% JAVA, ce projet a été réalisé à partir de l'IDE Android Studio.
+**100% JAVA**, ce projet a été réalisé à partir de l'IDE Android Studio.
 
 
 ## Fonctionnalités
@@ -100,7 +100,7 @@ This repository contains a mini app for the **DA Android** 7th projet, untitled 
 
 ## Technologies
 
-100% JAVA, this project was made with Android Studio IDE.
+**100% JAVA**, this project was made with Android Studio IDE.
 
 
 ## Features
