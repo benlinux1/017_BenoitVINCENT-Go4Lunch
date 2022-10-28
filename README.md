@@ -33,7 +33,7 @@ Cette applcation vous permet de/d' :
 
 ![Fonctionnalités FR](https://user-images.githubusercontent.com/78255467/198533983-fc5c6015-c1d5-428c-885e-1191edf1f661.png)
 
-![Fonctionnalités FR 2](https://user-images.githubusercontent.com/78255467/198538501-33d6b6df-a202-45c6-88fb-e0a864bd81ac.png)
+![Fonctionnalités FR 2](https://user-images.githubusercontent.com/78255467/198538930-c12981b0-80f7-41cd-8d63-18e6ea00742b.png)
 
 
 ## Tests
