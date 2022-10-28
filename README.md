@@ -31,7 +31,7 @@ Cette applcation vous permet de/d' :
 - Supprimer une réservation de votre liste générale
 - Recevoir une notification tous les jours à 12:00, vous rappelant dans quel restaurant vous déjeunez
 
-![](../PROJET 7 - GO4LUNCH/READ ME/Fonctionnalités FR.png)
+![Fonctionnalités FR](https://user-images.githubusercontent.com/78255467/198533983-fc5c6015-c1d5-428c-885e-1191edf1f661.png)
 
 
 ## Tests
@@ -118,8 +118,7 @@ This app allow you to :
 - Delete chosen bookings from your bookings list
 - Receive a notification, each day at 12am, that remember you your restaurant of the day
 
-
-![](../PROJET 7 - GO4LUNCH/READ ME/Fonctionnalités GB.png)
+![Fonctionnalités GB](https://user-images.githubusercontent.com/78255467/198534046-c6080be6-f68c-4166-989c-aa66214b9f6f.png)
 
 
 ## Tests
