@@ -60,7 +60,7 @@ L'application est entièrement traduite en Anglais et en Français, selon la lan
 
 ![GIT](https://user-images.githubusercontent.com/78255467/198230597-028f6051-8cff-4e73-9787-f6aff219503e.png)
 
-L'application va ensuite se compiler dans Android Studio
+- L'application va ensuite se compiler dans Android Studio
 
 
 ## Utilisation / Lancement de l'application
@@ -130,7 +130,7 @@ This app allow you to :
 
 This app has been tested on following devices :
 - Pixel 4 (API 30) with Google Play services
-- - Pixel 5X (API 30) with Google Play services
+- Pixel 5X (API 30) with Google Play services
 
 It was also tested in real conditions, on a physical phone Samsung Galaxy S20 and Galaxy Tab A7.
 
@@ -149,7 +149,7 @@ Go4lunch is fully available in English and in French languages, automatically se
 
 ![GIT](https://user-images.githubusercontent.com/78255467/198230597-028f6051-8cff-4e73-9787-f6aff219503e.png)
 
-Next the app will compile in Android Studio
+- Next, the app will compile in Android Studio
 
 
 ## Use / How to launch app
