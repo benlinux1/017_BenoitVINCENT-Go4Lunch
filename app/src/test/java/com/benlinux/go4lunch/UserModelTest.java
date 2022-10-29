@@ -2,17 +2,17 @@ package com.benlinux.go4lunch;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-
-import com.benlinux.go4lunch.ui.models.Restaurant;
 import com.benlinux.go4lunch.ui.models.User;
-import com.google.android.gms.maps.model.LatLng;
+
 
 import org.junit.Test;
 
 import java.util.ArrayList;
 
 
+/**
+ * Tests for User Model & getters
+ */
 public class UserModelTest {
 
     final ArrayList<String> favoritesRestaurants1 = new ArrayList<>();
