@@ -26,20 +26,6 @@
 
         </LinearLayout>
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.65" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.55" />
-
         <ImageView
             android:id="@+id/restaurantDetailsPhoto"
             android:layout_width="0dp"
@@ -69,7 +55,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:cardBackgroundColor="@color/colorPrimary"
-            app:layout_constraintBottom_toTopOf="@+id/guideline4"
+            app:layout_constraintBottom_toTopOf="@+id/restaurantDetailsCallButton"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             android:foregroundGravity="center_vertical">
@@ -155,7 +141,6 @@
                 </LinearLayout>
 
 
-
                 <androidx.constraintlayout.widget.Guideline
                     android:id="@+id/guideline5"
                     android:layout_width="wrap_content"
@@ -168,14 +153,14 @@
 
         <ImageButton
             android:id="@+id/restaurantDetailsCallButton"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:backgroundTint="#00FFFFFF"
-            android:layout_marginBottom="@dimen/default_margin"
-            app:layout_constraintBottom_toTopOf="@+id/guideline3"
+            android:layout_marginTop="@dimen/default_margin"
+            android:layout_marginStart="@dimen/default_large_margin"
+            app:layout_constraintTop_toBottomOf="@id/restaurantDetailsInformation"
             app:layout_constraintEnd_toStartOf="@+id/restaurantDetailsLikeButtonLayout"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/guideline4"
             app:srcCompat="@drawable/ic_phone"
             android:contentDescription="@string/phone_button_description" />
 
@@ -184,11 +169,11 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
+            android:layout_marginTop="@dimen/default_medium_margin"
             android:foregroundGravity="center_horizontal"
-            app:layout_constraintBottom_toTopOf="@+id/guideline3"
             app:layout_constraintEnd_toStartOf="@+id/restaurantDetailsWebsiteButton"
             app:layout_constraintStart_toEndOf="@+id/restaurantDetailsCallButton"
-            app:layout_constraintTop_toTopOf="@+id/guideline4"
+            app:layout_constraintTop_toBottomOf="@+id/restaurantDetailsInformation"
             android:orientation="horizontal">
 
             <androidx.appcompat.widget.AppCompatCheckBox
@@ -196,7 +181,7 @@
                 style="@style/LikeButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/default_margin"
+                android:paddingVertical="@dimen/small_margin"
                 android:button="@drawable/toggle_like"
                 android:checked="false"
                 android:minWidth="0dp"
@@ -208,15 +193,15 @@
 
         <ImageButton
             android:id="@+id/restaurantDetailsWebsiteButton"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="0dp"
-            android:layout_marginBottom="@dimen/default_margin"
+            android:layout_marginTop="@dimen/default_margin"
+            android:layout_marginEnd="@dimen/default_large_margin"
             android:backgroundTint="#00FFFFFF"
             android:contentDescription="@string/website_button_description"
-            app:layout_constraintBottom_toTopOf="@+id/guideline3"
+            app:layout_constraintTop_toBottomOf="@id/restaurantDetailsInformation"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/restaurantDetailsLikeButtonLayout"
-            app:layout_constraintTop_toTopOf="@+id/guideline4"
             app:srcCompat="@drawable/ic_website"
             tools:ignore="RedundantDescriptionCheck" />
 
@@ -224,10 +209,10 @@
             android:id="@+id/restaurantDetailsCallText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/small_margin"
+            android:layout_marginTop="@dimen/default_margin"
             android:text="@string/call"
             android:textColor="#DD2C00"
-            app:layout_constraintBottom_toTopOf="@+id/guideline3"
+            app:layout_constraintTop_toBottomOf="@id/restaurantDetailsCallButton"
             app:layout_constraintEnd_toEndOf="@+id/restaurantDetailsCallButton"
             app:layout_constraintStart_toStartOf="@+id/restaurantDetailsCallButton" />
 
@@ -235,10 +220,10 @@
             android:id="@+id/restaurantDetailsLikeText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/small_margin"
+            android:layout_marginTop="@dimen/default_medium_margin"
             android:text="@string/like"
             android:textColor="#DD2C00"
-            app:layout_constraintBottom_toTopOf="@+id/guideline3"
+            app:layout_constraintTop_toBottomOf="@id/restaurantDetailsLikeButtonLayout"
             app:layout_constraintEnd_toEndOf="@+id/restaurantDetailsLikeButtonLayout"
             app:layout_constraintStart_toEndOf="@+id/restaurantDetailsCallButton" />
 
@@ -246,10 +231,10 @@
             android:id="@+id/restaurantDetailsWebsiteText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/small_margin"
+            android:layout_marginTop="@dimen/default_margin"
             android:text="@string/website"
             android:textColor="#DD2C00"
-            app:layout_constraintBottom_toTopOf="@+id/guideline3"
+            app:layout_constraintTop_toBottomOf="@id/restaurantDetailsWebsiteButton"
             app:layout_constraintEnd_toEndOf="@+id/restaurantDetailsWebsiteButton"
             app:layout_constraintStart_toEndOf="@+id/restaurantDetailsLikeButtonLayout" />
 
@@ -257,15 +242,14 @@
             android:id="@+id/text_no_workmates"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
+            android:gravity="center"
+            android:layout_marginVertical="@dimen/default_large_margin"
+            android:paddingBottom="@dimen/default_large_margin"
             android:textAlignment="center"
             android:textSize="14sp"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/guideline3" />
+            app:layout_constraintTop_toBottomOf="@+id/restaurantDetailsLikeText" />
 
         <ScrollView
             android:id="@+id/workmates_scrollView"
@@ -275,7 +259,7 @@
             android:layout_marginTop="@dimen/small_plus_margin"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/guideline3"
+            app:layout_constraintTop_toBottomOf="@+id/restaurantDetailsCallText"
             android:overScrollMode="never">
 
             <androidx.recyclerview.widget.RecyclerView
