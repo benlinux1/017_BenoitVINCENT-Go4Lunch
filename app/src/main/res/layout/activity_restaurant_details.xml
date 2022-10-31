@@ -222,10 +222,11 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/default_medium_margin"
             android:text="@string/like"
+            android:textAlignment="center"
             android:textColor="#DD2C00"
             app:layout_constraintTop_toBottomOf="@id/restaurantDetailsLikeButtonLayout"
-            app:layout_constraintEnd_toEndOf="@+id/restaurantDetailsLikeButtonLayout"
-            app:layout_constraintStart_toEndOf="@+id/restaurantDetailsCallButton" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
             android:id="@+id/restaurantDetailsWebsiteText"
