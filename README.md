@@ -50,6 +50,21 @@ Elle a également été testée dans des conditions réelles, sur un smartphone 
 L'application est entièrement traduite en Anglais et en Français, selon la langue de l'appareil que vous utilisez.
 
 
+## Bibliothèques / API
+
+Cette application utilise les bibliothèques / API suivantes :
+- Material Design
+- Firebase (UI, Firestore Database, Storage)
+- Facebook SDK
+- Twitter API V2
+- Glide
+- Easy Permissions
+- Google Map
+- Google Places (nearbySearch, autoComplete)
+- JUnit
+- Mockito
+
+
 ## Installation
 
 - Ouvrez votre IDE préféré (ici Android Studio)
@@ -140,6 +155,21 @@ It was also tested in real conditions, on a physical phone Samsung Galaxy S20 an
 ## Languages
 
 Go4lunch is fully available in English and in French languages, automatically set according to your device's general language.
+
+
+## Libraries / API
+
+This app uses the following libraries / API :
+- Material Design
+- Firebase (UI, Firestore Database, Storage)
+- Facebook SDK (for login)
+- Twitter API V2 (for Login)
+- Glide
+- Easy Permissions
+- Google Map
+- Google Places (nearbySearch, autoComplete)
+- JUnit
+- Mockito
 
 
 ## Install
