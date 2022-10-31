@@ -34,11 +34,12 @@
     <dimen name="user_avatar_size">160dp</dimen>
     <dimen name="profile_button_width">260dp</dimen>
 
+    <!-- Recycler view -->
     <dimen name="list_restaurant_picture">100dp</dimen>
-
     <dimen name="recycler_view_margin_top">8dp</dimen>
     <dimen name="recycler_view_margin_bottom">20dp</dimen>
     <dimen name="recycler_view_margin_horizontal">20dp</dimen>
+
 
     <!-- Bottom navigation icons & text -->
     <dimen name="design_bottom_navigation_text_size_active" >19sp</dimen>
