@@ -4,8 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 
 import com.benlinux.go4lunch.activities.MainActivity;
-import com.benlinux.go4lunch.activities.UserLunchActivity;
-import com.benlinux.go4lunch.ui.adapters.BookingAdapter;
 import com.benlinux.go4lunch.ui.adapters.ListAdapter;
 import com.benlinux.go4lunch.ui.models.Booking;
 import com.benlinux.go4lunch.ui.models.Restaurant;
@@ -21,7 +19,7 @@ public class ListAdapterTest {
     @Test
     public void listAdapterGetRestaurantData() {
 
-        // Create empty bookings list
+        // Create empty restaurants list
         List<Restaurant> mRestaurants = new ArrayList<>();
         // Mock activity to get context
         MainActivity listActivity = mock(MainActivity.class);

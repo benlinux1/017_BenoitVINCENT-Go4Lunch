@@ -3,7 +3,6 @@ package com.benlinux.go4lunch.modules;
 import android.util.Log;
 
 import com.benlinux.go4lunch.BuildConfig;
-import com.benlinux.go4lunch.ui.models.Booking;
 import com.benlinux.go4lunch.ui.models.Restaurant;
 
 import org.json.JSONArray;
@@ -13,7 +12,6 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;

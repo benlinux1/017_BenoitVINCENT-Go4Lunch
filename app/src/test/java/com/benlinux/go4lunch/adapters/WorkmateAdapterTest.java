@@ -4,10 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 
 import com.benlinux.go4lunch.activities.MainActivity;
-import com.benlinux.go4lunch.activities.UserLunchActivity;
-import com.benlinux.go4lunch.ui.adapters.BookingAdapter;
 import com.benlinux.go4lunch.ui.adapters.WorkmateAdapter;
-import com.benlinux.go4lunch.ui.models.Booking;
 import com.benlinux.go4lunch.ui.models.User;
 
 import org.junit.Test;

@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import com.benlinux.go4lunch.ui.models.User;
 
-
 import org.junit.Test;
 
 import java.util.ArrayList;

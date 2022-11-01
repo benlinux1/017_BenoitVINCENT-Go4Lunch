@@ -2,12 +2,8 @@ package com.benlinux.go4lunch.modules;
 
 import static org.junit.Assert.assertEquals;
 
-import android.location.Geocoder;
-import android.util.Log;
-
 import com.benlinux.go4lunch.activities.MainActivity;
-import com.benlinux.go4lunch.modules.FormatAddressModule;
-import com.benlinux.go4lunch.modules.FormatRatingModule;
+
 import com.google.android.gms.maps.model.LatLng;
 
 import org.junit.Test;

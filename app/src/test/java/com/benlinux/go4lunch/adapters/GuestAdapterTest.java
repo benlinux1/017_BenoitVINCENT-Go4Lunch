@@ -2,21 +2,10 @@ package com.benlinux.go4lunch.adapters;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
-import static java.util.Arrays.asList;
-
-import androidx.annotation.NonNull;
-
-import com.benlinux.go4lunch.activities.MainActivity;
 import com.benlinux.go4lunch.activities.RestaurantDetailsActivity;
-import com.benlinux.go4lunch.data.userManager.UserManager;
 import com.benlinux.go4lunch.ui.adapters.GuestAdapter;
-import com.benlinux.go4lunch.ui.adapters.WorkmateAdapter;
 import com.benlinux.go4lunch.ui.models.User;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 
 import org.junit.Test;
 
