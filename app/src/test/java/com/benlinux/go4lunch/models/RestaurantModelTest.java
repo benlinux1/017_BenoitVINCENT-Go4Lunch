@@ -1,4 +1,4 @@
-package com.benlinux.go4lunch;
+package com.benlinux.go4lunch.models;
 
 import org.junit.Test;
 

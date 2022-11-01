@@ -43,31 +43,15 @@ public class GuestAdapter extends RecyclerView.Adapter<GuestAdapter.ViewHolder> 
     private final UserManager userManager = UserManager.getInstance();
 
     /**
-     * Instantiates a new ListAdapter.
-     * @param guests the list of restaurants the adapter deals with to set
+     * Instantiates a new GuestAdapter.
+     * @param guests the list of guests the adapter deals with to set
+     * @param context the context of the adapter call
+     * @param userBookedHere that confirm if current user booked or not in the contextual restaurant
      */
     public GuestAdapter(List<String> guests, Context context, boolean userBookedHere) {
         mGuests = guests;
         localContext = context;
         this.userBookedHere = userBookedHere;
-    }
-
-    private Task<List<Booking>> getBookingsOfToday() {
-        return bookingManager.getAllBookingsData().addOnCompleteListener(new OnCompleteListener<List<Booking>>() {
-            @Override
-            public void onComplete(@NonNull Task<List<Booking>> bookingTask) {
-                bookingsOfDay = new ArrayList<>();
-                final Calendar currentDate = Calendar.getInstance(Locale.FRANCE);
-                // Define today formatted date
-                @SuppressLint("SimpleDateFormat") SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-                String today = dateFormat.format(currentDate.getTime());
-                for (Booking booking : bookingTask.getResult()) {
-                    if (booking.getBookingDate().equals(today)) {
-                        bookingsOfDay.add(booking);
-                    }
-                }
-            }
-        });
     }
 
 
@@ -122,8 +106,6 @@ public class GuestAdapter extends RecyclerView.Adapter<GuestAdapter.ViewHolder> 
 
 
 
-
-
         /**
          * Instantiates a new Restaurant ViewHolder.
          * @param itemView the view of the restaurant item
@@ -133,7 +115,6 @@ public class GuestAdapter extends RecyclerView.Adapter<GuestAdapter.ViewHolder> 
 
             avatar = itemView.findViewById(R.id.workmate_avatar);
             name = itemView.findViewById(R.id.workmate_name);
-
         }
 
 

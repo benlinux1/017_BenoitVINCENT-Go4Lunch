@@ -26,7 +26,6 @@ public class MainActivityTest {
 
     @Test
     public void DrawerNavGetsUserName() throws Exception {
-
     }
 
     @Test

@@ -1,4 +1,4 @@
-package com.benlinux.go4lunch;
+package com.benlinux.go4lunch.models;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;

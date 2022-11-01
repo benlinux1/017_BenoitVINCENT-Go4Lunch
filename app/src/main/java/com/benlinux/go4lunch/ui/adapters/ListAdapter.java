@@ -24,6 +24,7 @@ import com.benlinux.go4lunch.BuildConfig;
 import com.benlinux.go4lunch.R;
 import com.benlinux.go4lunch.activities.RestaurantDetailsActivity;
 import com.benlinux.go4lunch.modules.FormatRatingModule;
+import com.benlinux.go4lunch.ui.models.Booking;
 import com.benlinux.go4lunch.ui.models.Restaurant;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.common.api.ApiException;
@@ -94,6 +95,10 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
 
     public LatLng getUserLocation() {
         return this.actualLocation;
+    }
+
+    public Restaurant getItem(int i) {
+        return mRestaurants.get(i);
     }
 
     @Override

@@ -1,10 +1,4 @@
-package com.benlinux.go4lunch;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.when;
-
-import com.benlinux.go4lunch.modules.FormatRatingModule;
+package com.benlinux.go4lunch.modules;
 
 import org.junit.Assert;
 import org.junit.Test;
