@@ -1,5 +1,4 @@
-![da-android-go-4-lunch](https://user-images.githubusercontent.com/78255467/198226824-1ee217fa-4e17-47ba-9f41-7ebdc88a5054.svg)
-[![forthebadge](https://forthebadge.com/images/badges/built-for-android.svg)](https://forthebadge.com)
+![benoit-vincent-go4lunch](https://github.com/benlinux1/017_BenoitVINCENT-Go4Lunch/assets/78255467/833d094e-ebc7-40d5-ba65-1d940223934f)![android-app-100_-java](https://github.com/benlinux1/017_BenoitVINCENT-Go4Lunch/assets/78255467/2d14262f-e3b8-4161-9a3e-4b44723c9ff9)
 
 # VERSION FRANCAISE
 (English translation in the 2nd part of the documentation below)
@@ -106,8 +105,7 @@ Notre équipe : BenLinux & FranckBlack
 ==========================================================================================
 
 
-![da-android-go-4-lunch](https://user-images.githubusercontent.com/78255467/198226824-1ee217fa-4e17-47ba-9f41-7ebdc88a5054.svg)
-[![forthebadge](https://forthebadge.com/images/badges/built-for-android.svg)](https://forthebadge.com)
+![benoit-vincent-go4lunch](https://github.com/benlinux1/017_BenoitVINCENT-Go4Lunch/assets/78255467/833d094e-ebc7-40d5-ba65-1d940223934f)![android-app-100_-java](https://github.com/benlinux1/017_BenoitVINCENT-Go4Lunch/assets/78255467/2d14262f-e3b8-4161-9a3e-4b44723c9ff9)
 
 # ENGLISH VERSION
 (version française en 1ère partie de la documentation)
