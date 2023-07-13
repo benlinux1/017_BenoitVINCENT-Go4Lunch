@@ -8,6 +8,9 @@
 # DA_ANDROID_GO4LUNCH
 Ce dépôt contient une application intitulée **Go4Lunch**.
 
+Il s'agissait ici de concevoir une **application permettant d'informer et de rassembler l'ensemble des collaborateurs
+dans différents lieux de restauration pour le déjeuner**.
+
 
 ## Technologies
 **100% JAVA**, ce projet a été réalisé à partir de l'IDE Android Studio.
@@ -113,6 +116,8 @@ Notre équipe : BenLinux & FranckBlack
 # Go4Lunch
 
 This repository contains an Android app untitled **Go4Lunch**.
+
+The aim here was to design an **application to inform and bring together all employees in different restaurants for lunch**.
 
 
 ## Technologies
