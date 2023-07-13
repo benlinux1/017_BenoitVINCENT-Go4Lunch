@@ -4,7 +4,7 @@
 (English translation in the 2nd part of the documentation below)
 
 
-# DA_ANDROID_GO4LUNCH
+# GO4LUNCH
 Ce dépôt contient une application intitulée **Go4Lunch**.
 
 Il s'agissait ici de concevoir une **application permettant d'informer et de rassembler l'ensemble des collaborateurs
@@ -111,7 +111,7 @@ Notre équipe : BenLinux & FranckBlack
 (version française en 1ère partie de la documentation)
 
 
-# Go4Lunch
+# GO4LUNCH
 
 This repository contains an Android app untitled **Go4Lunch**.
 
