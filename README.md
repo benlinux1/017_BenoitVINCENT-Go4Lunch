@@ -6,7 +6,7 @@
 
 
 # DA_ANDROID_GO4LUNCH
-Ce dépôt contient une application pour le P7 du parcours **DA ANDROID**, intitulée **Go4Lunch**.
+Ce dépôt contient une application intitulée **Go4Lunch**.
 
 
 ## Technologies
@@ -69,7 +69,7 @@ Cette application utilise les bibliothèques / API suivantes :
 
 - Ouvrez votre IDE préféré (ici Android Studio)
 - Ouvrez un nouveau projet et choississez "Get From Version Control"
-- Clonez l'application en copiant / collant ce lien : https://github.com/benlinux1/DA_ANDROID_GO4LUNCH.git
+- Clonez l'application en copiant / collant ce lien : https://github.com/benlinux1/017_BenoitVINCENT-Go4Lunch.git
 - Spécifiez un dossier de destination sur votre ordinateur et cliquez sur "clone"
 - Voici les étapes en images :
 
@@ -112,7 +112,7 @@ Notre équipe : BenLinux & FranckBlack
 
 # Go4Lunch
 
-This repository contains a mini app for the **DA Android** 7th projet, untitled **Go4Lunch**.
+This repository contains an Android app untitled **Go4Lunch**.
 
 
 ## Technologies
@@ -175,7 +175,7 @@ This app uses the following libraries / API :
 ## Install
 - Open your favorite IDE (here Android Studio)
 - Open a new project and choose "Get From Version Control" option
-- Clone the app by copying / pasting this repository link : https://github.com/benlinux1/DA_ANDROID_MAREU.git
+- Clone the app by copying / pasting this repository link : https://github.com/benlinux1/017_BenoitVINCENT-Go4Lunch.git
 - Specify a destination folder name on your computer and click "clone"
 - Here are the steps to illustrate in pictures :
 
